@@ -1,1 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="Apply for careers at Codivora Technologies" />
+    <meta name="author" content="Codivora Technologies" />
+    <title>Apply Now | Codivora Technologies</title>
 
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="assets/favicon.ico" />
+
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <!-- Bootstrap Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css" rel="stylesheet">
+
+    <!-- Core CSS -->
+    <link href="css/styles.css" rel="stylesheet">
+
+    <style>
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+        }
+        .apply-card {
+            background: #ffffff;
+            border-radius: 20px;
+            padding: 45px;
+            box-shadow: 0 25px 50px rgba(0,0,0,0.08);
+        }
+        .form-control, .form-select {
+            padding: 12px;
+            border-radius: 10px;
+        }
+        .btn-apply {
+            padding: 14px;
+            border-radius: 12px;
+            font-weight: 600;
+        }
+    </style>
+</head>
+
+<body class="bg-light">
+
+<!-- Navigation -->
+<nav class="navbar navbar-expand-lg navbar-light bg-white py-3">
+    <div class="container px-5">
+        <a class="navbar-brand d-flex align-items-center" href="index.html">
+            <img src="assets/Logo.png" alt="Codivora Technologies Logo" height="45">
+        </a>
+
+        <div class="collapse navbar-collapse">
+            <ul class="navbar-nav ms-auto small fw-bolder">
+                <li class="nav-item">
+                    <a class="nav-link" href="careers.html">Careers</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<!-- Apply Section -->
+<section class="py-5">
+    <div class="container px-5">
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+
+                <div class="apply-card">
+                    <h2 class="fw-bolder mb-2 text-center">Apply at Codivora Technologies</h2>
+                    <p class="text-muted text-center mb-4">
+                        Submit your details and take the next step in your career journey.
+                    </p>
+
+                    <!-- Dummy Form -->
+                    <form onsubmit="return handleSubmit()">
+
+                        <div class="row g-3">
+
+                            <div class="col-md-6">
+                                <label class="form-label">Full Name *</label>
+                                <input type="text" class="form-control" required>
+                            </div>
+
+                            <div class="col-md-6">
+                                <label class="form-label">Email Address *</label>
+                                <input type="email" class="form-control" required>
+                            </div>
+
+                            <div class="col-md-6">
+                                <label class="form-label">Phone Number *</label>
+                                <input type="tel" class="form-control" required>
+                            </div>
+
+                            <div class="col-md-6">
+                                <label class="form-label">Position Applying For *</label>
+                                <select class="form-select" required>
+                                    <option value="">Select a position</option>
+                                    <option>Software Developer Intern (0–1 yrs)</option>
+                                    <option>SDE I – Software Development Engineer I (0–3 yrs)</option>
+                                    <option>Junior Full Stack Developer (1–3 yrs)</option>
+                                    <option>Frontend Developer (React / Angular)</option>
+                                    <option>Backend Developer (Java / Python / Node)</option>
+                                    <option>Data Analyst</option>
+                                    <option>QA Automation Engineer</option>
+                                    <option>DevOps Engineer</option>
+                                    <option>Android / iOS App Developer</option>
+                                    <option>Cloud Support Engineer</option>
+                                    <option>Cybersecurity Analyst</option>
+                                    <option>System Administrator</option>
+                                    <option>Network Engineer</option>
+                                    <option>Database Administrator (DBA)</option>
+                                    <option>Technical Support Engineer (L2)</option>
+                                    <option>Associate Product Manager</option>
+                                </select>
+                            </div>
+
+                            <div class="col-md-6">
+                                <label class="form-label">LinkedIn Profile URL</label>
+                                <input type="url" class="form-control" placeholder="https://linkedin.com/in/username">
+                            </div>
+
+                            <div class="col-md-6">
+                                <label class="form-label">Portfolio / GitHub URL</label>
+                                <input type="url" class="form-control" placeholder="https://github.com/username">
+                            </div>
+
+                            <div class="col-12">
+                                <label class="form-label">Upload Resume *</label>
+                                <input type="file" class="form-control" required>
+                            </div>
+
+                            <div class="col-12">
+                                <label class="form-label">Message (optional)</label>
+                                <textarea class="form-control" rows="4" placeholder="Tell us briefly about yourself..."></textarea>
+                            </div>
+
+                            <div class="col-12 d-grid mt-3">
+                                <button type="submit" class="btn btn-primary btn-apply">
+                                    Submit Application
+                                </button>
+                            </div>
+
+                        </div>
+                    </form>
+                    <!-- End Form -->
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Footer -->
+<footer class="bg-white py-4 mt-auto">
+    <div class="container px-5 text-center">
+        <div class="small m-0">
+            © Codivora Technologies 2026. All rights reserved.
+        </div>
+    </div>
+</footer>
+
+<!-- Dummy Submit Script -->
+<script>
+    function handleSubmit() {
+        window.location.href = "thank-you.html";
+        return false;
+    }
+</script>
+
+</body>
+</html>

@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
     <meta name="description" content="Codivora Technologies - Software, AI, Web & Digital Solutions" />
     <meta name="author" content="Codivora Technologies" />
     <title>Codivora Technologies | Digital & Software Solutions</title>
@@ -15,70 +15,78 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
 
-    <!-- Bootstrap -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <!-- Bootstrap Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css" rel="stylesheet" />
 
     <!-- Core CSS -->
     <link href="css/styles.css" rel="stylesheet" />
 
-    <!-- HERO GEN-Z 3D FIX -->
+    <!-- Gen-Z UI Enhancements (SAFE) -->
     <style>
         body {
-            font-family: "Plus Jakarta Sans", sans-serif;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background: radial-gradient(circle at top, #f6f7ff 0%, #ffffff 40%);
         }
 
-        /* HERO VISUAL */
-        .hero-visual {
-            position: relative;
-            width: 100%;
-            max-width: 420px;
-            margin: auto;
-            aspect-ratio: 3 / 4.2;
-            display: flex;
-            align-items: flex-end;
-            justify-content: center;
+        /* Navbar */
+        .navbar {
+            backdrop-filter: blur(14px);
+            background: rgba(255,255,255,0.88) !important;
+            box-shadow: 0 12px 30px rgba(0,0,0,0.04);
         }
 
-        /* Background box */
-        .hero-bg {
-            position: absolute;
-            width: 100%;
-            height: 88%;
-            bottom: 0;
-            background: linear-gradient(135deg, #6366f1, #a855f7);
-            border-radius: 36px;
-            box-shadow:
-                0 50px 120px rgba(99,102,241,0.45),
-                inset 0 0 0 1px rgba(255,255,255,0.15);
-            z-index: 1;
+        .nav-link {
+            transition: all 0.3s ease;
         }
 
-        /* Person image */
-        .hero-person {
-            position: relative;
-            height: 96%;
-            width: auto;
-            max-width: 100%;
-            object-fit: contain;
-            z-index: 2;
-            filter: drop-shadow(0 40px 60px rgba(0,0,0,0.35));
+        .nav-link:hover {
+            color: #6d28d9;
+            transform: translateY(-2px);
         }
 
-        /* Subtle hover */
-        .hero-visual:hover .hero-bg {
-            transform: translateY(-6px);
+        /* Buttons */
+        .btn-primary {
+            background: linear-gradient(135deg, #4f46e5, #9333ea);
+            border: none;
+            box-shadow: 0 20px 40px rgba(79,70,229,0.35);
+            transition: all 0.35s ease;
         }
 
-        .hero-visual:hover .hero-person {
-            transform: translateY(-4px) scale(1.01);
+        .btn-primary:hover {
+            transform: translateY(-3px) scale(1.02);
+            box-shadow: 0 30px 60px rgba(147,51,234,0.45);
         }
 
-        /* Mobile tuning */
-        @media (max-width: 768px) {
-            .hero-visual {
-                max-width: 320px;
-                aspect-ratio: 3 / 4.5;
-            }
+        /* Profile card – ORIGINAL SAFE STYLE */
+        .profile {
+            border-radius: 26px;
+            overflow: hidden;
+            box-shadow: 0 30px 60px rgba(0,0,0,0.18);
+            transition: transform 0.4s ease;
+        }
+
+        .profile:hover {
+            transform: translateY(-6px) scale(1.01);
+        }
+
+        /* About Card */
+        .about-card {
+            background: rgba(255,255,255,0.75);
+            backdrop-filter: blur(18px);
+            border-radius: 26px;
+            padding: 60px 40px;
+            box-shadow: 0 30px 60px rgba(0,0,0,0.06);
+        }
+
+        /* Footer logos */
+        footer img {
+            opacity: 0.85;
+            transition: all 0.3s ease;
+        }
+
+        footer img:hover {
+            opacity: 1;
+            transform: scale(1.08);
         }
     </style>
 </head>
@@ -86,102 +94,124 @@
 <body class="d-flex flex-column h-100">
 <main class="flex-shrink-0">
 
-    <!-- NAVBAR -->
-    <nav class="navbar navbar-expand-lg navbar-light bg-white py-3">
-        <div class="container px-5">
-            <a class="navbar-brand d-flex align-items-center" href="index.html">
-                <img src="assets/Logo.png" alt="Codivora Technologies Logo" height="45">
-            </a>
+<!-- Navigation -->
+<nav class="navbar navbar-expand-lg navbar-light py-3">
+    <div class="container px-5">
+        <a class="navbar-brand d-flex align-items-center" href="index.html">
+            <img src="assets/Logo.png" alt="Codivora Technologies Logo" height="45">
+        </a>
 
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent">
-                <span class="navbar-toggler-icon"></span>
-            </button>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent">
+            <span class="navbar-toggler-icon"></span>
+        </button>
 
-            <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                <ul class="navbar-nav ms-auto small fw-bolder align-items-lg-center">
-                    <li class="nav-item me-3">
-                        <a class="nav-link" href="mailto:contact@codivora.tech">Contact Us</a>
-                    </li>
-                    <li class="nav-item me-3">
-                        <a class="nav-link" href="clients.html" target="_blank">Our Clients</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="careers.html">Careers</a>
-                    </li>
-                </ul>
-            </div>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav ms-auto small fw-bolder align-items-lg-center">
+                <li class="nav-item me-3">
+                    <a class="nav-link" href="mailto:contact@codivora.tech">Contact Us</a>
+                </li>
+                <li class="nav-item me-3">
+                    <a class="nav-link" href="clients.html" target="_blank">Our Clients</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="careers.html">Careers</a>
+                </li>
+            </ul>
         </div>
-    </nav>
+    </div>
+</nav>
 
-    <!-- HERO -->
-    <header class="py-5">
-        <div class="container px-5 pb-5">
-            <div class="row gx-5 align-items-center">
-                <div class="col-xxl-5">
-                    <div class="text-center text-xxl-start">
-                        <div class="badge bg-gradient-primary-to-secondary text-white mb-4">
-                            SOFTWARE · AI · WEB · DIGITAL SOLUTIONS
-                        </div>
+<!-- Hero -->
+<header class="py-5">
+    <div class="container px-5 pb-5">
+        <div class="row gx-5 align-items-center">
 
-                        <div class="fs-3 fw-light text-muted">
-                            We help businesses
-                        </div>
-
-                        <h1 class="display-3 fw-bolder mb-5">
-                            <span class="text-gradient d-inline">
-                                Build, scale,<br>and grow digitally
-                            </span>
-                        </h1>
-
-                        <div class="d-grid d-sm-flex justify-content-sm-center justify-content-xxl-start">
-                            <span class="btn btn-primary btn-lg px-5 py-3 fw-bolder">
-                                Trusted by 80+ tech powerhouses worldwide
-                            </span>
-                        </div>
+            <!-- Left content -->
+            <div class="col-xxl-5">
+                <div class="text-center text-xxl-start">
+                    <div class="badge bg-gradient-primary-to-secondary text-white mb-4">
+                        SOFTWARE · AI · WEB · DIGITAL SOLUTIONS
                     </div>
-                </div>
 
-                <div class="col-xxl-7">
-                    <div class="hero-visual">
-                        <div class="hero-bg"></div>
-                        <img src="assets/profile.png" alt="Codivora Technologies" class="hero-person">
+                    <div class="fs-3 fw-light text-muted">
+                        We help businesses
+                    </div>
+
+                    <h1 class="display-3 fw-bolder mb-5">
+                        <span class="text-gradient d-inline">
+                            Build, scale,<br>and grow digitally
+                        </span>
+                    </h1>
+
+                    <div class="d-grid d-sm-flex gap-3">
+                        <span class="btn btn-primary btn-lg px-5 py-3 fw-bolder">
+                            Trusted by 80+ tech powerhouses worldwide
+                        </span>
                     </div>
                 </div>
             </div>
-        </div>
-    </header>
 
-    <!-- ABOUT -->
-    <section class="bg-light py-5">
-        <div class="container px-5">
-            <div class="text-center my-5">
-                <h2 class="display-5 fw-bolder">
-                    <span class="text-gradient d-inline">About Codivora Technologies</span>
-                </h2>
-                <p class="lead fw-light mb-4">
-                    Building reliable digital products for modern businesses.
-                </p>
-                <p class="text-muted">
-                    Codivora Technologies delivers high-quality software, AI solutions,
-                    scalable web platforms, and digital systems with a strong focus on
-                    performance, reliability, and long-term value.
-                </p>
+            <!-- Right image (ORIGINAL SAFE VERSION) -->
+            <div class="col-xxl-7">
+                <div class="d-flex justify-content-center mt-5 mt-xxl-0">
+                    <div class="profile bg-gradient-primary-to-secondary">
+                        <img class="profile-img" src="assets/profile.png" alt="Codivora Technologies" />
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</header>
+
+<!-- About -->
+<section class="py-5">
+    <div class="container px-5">
+        <div class="row justify-content-center">
+            <div class="col-xxl-8">
+                <div class="about-card text-center">
+                    <h2 class="display-5 fw-bolder mb-3">
+                        <span class="text-gradient d-inline">
+                            About Codivora Technologies
+                        </span>
+                    </h2>
+
+                    <p class="lead fw-light mb-4">
+                        Building reliable digital products for modern businesses.
+                    </p>
+
+                    <p class="text-muted">
+                        Codivora Technologies is a forward-thinking technology company delivering high-quality
+                        software development, artificial intelligence solutions, scalable web platforms,
+                        and digital systems. We focus on performance, reliability, and long-term value.
+                    </p>
+                </div>
             </div>
         </div>
-    </section>
+    </div>
+</section>
 
 </main>
 
-<!-- FOOTER -->
+<!-- Footer -->
 <footer class="bg-white py-4 mt-auto">
-    <div class="container px-5 text-center">
-        <h6 class="fw-bolder text-muted mb-3">Approved By</h6>
-        <div class="d-flex justify-content-center gap-4 mb-3">
-            <img src="assets/msme.png" height="50">
-            <img src="assets/dpiit.png" height="50">
+    <div class="container px-5">
+        <div class="row justify-content-center text-center mb-3">
+            <div class="col-12">
+                <h6 class="fw-bolder text-muted mb-3">Approved By</h6>
+                <div class="d-flex justify-content-center align-items-center gap-4 flex-wrap">
+                    <img src="assets/msme.png" height="50" alt="MSME">
+                    <img src="assets/dpiit.png" height="50" alt="DPIIT">
+                </div>
+            </div>
         </div>
-        <div class="small m-0">
-            © Codivora Technologies 2026. All rights reserved.
+
+        <div class="row align-items-center justify-content-center mt-4">
+            <div class="col-auto">
+                <div class="small m-0">
+                    © Codivora Technologies 2026. All rights reserved.
+                </div>
+            </div>
         </div>
     </div>
 </footer>

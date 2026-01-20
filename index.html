@@ -27,7 +27,6 @@
             background: radial-gradient(circle at top, #f6f7ff 0%, #ffffff 40%);
         }
 
-        /* Navbar */
         .navbar {
             backdrop-filter: blur(14px);
             background: rgba(255,255,255,0.88) !important;
@@ -43,7 +42,6 @@
             transform: translateY(-2px);
         }
 
-        /* Buttons */
         .btn-primary {
             background: linear-gradient(135deg, #4f46e5, #9333ea);
             border: none;
@@ -56,23 +54,20 @@
             box-shadow: 0 30px 60px rgba(147,51,234,0.45);
         }
 
-        /* PROFILE BOX – FIXED */
         .profile {
             border-radius: 26px;
-            overflow: visible; /* IMPORTANT: allows head to come out */
+            overflow: visible;
             position: relative;
             box-shadow: 0 30px 60px rgba(0,0,0,0.18);
         }
 
-        /* IMAGE POSITIONING – HEAD POP EFFECT */
         .profile-img {
             display: block;
             max-width: 100%;
             height: auto;
-            transform: translateY(32px); /* pushes image down */
+            transform: translateY(32px);
         }
 
-        /* About Card */
         .about-card {
             background: rgba(255,255,255,0.75);
             backdrop-filter: blur(18px);
@@ -112,11 +107,18 @@
                 <li class="nav-item me-3">
                     <a class="nav-link" href="mailto:contact@codivora.tech">Contact Us</a>
                 </li>
+
                 <li class="nav-item me-3">
                     <a class="nav-link" href="clients/" target="_blank">Our Clients</a>
                 </li>
-                <li class="nav-item">
+
+                <li class="nav-item me-3">
                     <a class="nav-link" href="careers/">Careers</a>
+                </li>
+
+                <!-- ✅ NEW -->
+                <li class="nav-item">
+                    <a class="nav-link" href="team/">Our Team</a>
                 </li>
             </ul>
         </div>
@@ -152,7 +154,6 @@
                 </div>
             </div>
 
-            <!-- IMAGE -->
             <div class="col-xxl-7">
                 <div class="d-flex justify-content-center mt-5 mt-xxl-0">
                     <div class="profile bg-gradient-primary-to-secondary">

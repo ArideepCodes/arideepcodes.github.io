@@ -1,173 +1,215 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="description" content="Apply for careers at Codivora Technologies" />
-    <meta name="author" content="Codivora Technologies" />
-    <title>Apply Now | Codivora Technologies</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Apply Now | Codivora Technologies</title>
 
-    <!-- Favicon -->
-    <link rel="icon" type="image/x-icon" href="assets/favicon.ico" />
+  <!-- Favicon -->
+  <link rel="icon" type="image/x-icon" href="/assets/favicon.ico" />
 
-    <!-- Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 
-    <!-- Bootstrap Icons -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css" rel="stylesheet">
+  <!-- Bootstrap Icons -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
 
-    <!-- Core CSS -->
-    <link href="css/styles.css" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background: radial-gradient(circle at top, #f5f6ff 0%, #ffffff 45%);
+      min-height: 100vh;
+      margin: 0;
+    }
 
-    <style>
-        body {
-            font-family: 'Plus Jakarta Sans', sans-serif;
-        }
-        .apply-card {
-            background: #ffffff;
-            border-radius: 20px;
-            padding: 45px;
-            box-shadow: 0 25px 50px rgba(0,0,0,0.08);
-        }
-        .form-control, .form-select {
-            padding: 12px;
-            border-radius: 10px;
-        }
-        .btn-apply {
-            padding: 14px;
-            border-radius: 12px;
-            font-weight: 600;
-        }
-    </style>
+    .navbar {
+      background: rgba(255,255,255,0.85);
+      backdrop-filter: blur(14px);
+      box-shadow: 0 12px 30px rgba(0,0,0,0.04);
+    }
+
+    .apply-wrapper {
+      padding: 80px 16px;
+      display: flex;
+      justify-content: center;
+    }
+
+    .apply-card {
+      width: 100%;
+      max-width: 820px;
+      background: rgba(255,255,255,0.8);
+      backdrop-filter: blur(20px);
+      border-radius: 28px;
+      padding: 50px 45px;
+      box-shadow: 0 40px 80px rgba(99,102,241,0.18);
+    }
+
+    .apply-card h1 {
+      font-weight: 800;
+      margin-bottom: 10px;
+      background: linear-gradient(135deg, #4f46e5, #9333ea);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .apply-card p {
+      color: #6b7280;
+      margin-bottom: 40px;
+    }
+
+    .form-group {
+      margin-bottom: 22px;
+    }
+
+    label {
+      font-weight: 600;
+      font-size: 14px;
+      margin-bottom: 6px;
+      display: block;
+    }
+
+    input, select, textarea {
+      width: 100%;
+      padding: 14px 16px;
+      border-radius: 14px;
+      border: 1px solid #e5e7eb;
+      font-size: 15px;
+      transition: all 0.3s ease;
+      outline: none;
+    }
+
+    input:focus, select:focus, textarea:focus {
+      border-color: #6366f1;
+      box-shadow: 0 0 0 4px rgba(99,102,241,0.15);
+    }
+
+    textarea {
+      resize: none;
+      height: 120px;
+    }
+
+    .file-input {
+      padding: 12px;
+      background: #f9fafb;
+      cursor: pointer;
+    }
+
+    .submit-btn {
+      margin-top: 30px;
+      width: 100%;
+      padding: 16px;
+      font-size: 16px;
+      font-weight: 700;
+      border-radius: 16px;
+      border: none;
+      color: white;
+      background: linear-gradient(135deg, #4f46e5, #9333ea);
+      box-shadow: 0 20px 40px rgba(147,51,234,0.35);
+      cursor: pointer;
+      transition: all 0.35s ease;
+    }
+
+    .submit-btn:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 30px 60px rgba(147,51,234,0.45);
+    }
+
+    footer {
+      text-align: center;
+      padding: 30px 10px;
+      font-size: 14px;
+      color: #6b7280;
+    }
+
+    @media (max-width: 600px) {
+      .apply-card {
+        padding: 35px 24px;
+      }
+    }
+  </style>
 </head>
 
-<body class="bg-light">
+<body>
 
-<!-- Navigation -->
-<nav class="navbar navbar-expand-lg navbar-light bg-white py-3">
-    <div class="container px-5">
-        <a class="navbar-brand d-flex align-items-center" href="index.html">
-            <img src="assets/Logo.png" alt="Codivora Technologies Logo" height="45">
-        </a>
-
-        <div class="collapse navbar-collapse">
-            <ul class="navbar-nav ms-auto small fw-bolder">
-                <li class="nav-item">
-                    <a class="nav-link" href="careers/">Careers</a>
-                </li>
-            </ul>
-        </div>
-    </div>
+<!-- Navbar -->
+<nav class="navbar">
+  <div style="max-width:1200px;margin:auto;padding:14px 20px;display:flex;align-items:center;">
+    <a href="/" style="display:flex;align-items:center;text-decoration:none;">
+      <img src="/assets/Logo.png" height="42" alt="Codivora Logo">
+    </a>
+  </div>
 </nav>
 
-<!-- Apply Section -->
-<section class="py-5">
-    <div class="container px-5">
-        <div class="row justify-content-center">
-            <div class="col-lg-8">
+<!-- Apply Form -->
+<div class="apply-wrapper">
+  <div class="apply-card">
+    <h1>Apply at Codivora</h1>
+    <p>Submit your details and take the next step in your career journey.</p>
 
-                <div class="apply-card">
-                    <h2 class="fw-bolder mb-2 text-center">Apply at Codivora Technologies</h2>
-                    <p class="text-muted text-center mb-4">
-                        Submit your details and take the next step in your career journey.
-                    </p>
+    <form action="/thank-you" method="get">
+      <div class="form-group">
+        <label>Full Name *</label>
+        <input type="text" required>
+      </div>
 
-                    <!-- Dummy Form -->
-                    <form onsubmit="return handleSubmit()">
+      <div class="form-group">
+        <label>Email Address *</label>
+        <input type="email" required>
+      </div>
 
-                        <div class="row g-3">
+      <div class="form-group">
+        <label>Phone Number *</label>
+        <input type="tel" required>
+      </div>
 
-                            <div class="col-md-6">
-                                <label class="form-label">Full Name *</label>
-                                <input type="text" class="form-control" required>
-                            </div>
+      <div class="form-group">
+        <label>Position Applying For *</label>
+        <select required>
+          <option value="">Select a position</option>
+          <option>Software Developer Intern</option>
+          <option>SDE I (Software Development Engineer I)</option>
+          <option>Junior Full Stack Developer</option>
+          <option>Frontend Developer</option>
+          <option>Backend Developer</option>
+          <option>Data Analyst</option>
+          <option>DevOps Engineer</option>
+          <option>QA Automation Engineer</option>
+          <option>Cloud Support Engineer</option>
+        </select>
+      </div>
 
-                            <div class="col-md-6">
-                                <label class="form-label">Email Address *</label>
-                                <input type="email" class="form-control" required>
-                            </div>
+      <div class="form-group">
+        <label>LinkedIn Profile URL</label>
+        <input type="url" placeholder="https://linkedin.com/in/username">
+      </div>
 
-                            <div class="col-md-6">
-                                <label class="form-label">Phone Number *</label>
-                                <input type="tel" class="form-control" required>
-                            </div>
+      <div class="form-group">
+        <label>Portfolio / GitHub URL</label>
+        <input type="url" placeholder="https://github.com/username">
+      </div>
 
-                            <div class="col-md-6">
-                                <label class="form-label">Position Applying For *</label>
-                                <select class="form-select" required>
-                                    <option value="">Select a position</option>
-                                    <option>Software Developer Intern (0–1 yrs)</option>
-                                    <option>SDE I – Software Development Engineer I (0–3 yrs)</option>
-                                    <option>Junior Full Stack Developer (1–3 yrs)</option>
-                                    <option>Frontend Developer (React / Angular)</option>
-                                    <option>Backend Developer (Java / Python / Node)</option>
-                                    <option>Data Analyst</option>
-                                    <option>QA Automation Engineer</option>
-                                    <option>DevOps Engineer</option>
-                                    <option>Android / iOS App Developer</option>
-                                    <option>Cloud Support Engineer</option>
-                                    <option>Cybersecurity Analyst</option>
-                                    <option>System Administrator</option>
-                                    <option>Network Engineer</option>
-                                    <option>Database Administrator (DBA)</option>
-                                    <option>Technical Support Engineer (L2)</option>
-                                    <option>Associate Product Manager</option>
-                                </select>
-                            </div>
+      <div class="form-group">
+        <label>Upload Resume *</label>
+        <input type="file" class="file-input" required>
+      </div>
 
-                            <div class="col-md-6">
-                                <label class="form-label">LinkedIn Profile URL</label>
-                                <input type="url" class="form-control" placeholder="https://linkedin.com/in/username">
-                            </div>
+      <div class="form-group">
+        <label>Message (optional)</label>
+        <textarea placeholder="Tell us briefly about yourself..."></textarea>
+      </div>
 
-                            <div class="col-md-6">
-                                <label class="form-label">Portfolio / GitHub URL</label>
-                                <input type="url" class="form-control" placeholder="https://github.com/username">
-                            </div>
+      <button type="submit" class="submit-btn">
+        Submit Application
+      </button>
+    </form>
+  </div>
+</div>
 
-                            <div class="col-12">
-                                <label class="form-label">Upload Resume *</label>
-                                <input type="file" class="form-control" required>
-                            </div>
-
-                            <div class="col-12">
-                                <label class="form-label">Message (optional)</label>
-                                <textarea class="form-control" rows="4" placeholder="Tell us briefly about yourself..."></textarea>
-                            </div>
-
-                            <div class="col-12 d-grid mt-3">
-                                <button type="submit" class="btn btn-primary btn-apply">
-                                    Submit Application
-                                </button>
-                            </div>
-
-                        </div>
-                    </form>
-                    <!-- End Form -->
-
-                </div>
-
-            </div>
-        </div>
-    </div>
-</section>
-
-<!-- Footer -->
-<footer class="bg-white py-4 mt-auto">
-    <div class="container px-5 text-center">
-        <div class="small m-0">
-            © Codivora Technologies 2026. All rights reserved.
-        </div>
-    </div>
+<footer>
+  © Codivora Technologies 2026. All rights reserved.
 </footer>
-
-<!-- Dummy Submit Script -->
-<script>
-    function handleSubmit() {
-        window.location.href = "thank-you.html";
-        return false;
-    }
-</script>
 
 </body>
 </html>

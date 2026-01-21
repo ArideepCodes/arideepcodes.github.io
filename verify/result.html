@@ -32,6 +32,40 @@
             border-radius: 12px;
             font-weight: 700;
         }
+
+        /* ===== PRINT / PDF STYLES ===== */
+        @media print {
+            body {
+                background: white !important;
+            }
+
+            nav,
+            .btn {
+                display: none !important;
+            }
+
+            .card-box {
+                box-shadow: none !important;
+                border-radius: 0 !important;
+                padding: 0 !important;
+            }
+
+            .pdf-header {
+                display: flex;
+                align-items: center;
+                margin-bottom: 30px;
+            }
+
+            .pdf-header img {
+                height: 50px;
+            }
+
+            .pdf-footer {
+                margin-top: 50px;
+                font-size: 0.9rem;
+                color: #444;
+            }
+        }
     </style>
 </head>
 
@@ -50,6 +84,11 @@
         <div class="col-md-7">
             <div class="card-box text-center">
 
+                <!-- PDF HEADER -->
+                <div class="pdf-header mb-4 text-start">
+                    <img src="../assets/Logo.png" alt="Codivora Technologies">
+                </div>
+
                 <div class="badge-ok mb-4">Employee Verified ✓</div>
 
                 <h3 id="name" class="fw-bolder mb-3"></h3>
@@ -62,8 +101,36 @@
                     <p><strong>Email:</strong> <span id="email"></span></p>
                 </div>
 
-                <div class="mt-4">
-                    <a href="/verify" class="btn btn-primary">Verify Another Employee</a>
+                <hr class="my-4">
+
+                <!-- OFFICIAL WORDING -->
+                <div class="text-start">
+                    <p>
+                        This document certifies that the above-mentioned individual is currently
+                        associated with <strong>Codivora Technologies</strong> as a job candidate.
+                    </p>
+
+                    <p>
+                        The concerned institute is kindly requested to grant attendance leave or
+                        academic consideration to the student, wherever applicable, for official
+                        employment-related engagements.
+                    </p>
+                </div>
+
+                <div class="pdf-footer text-start">
+                    <p>
+                        This is a digitally generated verification document and does not require
+                        any physical signature or seal.
+                    </p>
+                </div>
+
+                <div class="mt-4 d-flex gap-3 justify-content-center">
+                    <button class="btn btn-primary" onclick="downloadPDF()">
+                        Download Verification PDF
+                    </button>
+                    <a href="/verify" class="btn btn-outline-secondary">
+                        Verify Another Employee
+                    </a>
                 </div>
 
             </div>
@@ -83,6 +150,10 @@
         document.getElementById("education").innerText = data.education;
         document.getElementById("institute").innerText = data.institute;
         document.getElementById("email").innerText = data.email;
+    }
+
+    function downloadPDF() {
+        window.print();
     }
 </script>
 

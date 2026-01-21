@@ -25,6 +25,54 @@
             box-shadow: 0 30px 60px rgba(0,0,0,0.08);
         }
 
+        /* ===== VERIFICATION ANIMATION ===== */
+        .verify-animation {
+            height: 90px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 16px;
+        }
+
+        .spinner {
+            width: 56px;
+            height: 56px;
+            border: 6px solid #e5e7eb;
+            border-top: 6px solid #22c55e;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        .checkmark {
+            display: none;
+            width: 70px;
+            height: 70px;
+        }
+
+        .checkmark svg {
+            width: 70px;
+            height: 70px;
+        }
+
+        .checkmark path {
+            fill: none;
+            stroke: #22c55e;
+            stroke-width: 6;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+            stroke-dasharray: 48;
+            stroke-dashoffset: 48;
+            animation: draw 0.6s ease forwards;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        @keyframes draw {
+            to { stroke-dashoffset: 0; }
+        }
+
         .badge-ok {
             background: linear-gradient(135deg, #22c55e, #16a34a);
             color: white;
@@ -92,7 +140,17 @@
                     <img src="../assets/Logo.png" alt="Codivora Technologies" class="pdf-logo">
                 </div>
 
-                <div class="badge-ok mb-4">Employee Verified ✓</div>
+                <!-- VERIFICATION ANIMATION -->
+                <div class="verify-animation">
+                    <div class="spinner" id="spinner"></div>
+                    <div class="checkmark" id="checkmark">
+                        <svg viewBox="0 0 52 52">
+                            <path d="M14 27 L22 35 L38 18"></path>
+                        </svg>
+                    </div>
+                </div>
+
+                <div class="badge-ok mb-4">Employee Verified</div>
 
                 <h3 id="name" class="fw-bolder mb-3"></h3>
 
@@ -143,10 +201,17 @@
 
 <script>
     const data = JSON.parse(localStorage.getItem("verifiedEmployee"));
+    const spinner = document.getElementById("spinner");
+    const checkmark = document.getElementById("checkmark");
 
     if (!data) {
         window.location.href = "/verify/not-found.html";
     } else {
+        setTimeout(() => {
+            spinner.style.display = "none";
+            checkmark.style.display = "block";
+        }, 900);
+
         document.getElementById("name").innerText = data.name;
         document.getElementById("age").innerText = data.age;
         document.getElementById("designation").innerText = data.designation;

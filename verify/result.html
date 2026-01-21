@@ -1,1 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <title>Employee Verified | Codivora Technologies</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 
+    <link rel="icon" href="../assets/favicon.ico">
+
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <style>
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background: radial-gradient(circle at top, #f6f7ff 0%, #ffffff 45%);
+        }
+
+        .card-box {
+            background: rgba(255,255,255,0.9);
+            backdrop-filter: blur(18px);
+            border-radius: 26px;
+            padding: 50px 40px;
+            box-shadow: 0 30px 60px rgba(0,0,0,0.08);
+        }
+
+        .badge-ok {
+            background: linear-gradient(135deg, #22c55e, #16a34a);
+            color: white;
+            padding: 10px 18px;
+            border-radius: 12px;
+            font-weight: 700;
+        }
+    </style>
+</head>
+
+<body>
+
+<nav class="navbar navbar-light bg-white py-3 shadow-sm">
+    <div class="container px-5">
+        <a class="navbar-brand" href="../index.html">
+            <img src="../assets/Logo.png" height="45">
+        </a>
+    </div>
+</nav>
+
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-7">
+            <div class="card-box text-center">
+
+                <div class="badge-ok mb-4">Employee Verified ✓</div>
+
+                <h3 id="name" class="fw-bolder mb-3"></h3>
+
+                <div class="text-start mt-4">
+                    <p><strong>Age:</strong> <span id="age"></span></p>
+                    <p><strong>Designation:</strong> <span id="designation"></span></p>
+                    <p><strong>Education:</strong> <span id="education"></span></p>
+                    <p><strong>Institute:</strong> <span id="institute"></span></p>
+                </div>
+
+                <div class="mt-4">
+                    <a href="/verify" class="btn btn-primary">Verify Another Employee</a>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    const data = JSON.parse(localStorage.getItem("verifiedEmployee"));
+
+    if (!data) {
+        window.location.href = "/verify/not-found.html";
+    } else {
+        document.getElementById("name").innerText = data.name;
+        document.getElementById("age").innerText = data.age;
+        document.getElementById("designation").innerText = data.designation;
+        document.getElementById("education").innerText = data.education;
+        document.getElementById("institute").innerText = data.institute;
+    }
+</script>
+
+</body>
+</html>

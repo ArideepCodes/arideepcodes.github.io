@@ -18,7 +18,7 @@
         }
 
         .card-box {
-            background: rgba(255,255,255,0.9);
+            background: rgba(255,255,255,0.92);
             backdrop-filter: blur(18px);
             border-radius: 26px;
             padding: 50px 40px;
@@ -31,6 +31,13 @@
             padding: 10px 18px;
             border-radius: 12px;
             font-weight: 700;
+            display: inline-block;
+        }
+
+        /* LOGO SIZE CONTROL */
+        .pdf-logo {
+            height: 46px;
+            width: auto;
         }
 
         /* ===== PRINT / PDF STYLES ===== */
@@ -50,14 +57,8 @@
                 padding: 0 !important;
             }
 
-            .pdf-header {
-                display: flex;
-                align-items: center;
-                margin-bottom: 30px;
-            }
-
-            .pdf-header img {
-                height: 50px;
+            .pdf-logo {
+                height: 42px;
             }
 
             .pdf-footer {
@@ -71,22 +72,24 @@
 
 <body>
 
+<!-- NAVBAR -->
 <nav class="navbar navbar-light bg-white py-3 shadow-sm">
     <div class="container px-5">
         <a class="navbar-brand" href="../index.html">
-            <img src="../assets/Logo.png" height="45">
+            <img src="../assets/Logo.png" height="40" alt="Codivora Technologies">
         </a>
     </div>
 </nav>
 
+<!-- CONTENT -->
 <div class="container py-5">
     <div class="row justify-content-center">
         <div class="col-md-7">
             <div class="card-box text-center">
 
                 <!-- PDF HEADER -->
-                <div class="pdf-header mb-4 text-start">
-                    <img src="../assets/Logo.png" alt="Codivora Technologies">
+                <div class="mb-4 text-start">
+                    <img src="../assets/Logo.png" alt="Codivora Technologies" class="pdf-logo">
                 </div>
 
                 <div class="badge-ok mb-4">Employee Verified ✓</div>
@@ -107,13 +110,13 @@
                 <div class="text-start">
                     <p>
                         This document certifies that the above-mentioned individual is currently
-                        associated with <strong>Codivora Technologies</strong> as a job candidate.
+                        associated with <strong>Codivora Technologies.</strong>
                     </p>
 
                     <p>
-                        The concerned institute is kindly requested to grant attendance leave or
-                        academic consideration to the student, wherever applicable, for official
-                        employment-related engagements.
+                        The concerned educational institution is kindly requested to grant
+                        attendance leave or academic consideration to the student, wherever
+                        applicable, for official employment-related engagements.
                     </p>
                 </div>
 

@@ -9,6 +9,7 @@ const employees = {
         designation: "SDE I",
         education: "B.Tech CS AIML",
         institute: "Swami Vivekananda University"
+        email: "arideep@codivora.tech"
     },
     "ctsde120254829": {
         name: "Arideep Kanshabanik",
@@ -16,6 +17,7 @@ const employees = {
         designation: "SDE I",
         education: "B.Tech CS AIML",
         institute: "Swami Vivekananda University"
+        email: "arideep@codivora.tech"
     },
 
     // Torsa Farooqi
@@ -25,6 +27,7 @@ const employees = {
         designation: "SDE I",
         education: "B.Tech CS AIML",
         institute: "Aliah University"
+        email: "torsa@codivora.tech"
     },
     "ctsde120254830": {
         name: "Torsa Farooqi",
@@ -32,6 +35,7 @@ const employees = {
         designation: "SDE I",
         education: "B.Tech CS AIML",
         institute: "Aliah University"
+        email: "torsa@codivora.tech"
     }
 };
 

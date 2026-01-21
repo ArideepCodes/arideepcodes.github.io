@@ -8,7 +8,7 @@ const employees = {
         age: "21",
         designation: "SDE I",
         education: "B.Tech CS AIML",
-        institute: "Swami Vivekananda University"
+        institute: "Swami Vivekananda University",
         email: "arideep@codivora.tech"
     },
     "ctsde120254829": {
@@ -16,7 +16,7 @@ const employees = {
         age: "21",
         designation: "SDE I",
         education: "B.Tech CS AIML",
-        institute: "Swami Vivekananda University"
+        institute: "Swami Vivekananda University",
         email: "arideep@codivora.tech"
     },
 
@@ -26,7 +26,7 @@ const employees = {
         age: "21",
         designation: "SDE I",
         education: "B.Tech CS AIML",
-        institute: "Aliah University"
+        institute: "Aliah University",
         email: "torsa@codivora.tech"
     },
     "ctsde120254830": {
@@ -34,7 +34,7 @@ const employees = {
         age: "21",
         designation: "SDE I",
         education: "B.Tech CS AIML",
-        institute: "Aliah University"
+        institute: "Aliah University",
         email: "torsa@codivora.tech"
     }
 };

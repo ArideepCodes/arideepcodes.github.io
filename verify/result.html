@@ -25,7 +25,6 @@
             box-shadow: 0 30px 60px rgba(0,0,0,0.08);
         }
 
-        /* ===== VERIFICATION ANIMATION ===== */
         .verify-animation {
             height: 90px;
             display: flex;
@@ -82,13 +81,11 @@
             display: inline-block;
         }
 
-        /* LOGO SIZE CONTROL */
         .pdf-logo {
             height: 46px;
             width: auto;
         }
 
-        /* ===== PRINT / PDF STYLES ===== */
         @media print {
             body {
                 background: white !important;
@@ -120,7 +117,6 @@
 
 <body>
 
-<!-- NAVBAR -->
 <nav class="navbar navbar-light bg-white py-3 shadow-sm">
     <div class="container px-5">
         <a class="navbar-brand" href="../index.html">
@@ -129,18 +125,15 @@
     </div>
 </nav>
 
-<!-- CONTENT -->
 <div class="container py-5">
     <div class="row justify-content-center">
         <div class="col-md-7">
             <div class="card-box text-center">
 
-                <!-- PDF HEADER -->
                 <div class="mb-4 text-start">
                     <img src="../assets/Logo.png" alt="Codivora Technologies" class="pdf-logo">
                 </div>
 
-                <!-- VERIFICATION ANIMATION -->
                 <div class="verify-animation">
                     <div class="spinner" id="spinner"></div>
                     <div class="checkmark" id="checkmark">
@@ -150,7 +143,9 @@
                     </div>
                 </div>
 
-                <div class="badge-ok mb-4">Employee Verified</div>
+                <div id="verificationBadge" class="badge-ok mb-4">
+                    Verification Successful
+                </div>
 
                 <h3 id="name" class="fw-bolder mb-3"></h3>
 
@@ -164,19 +159,7 @@
 
                 <hr class="my-4">
 
-                <!-- OFFICIAL WORDING -->
-                <div class="text-start">
-                    <p>
-                        This document certifies that the above-mentioned individual is currently
-                        associated with <strong>Codivora Technologies.</strong>
-                    </p>
-
-                    <p>
-                        The concerned educational institution is kindly requested to grant
-                        attendance leave or academic consideration to the student, wherever
-                        applicable, for official employment-related engagements.
-                    </p>
-                </div>
+                <div id="officialWording" class="text-start"></div>
 
                 <div class="pdf-footer text-start">
                     <p>
@@ -204,6 +187,61 @@
     const spinner = document.getElementById("spinner");
     const checkmark = document.getElementById("checkmark");
 
+    const params = new URLSearchParams(window.location.search);
+    const purpose = params.get("purpose") || "general";
+
+    const badge = document.getElementById("verificationBadge");
+    const wording = document.getElementById("officialWording");
+
+    const purposeContent = {
+        education: {
+            badge: "Educational Verification",
+            text: `
+                <p>
+                    This document confirms that the above-mentioned individual is associated with
+                    <strong>Codivora Technologies</strong> as per internal records.
+                </p>
+                <p>
+                    This verification is issued for academic or institutional reference only.
+                    The concerned educational institution may consider this information wherever applicable.
+                </p>
+            `
+        },
+        employment: {
+            badge: "Employment Verification",
+            text: `
+                <p>
+                    This is to verify that the above-mentioned individual is associated with
+                    <strong>Codivora Technologies</strong> based on available employment records.
+                </p>
+                <p>
+                    This verification is intended for professional or background verification purposes only.
+                </p>
+            `
+        },
+        internship: {
+            badge: "Internship Confirmation",
+            text: `
+                <p>
+                    This document confirms the internship association of the above-mentioned individual
+                    with <strong>Codivora Technologies</strong>.
+                </p>
+                <p>
+                    Issued for institutional or academic reference where required.
+                </p>
+            `
+        },
+        general: {
+            badge: "Verification Successful",
+            text: `
+                <p>
+                    This verification confirms the association of the above-mentioned individual
+                    with <strong>Codivora Technologies</strong> as per available records.
+                </p>
+            `
+        }
+    };
+
     if (!data) {
         window.location.href = "/verify/not-found.html";
     } else {
@@ -218,6 +256,10 @@
         document.getElementById("education").innerText = data.education;
         document.getElementById("institute").innerText = data.institute;
         document.getElementById("email").innerText = data.email;
+
+        const content = purposeContent[purpose] || purposeContent.general;
+        badge.innerText = content.badge;
+        wording.innerHTML = content.text;
     }
 
     function downloadPDF() {

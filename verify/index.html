@@ -31,6 +31,10 @@
             background: linear-gradient(135deg, #4f46e5, #9333ea);
             border: none;
         }
+
+        select.form-select-lg {
+            padding: 14px 18px;
+        }
     </style>
 </head>
 
@@ -51,9 +55,22 @@
 
                 <h2 class="fw-bolder mb-3">Employment Verification</h2>
                 <p class="text-muted mb-4">
-                    For institutional verification purposes only.
+                    This verification portal is intended for institutional and official use only.
                 </p>
 
+                <!-- Purpose Selector -->
+                <select
+                    id="verificationPurpose"
+                    class="form-select form-select-lg mb-4"
+                >
+                    <option value="">Select Verification Purpose</option>
+                    <option value="education">Educational Verification (University / College)</option>
+                    <option value="employment">Employment Verification (HR / Employer)</option>
+                    <option value="internship">Internship Confirmation</option>
+                    <option value="general">General Verification</option>
+                </select>
+
+                <!-- Employee ID -->
                 <input
                     type="text"
                     id="employeeId"
@@ -70,6 +87,26 @@
     </div>
 </div>
 
-<script src="../js/verify.js"></script>
+<script>
+    function verifyEmployee() {
+        const employeeId = document.getElementById("employeeId").value.trim();
+        const purpose = document.getElementById("verificationPurpose").value;
+
+        if (!purpose) {
+            alert("Please select a verification purpose.");
+            return;
+        }
+
+        if (!employeeId) {
+            alert("Please enter a valid Employee ID.");
+            return;
+        }
+
+        window.location.href =
+            "result.html?id=" + encodeURIComponent(employeeId) +
+            "&purpose=" + encodeURIComponent(purpose);
+    }
+</script>
+
 </body>
 </html>

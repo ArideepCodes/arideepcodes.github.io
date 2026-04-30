@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Assessment</title>
+  <style>
+    body {
+      background: #0f172a;
+      color: white;
+      font-family: Arial;
+      text-align: center;
+    }
+    input, button {
+      padding: 10px;
+      margin: 10px;
+    }
+    .hidden { display: none; }
+    video {
+      position: fixed;
+      top: 10px;
+      right: 10px;
+      width: 150px;
+      border-radius: 10px;
+    }
+  </style>
+</head>
+
+<body>
+
+<!-- LOGIN -->
+<div id="login">
+  <h2>Assessment Login</h2>
+  <input id="id" placeholder="Candidate ID"><br>
+  <input id="pass" type="password" placeholder="Password"><br>
+  <button onclick="login()">Login</button>
+</div>
+
+<!-- TEST -->
+<div id="test" class="hidden">
+  <h3 id="timer"></h3>
+  <h3 id="warning">Warnings: 0/10</h3>
+
+  <video id="cam" autoplay muted></video>
+
+  <h2 id="question"></h2>
+  <div id="options"></div>
+
+  <button onclick="next()">Next</button>
+  <button onclick="submitTest()">Submit</button>
+</div>
+
+<!-- SUBMITTED -->
+<div id="submitted" class="hidden">
+  <h1>Assessment Submitted</h1>
+  <p>We will send your results soon via email.</p>
+</div>
+
+<script>
+const users = [
+  { id: "CODIUAE736197", pass: "1234" }
+];
+
+const questions = [
+  { q: "What is HTML?", o: ["Lang", "Markup", "OS", "DB"], a: 1 },
+  { q: "CSS stands for?", o: ["Style", "Script", "Server", "None"], a: 0 },
+  { q: "JS is?", o: ["Lang", "DB", "Tool", "OS"], a: 0 }
+];
+
+// duplicate until 20
+
+let current = 0;
+let warnings = 0;
+let time = 1200;
+
+function login() {
+  const id = document.getElementById("id").value;
+  const pass = document.getElementById("pass").value;
+
+  const valid = users.some(u => u.id === id && u.pass === pass);
+
+  if (valid) {
+    document.getElementById("login").classList.add("hidden");
+    document.getElementById("test").classList.remove("hidden");
+    startCam();
+    loadQ();
+    startTimer();
+  } else {
+    alert("Invalid login");
+  }
+}
+
+function loadQ() {
+  const q = questions[current];
+  document.getElementById("question").innerText = q.q;
+
+  let html = "";
+  q.o.forEach((opt, i) => {
+    html += `<button onclick="select(${i})">${opt}</button><br>`;
+  });
+
+  document.getElementById("options").innerHTML = html;
+}
+
+function select(i) {
+  // store if needed
+}
+
+function next() {
+  current++;
+  if (current >= questions.length) {
+    submitTest();
+  } else {
+    loadQ();
+  }
+}
+
+function submitTest() {
+  document.getElementById("test").classList.add("hidden");
+  document.getElementById("submitted").classList.remove("hidden");
+}
+
+function startTimer() {
+  setInterval(() => {
+    time--;
+    document.getElementById("timer").innerText = "Time: " + time;
+
+    if (time <= 0) submitTest();
+  }, 1000);
+}
+
+// CAMERA
+function startCam() {
+  navigator.mediaDevices.getUserMedia({ video: true })
+    .then(stream => {
+      document.getElementById("cam").srcObject = stream;
+    });
+}
+
+// TAB SWITCH DETECTION
+window.onblur = () => {
+  warnings++;
+  document.getElementById("warning").innerText = "Warnings: " + warnings + "/10";
+
+  alert("Warning " + warnings);
+
+  if (warnings >= 10) {
+    alert("Exam Terminated");
+    location.reload();
+  }
+};
+</script>
+
+</body>
+</html>

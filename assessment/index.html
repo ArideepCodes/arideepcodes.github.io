@@ -1,127 +1,197 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Assessment</title>
+  <title>Codivora Assessment</title>
   <style>
     body {
+      margin: 0;
+      font-family: Arial;
       background: #0f172a;
       color: white;
-      font-family: Arial;
-      text-align: center;
     }
-    input, button {
+
+    .container {
+      max-width: 900px;
+      margin: auto;
+      padding: 20px;
+    }
+
+    .card {
+      background: #1e293b;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 0 20px rgba(0,255,255,0.1);
+    }
+
+    input {
+      width: 100%;
+      padding: 12px;
+      margin: 10px 0;
+      border-radius: 5px;
+      border: none;
+    }
+
+    button {
+      padding: 10px 20px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      background: cyan;
+      color: black;
+      font-weight: bold;
+      margin-top: 10px;
+    }
+
+    .option {
+      display: block;
+      background: #334155;
       padding: 10px;
-      margin: 10px;
+      margin: 10px 0;
+      border-radius: 6px;
+      cursor: pointer;
     }
-    .hidden { display: none; }
+
+    .option:hover {
+      background: #475569;
+    }
+
+    .topbar {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 15px;
+    }
+
     video {
       position: fixed;
       top: 10px;
       right: 10px;
-      width: 150px;
+      width: 180px;
       border-radius: 10px;
+      border: 2px solid cyan;
+    }
+
+    .hidden {
+      display: none;
     }
   </style>
 </head>
 
 <body>
 
-<!-- LOGIN -->
-<div id="login">
-  <h2>Assessment Login</h2>
-  <input id="id" placeholder="Candidate ID"><br>
-  <input id="pass" type="password" placeholder="Password"><br>
-  <button onclick="login()">Login</button>
-</div>
+<div class="container">
 
-<!-- TEST -->
-<div id="test" class="hidden">
-  <h3 id="timer"></h3>
-  <h3 id="warning">Warnings: 0/10</h3>
+  <!-- LOGIN -->
+  <div id="login" class="card">
+    <h2>Codivora Assessment Portal</h2>
+    <input id="id" placeholder="Candidate ID">
+    <input id="pass" type="password" placeholder="Password">
+    <button onclick="login()">Login</button>
+  </div>
 
-  <video id="cam" autoplay muted></video>
+  <!-- TEST -->
+  <div id="test" class="hidden">
 
-  <h2 id="question"></h2>
-  <div id="options"></div>
+    <div class="topbar">
+      <div id="progress"></div>
+      <div id="timer"></div>
+    </div>
 
-  <button onclick="next()">Next</button>
-  <button onclick="submitTest()">Submit</button>
-</div>
+    <video id="cam" autoplay muted></video>
 
-<!-- SUBMITTED -->
-<div id="submitted" class="hidden">
-  <h1>Assessment Submitted</h1>
-  <p>We will send your results soon via email.</p>
+    <div class="card">
+      <h3 id="question"></h3>
+      <div id="options"></div>
+
+      <button onclick="next()">Next</button>
+      <button onclick="submitTest()">Submit</button>
+    </div>
+
+  </div>
+
+  <!-- SUBMITTED -->
+  <div id="submitted" class="hidden card">
+    <h1>Assessment Submitted</h1>
+    <p>We will send your results soon via email.</p>
+  </div>
+
 </div>
 
 <script>
+
+// LOGIN
 const users = [
-  { id: "CODIUAE736197", pass: "1234" }
+  { id: "CODIUAE736197", pass: "Moumi@2002@SDE@INTERN" }
 ];
 
-const questions = [
-  { q: "What is HTML?", o: ["Lang", "Markup", "OS", "DB"], a: 1 },
-  { q: "CSS stands for?", o: ["Style", "Script", "Server", "None"], a: 0 },
-  { q: "JS is?", o: ["Lang", "DB", "Tool", "OS"], a: 0 }
-];
-
-// duplicate until 20
+// 35 QUESTIONS
+const questions = Array.from({ length: 35 }, (_, i) => ({
+  q: "Question " + (i + 1) + ": Sample technical question?",
+  o: ["Option A", "Option B", "Option C", "Option D", "Option E"],
+  a: 0
+}));
 
 let current = 0;
-let warnings = 0;
-let time = 1200;
+let answers = [];
+let time = 2100;
 
+// LOGIN
 function login() {
   const id = document.getElementById("id").value;
   const pass = document.getElementById("pass").value;
 
   const valid = users.some(u => u.id === id && u.pass === pass);
 
-  if (valid) {
-    document.getElementById("login").classList.add("hidden");
-    document.getElementById("test").classList.remove("hidden");
-    startCam();
-    loadQ();
-    startTimer();
-  } else {
-    alert("Invalid login");
-  }
+  if (!valid) return alert("Invalid login");
+
+  document.getElementById("login").classList.add("hidden");
+  document.getElementById("test").classList.remove("hidden");
+
+  startCam();
+  loadQ();
+  startTimer();
 }
 
+// LOAD QUESTION
 function loadQ() {
   const q = questions[current];
+
   document.getElementById("question").innerText = q.q;
+  document.getElementById("progress").innerText =
+    `Q ${current + 1} / ${questions.length}`;
 
   let html = "";
   q.o.forEach((opt, i) => {
-    html += `<button onclick="select(${i})">${opt}</button><br>`;
+    html += `<div class="option" onclick="select(${i})">${opt}</div>`;
   });
 
   document.getElementById("options").innerHTML = html;
 }
 
+// SELECT
 function select(i) {
-  // store if needed
+  answers[current] = i;
 }
 
+// NEXT
 function next() {
-  current++;
-  if (current >= questions.length) {
-    submitTest();
-  } else {
+  if (current < questions.length - 1) {
+    current++;
     loadQ();
   }
 }
 
+// SUBMIT
 function submitTest() {
   document.getElementById("test").classList.add("hidden");
   document.getElementById("submitted").classList.remove("hidden");
 }
 
+// TIMER
 function startTimer() {
   setInterval(() => {
     time--;
-    document.getElementById("timer").innerText = "Time: " + time;
+    document.getElementById("timer").innerText =
+      "Time: " + Math.floor(time / 60) + ":" + (time % 60);
 
     if (time <= 0) submitTest();
   }, 1000);
@@ -135,18 +205,6 @@ function startCam() {
     });
 }
 
-// TAB SWITCH DETECTION
-window.onblur = () => {
-  warnings++;
-  document.getElementById("warning").innerText = "Warnings: " + warnings + "/10";
-
-  alert("Warning " + warnings);
-
-  if (warnings >= 10) {
-    alert("Exam Terminated");
-    location.reload();
-  }
-};
 </script>
 
 </body>

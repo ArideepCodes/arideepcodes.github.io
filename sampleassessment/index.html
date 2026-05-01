@@ -1,0 +1,1466 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Codivora — Sample Assessment</title>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Outfit:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #080b14;
+      --surface: #0e1422;
+      --surface2: #141b2d;
+      --surface3: #1a2236;
+      --border: rgba(99,179,237,0.15);
+      --accent: #63b3ed;
+      --accent2: #9f7aea;
+      --accent3: #68d391;
+      --text: #e2e8f0;
+      --muted: #718096;
+      --danger: #fc8181;
+      --warn: #f6ad55;
+      --radius: 14px;
+      --glow: rgba(99,179,237,0.12);
+    }
+
+    body {
+      font-family: 'Outfit', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      overflow-x: hidden;
+      user-select: none;
+      -webkit-user-select: none;
+    }
+
+    /* Dot grid background */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: radial-gradient(rgba(99,179,237,0.07) 1px, transparent 1px);
+      background-size: 28px 28px;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* Ambient glow blobs */
+    body::after {
+      content: '';
+      position: fixed;
+      top: -200px; left: -200px;
+      width: 600px; height: 600px;
+      background: radial-gradient(circle, rgba(99,179,237,0.06) 0%, transparent 65%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .hidden { display: none !important; }
+
+    /* ===================== SAMPLE BANNER ===================== */
+    .sample-banner {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 5000;
+      background: linear-gradient(90deg, rgba(246,173,85,0.15), rgba(246,173,85,0.08), rgba(246,173,85,0.15));
+      border-bottom: 1px solid rgba(246,173,85,0.3);
+      padding: 7px 20px;
+      text-align: center;
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--warn);
+      letter-spacing: 0.8px;
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    .sample-banner span {
+      background: rgba(246,173,85,0.2);
+      border: 1px solid rgba(246,173,85,0.4);
+      border-radius: 4px;
+      padding: 1px 8px;
+      margin-right: 8px;
+    }
+
+    /* ===================== LOGIN ===================== */
+    #loginScreen {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      padding: 20px;
+      padding-top: 60px;
+    }
+
+    .login-box {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 22px;
+      padding: 44px 40px;
+      width: 100%;
+      max-width: 420px;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 0 80px rgba(99,179,237,0.06), 0 32px 64px rgba(0,0,0,0.4);
+    }
+
+    .login-box::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(99,179,237,0.4), transparent);
+    }
+
+    .login-box::after {
+      content: '';
+      position: absolute;
+      top: -100px; right: -100px;
+      width: 280px; height: 280px;
+      background: radial-gradient(circle, rgba(159,122,234,0.1) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 30px;
+    }
+
+    .brand-icon {
+      width: 42px; height: 42px;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      border-radius: 12px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 20px;
+      box-shadow: 0 4px 16px rgba(99,179,237,0.25);
+    }
+
+    .brand-name {
+      font-size: 20px;
+      font-weight: 800;
+      letter-spacing: -0.5px;
+      color: var(--text);
+    }
+
+    .brand-name span { color: var(--accent); }
+
+    .brand-tag {
+      font-size: 10px;
+      font-weight: 600;
+      color: var(--warn);
+      background: rgba(246,173,85,0.12);
+      border: 1px solid rgba(246,173,85,0.25);
+      border-radius: 4px;
+      padding: 2px 7px;
+      letter-spacing: 0.8px;
+      font-family: 'JetBrains Mono', monospace;
+      margin-left: 4px;
+    }
+
+    .login-title {
+      font-size: 26px;
+      font-weight: 800;
+      margin-bottom: 6px;
+      letter-spacing: -0.5px;
+      line-height: 1.2;
+    }
+
+    .login-sub {
+      font-size: 14px;
+      color: var(--muted);
+      margin-bottom: 30px;
+      line-height: 1.5;
+    }
+
+    .sample-note-box {
+      background: rgba(246,173,85,0.06);
+      border: 1px solid rgba(246,173,85,0.2);
+      border-radius: 10px;
+      padding: 12px 14px;
+      margin-bottom: 24px;
+      font-size: 12px;
+      color: var(--warn);
+      line-height: 1.6;
+    }
+
+    .sample-note-box strong { font-weight: 700; }
+
+    label {
+      display: block;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 1.2px;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 8px;
+    }
+
+    input[type="text"], input[type="password"] {
+      width: 100%;
+      background: var(--bg);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 10px;
+      padding: 13px 16px;
+      color: var(--text);
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 13px;
+      outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
+      margin-bottom: 18px;
+    }
+
+    input[type="text"]:focus, input[type="password"]:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(99,179,237,0.1);
+    }
+
+    .btn-primary {
+      width: 100%;
+      padding: 14px;
+      background: linear-gradient(135deg, var(--accent), #4a9ed6);
+      border: none;
+      border-radius: 10px;
+      color: #080b14;
+      font-family: 'Outfit', sans-serif;
+      font-size: 15px;
+      font-weight: 800;
+      cursor: pointer;
+      letter-spacing: 0.3px;
+      transition: opacity 0.2s, transform 0.15s, box-shadow 0.2s;
+      box-shadow: 0 4px 20px rgba(99,179,237,0.25);
+    }
+
+    .btn-primary:hover { opacity: 0.9; transform: translateY(-1px); box-shadow: 0 6px 24px rgba(99,179,237,0.35); }
+    .btn-primary:active { transform: translateY(0); }
+
+    .login-creds {
+      text-align: center;
+      margin-top: 16px;
+      font-size: 12px;
+      color: var(--muted);
+      font-family: 'JetBrains Mono', monospace;
+      line-height: 1.8;
+    }
+
+    .login-creds .cred-row {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .cred-val {
+      color: var(--accent3);
+      font-weight: 600;
+    }
+
+    #loginErr {
+      color: var(--danger);
+      font-size: 13px;
+      margin-top: -10px;
+      margin-bottom: 14px;
+      display: none;
+    }
+
+    @keyframes blink { 0%,100%{opacity:1;} 50%{opacity:0.2;} }
+    @keyframes shake { 0%,100%{transform:translateX(0);} 20%{transform:translateX(-10px);} 40%{transform:translateX(10px);} 60%{transform:translateX(-8px);} 80%{transform:translateX(8px);} }
+    @keyframes slideDown { from{transform:translateY(-100%);opacity:0;} to{transform:translateY(0);opacity:1;} }
+    @keyframes fadeOut { from{opacity:1;} to{opacity:0;} }
+    @keyframes popIn { 0%{transform:scale(0.9);opacity:0;} 100%{transform:scale(1);opacity:1;} }
+
+    /* ===================== TEST SCREEN ===================== */
+    #testScreen {
+      position: relative;
+      z-index: 1;
+      min-height: 100vh;
+      padding: 20px;
+      padding-top: 52px;
+    }
+
+    .topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 12px 18px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      margin-bottom: 18px;
+      gap: 14px;
+      flex-wrap: wrap;
+    }
+
+    .topbar-left {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .topbar-brand {
+      font-size: 15px;
+      font-weight: 800;
+      color: var(--accent);
+      letter-spacing: -0.3px;
+    }
+
+    .topbar-sample-tag {
+      font-size: 10px;
+      font-weight: 700;
+      color: var(--warn);
+      background: rgba(246,173,85,0.1);
+      border: 1px solid rgba(246,173,85,0.25);
+      border-radius: 4px;
+      padding: 2px 7px;
+      letter-spacing: 0.8px;
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    .progress-wrap {
+      flex: 1;
+      min-width: 140px;
+    }
+
+    .progress-label {
+      display: flex;
+      justify-content: space-between;
+      font-size: 11px;
+      color: var(--muted);
+      margin-bottom: 5px;
+      font-weight: 500;
+    }
+
+    .progress-bar-bg {
+      height: 5px;
+      background: rgba(255,255,255,0.06);
+      border-radius: 99px;
+      overflow: hidden;
+    }
+
+    .progress-bar-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--accent), var(--accent2));
+      border-radius: 99px;
+      transition: width 0.4s ease;
+      width: 0%;
+    }
+
+    .timer-box {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 7px 13px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 15px;
+      font-weight: 700;
+    }
+
+    .timer-dot {
+      width: 7px; height: 7px;
+      background: var(--accent3);
+      border-radius: 50%;
+      animation: blink 1s infinite;
+    }
+
+    .timer-box.warn { border-color: var(--warn); color: var(--warn); }
+    .timer-box.warn .timer-dot { background: var(--warn); }
+    .timer-box.danger { border-color: var(--danger); color: var(--danger); }
+    .timer-box.danger .timer-dot { background: var(--danger); }
+
+    .strike-box {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--bg);
+      border: 1px solid rgba(252,129,129,0.2);
+      border-radius: 8px;
+      padding: 7px 13px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--muted);
+    }
+
+    .strike-pips { display: flex; gap: 4px; }
+
+    .strike-pip {
+      width: 10px; height: 10px;
+      border-radius: 3px;
+      border: 1px solid rgba(252,129,129,0.35);
+      background: transparent;
+      transition: background 0.3s;
+    }
+
+    .strike-pip.active {
+      background: var(--danger);
+      border-color: var(--danger);
+      box-shadow: 0 0 6px rgba(252,129,129,0.5);
+    }
+
+    .test-layout {
+      display: grid;
+      grid-template-columns: 1fr 230px;
+      gap: 18px;
+      align-items: start;
+    }
+
+    @media (max-width: 768px) {
+      .test-layout { grid-template-columns: 1fr; }
+    }
+
+    .question-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 28px 30px;
+      position: relative;
+      overflow: hidden;
+      animation: popIn 0.3s ease;
+    }
+
+    .question-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(99,179,237,0.3), transparent);
+    }
+
+    .q-meta {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 18px;
+      flex-wrap: wrap;
+    }
+
+    .q-badge {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      background: rgba(104,211,145,0.1);
+      color: var(--accent3);
+      border: 1px solid rgba(104,211,145,0.25);
+      border-radius: 5px;
+      padding: 3px 9px;
+    }
+
+    .q-category {
+      font-size: 12px;
+      color: var(--muted);
+      font-weight: 500;
+    }
+
+    .q-number {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--muted);
+      font-family: 'JetBrains Mono', monospace;
+      margin-left: auto;
+    }
+
+    .question-text {
+      font-size: 17px;
+      font-weight: 600;
+      line-height: 1.65;
+      margin-bottom: 24px;
+      color: #f0f4f8;
+      pointer-events: none;
+    }
+
+    .options-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-bottom: 24px;
+    }
+
+    .option-btn {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      padding: 14px 16px;
+      background: var(--surface2);
+      border: 1px solid rgba(255,255,255,0.07);
+      border-radius: 11px;
+      cursor: pointer;
+      text-align: left;
+      transition: all 0.15s;
+      color: var(--text);
+      font-family: 'Outfit', sans-serif;
+      font-size: 14px;
+      line-height: 1.5;
+      width: 100%;
+      font-weight: 500;
+    }
+
+    .option-btn:hover {
+      border-color: rgba(99,179,237,0.35);
+      background: rgba(99,179,237,0.06);
+      transform: translateX(2px);
+    }
+
+    .option-btn.selected {
+      border-color: var(--accent);
+      background: rgba(99,179,237,0.1);
+      box-shadow: 0 0 0 1px rgba(99,179,237,0.25), inset 0 0 20px rgba(99,179,237,0.04);
+    }
+
+    .option-key {
+      width: 26px; height: 26px;
+      min-width: 26px;
+      border-radius: 7px;
+      border: 1px solid rgba(255,255,255,0.1);
+      background: var(--surface3);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 11px;
+      font-weight: 700;
+      font-family: 'JetBrains Mono', monospace;
+      color: var(--muted);
+      margin-top: 1px;
+      transition: all 0.15s;
+    }
+
+    .option-btn.selected .option-key {
+      background: var(--accent);
+      border-color: var(--accent);
+      color: #080b14;
+    }
+
+    .nav-btns {
+      display: flex;
+      gap: 10px;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .btn-nav {
+      padding: 11px 22px;
+      border-radius: 9px;
+      font-family: 'Outfit', sans-serif;
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.15s;
+      border: none;
+    }
+
+    .btn-prev {
+      background: var(--surface3);
+      color: var(--muted);
+      border: 1px solid rgba(255,255,255,0.07);
+    }
+
+    .btn-prev:hover { color: var(--text); border-color: rgba(255,255,255,0.15); }
+
+    .btn-next {
+      background: linear-gradient(135deg, var(--accent), #4a9ed6);
+      color: #080b14;
+      margin-left: auto;
+      box-shadow: 0 3px 12px rgba(99,179,237,0.2);
+    }
+
+    .btn-next:hover { opacity: 0.9; transform: translateY(-1px); }
+
+    .btn-submit {
+      background: linear-gradient(135deg, var(--accent2), #7c5fca);
+      color: white;
+      margin-left: auto;
+      box-shadow: 0 3px 12px rgba(159,122,234,0.25);
+    }
+
+    .btn-submit:hover { opacity: 0.9; transform: translateY(-1px); }
+
+    /* SIDEBAR */
+    .sidebar { display: flex; flex-direction: column; gap: 14px; }
+
+    .cam-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      overflow: hidden;
+    }
+
+    .cam-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 13px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .cam-label {
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--muted);
+    }
+
+    .rec-badge {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      font-size: 10px;
+      color: var(--danger);
+      font-weight: 700;
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    .rec-dot {
+      width: 6px; height: 6px;
+      background: var(--danger);
+      border-radius: 50%;
+      animation: blink 1s infinite;
+    }
+
+    #cam {
+      width: 100%;
+      display: block;
+      aspect-ratio: 4/3;
+      object-fit: cover;
+      background: #000;
+    }
+
+    .cam-footer {
+      padding: 7px 13px;
+      font-size: 10px;
+      color: var(--muted);
+      text-align: center;
+    }
+
+    .qmap-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 14px;
+    }
+
+    .qmap-title {
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--muted);
+      margin-bottom: 10px;
+    }
+
+    .qmap-grid {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 4px;
+    }
+
+    .qmap-btn {
+      aspect-ratio: 1;
+      border-radius: 5px;
+      border: 1px solid rgba(255,255,255,0.07);
+      background: var(--bg);
+      color: var(--muted);
+      font-size: 9px;
+      font-weight: 700;
+      font-family: 'JetBrains Mono', monospace;
+      cursor: pointer;
+      transition: all 0.15s;
+      display: flex; align-items: center; justify-content: center;
+    }
+
+    .qmap-btn:hover { border-color: var(--accent); color: var(--accent); }
+    .qmap-btn.answered { background: rgba(99,179,237,0.12); border-color: rgba(99,179,237,0.35); color: var(--accent); }
+    .qmap-btn.active { background: var(--accent); border-color: var(--accent); color: #080b14; }
+
+    .qmap-legend {
+      display: flex;
+      gap: 10px;
+      margin-top: 10px;
+      font-size: 10px;
+      color: var(--muted);
+    }
+
+    .legend-item { display: flex; align-items: center; gap: 4px; }
+    .legend-dot { width: 7px; height: 7px; border-radius: 2px; }
+
+    .violation-card {
+      background: var(--surface);
+      border: 1px solid rgba(252,129,129,0.15);
+      border-radius: var(--radius);
+      padding: 13px 14px;
+    }
+
+    .violation-card-title {
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--danger);
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    #violationList {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+      max-height: 90px;
+      overflow-y: auto;
+    }
+
+    .vlog-item {
+      font-size: 10px;
+      color: var(--muted);
+      font-family: 'JetBrains Mono', monospace;
+      padding: 4px 7px;
+      background: rgba(252,129,129,0.05);
+      border-radius: 4px;
+      border-left: 2px solid rgba(252,129,129,0.35);
+    }
+
+    .vlog-empty {
+      font-size: 10px;
+      color: var(--muted);
+      font-family: 'JetBrains Mono', monospace;
+      opacity: 0.5;
+    }
+
+    /* ===================== WARNING OVERLAY ===================== */
+    #warningOverlay {
+      position: fixed;
+      inset: 0;
+      z-index: 999;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(8,11,20,0.92);
+      backdrop-filter: blur(10px);
+    }
+
+    .warning-box {
+      background: var(--surface);
+      border: 1px solid rgba(252,129,129,0.4);
+      border-radius: 20px;
+      padding: 36px;
+      max-width: 440px;
+      width: 90%;
+      text-align: center;
+      box-shadow: 0 0 60px rgba(252,129,129,0.12);
+      animation: shake 0.5s ease;
+    }
+
+    .warning-icon { font-size: 48px; margin-bottom: 14px; }
+
+    .warning-title {
+      font-size: 20px;
+      font-weight: 800;
+      color: var(--danger);
+      margin-bottom: 10px;
+    }
+
+    .warning-msg {
+      font-size: 14px;
+      color: var(--muted);
+      line-height: 1.7;
+      margin-bottom: 18px;
+    }
+
+    .warning-strike {
+      font-size: 12px;
+      font-family: 'JetBrains Mono', monospace;
+      color: var(--warn);
+      background: rgba(246,173,85,0.08);
+      border: 1px solid rgba(246,173,85,0.25);
+      border-radius: 8px;
+      padding: 9px 14px;
+      margin-bottom: 22px;
+    }
+
+    .btn-warning-ok {
+      padding: 12px 32px;
+      border-radius: 9px;
+      background: linear-gradient(135deg, var(--danger), #e85d5d);
+      border: none;
+      color: white;
+      font-family: 'Outfit', sans-serif;
+      font-size: 14px;
+      font-weight: 800;
+      cursor: pointer;
+      transition: 0.15s;
+    }
+
+    .btn-warning-ok:hover { opacity: 0.9; }
+
+    /* FULLSCREEN PROMPT */
+    #fsPrompt {
+      position: fixed;
+      inset: 0;
+      z-index: 9999;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(8,11,20,0.97);
+      backdrop-filter: blur(12px);
+    }
+
+    .fs-box {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 44px 38px;
+      max-width: 420px;
+      width: 90%;
+      text-align: center;
+    }
+
+    .fs-icon { font-size: 48px; margin-bottom: 14px; }
+    .fs-title { font-size: 20px; font-weight: 800; margin-bottom: 10px; }
+    .fs-sub { font-size: 13px; color: var(--muted); line-height: 1.6; margin-bottom: 26px; }
+
+    /* TOAST */
+    #toastContainer {
+      position: fixed;
+      top: 52px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 8000;
+      display: flex;
+      flex-direction: column;
+      gap: 7px;
+      pointer-events: none;
+    }
+
+    .toast {
+      background: var(--surface);
+      border: 1px solid rgba(252,129,129,0.4);
+      border-radius: 9px;
+      padding: 9px 18px;
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--danger);
+      font-family: 'JetBrains Mono', monospace;
+      animation: slideDown 0.3s ease forwards;
+      white-space: nowrap;
+    }
+
+    .toast.fadeout { animation: fadeOut 0.5s ease forwards; }
+
+    /* SUBMIT MODAL */
+    #submitModal {
+      position: fixed;
+      inset: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(8,11,20,0.85);
+      backdrop-filter: blur(8px);
+    }
+
+    .modal-box {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 36px;
+      max-width: 380px;
+      width: 90%;
+      text-align: center;
+      box-shadow: 0 0 80px rgba(99,179,237,0.08);
+      animation: popIn 0.25s ease;
+    }
+
+    .modal-icon { font-size: 44px; margin-bottom: 14px; }
+    .modal-title { font-size: 22px; font-weight: 800; margin-bottom: 8px; }
+    .modal-sub { font-size: 13px; color: var(--muted); margin-bottom: 24px; line-height: 1.6; }
+
+    .modal-stats {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-bottom: 24px;
+    }
+
+    .stat-box {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 14px;
+    }
+
+    .stat-val {
+      font-size: 28px;
+      font-weight: 800;
+      color: var(--accent);
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    .stat-lbl { font-size: 11px; color: var(--muted); margin-top: 4px; font-weight: 500; }
+
+    .modal-btns { display: flex; gap: 10px; }
+
+    .btn-cancel {
+      flex: 1;
+      padding: 12px;
+      border-radius: 9px;
+      background: var(--surface2);
+      border: 1px solid rgba(255,255,255,0.07);
+      color: var(--muted);
+      font-family: 'Outfit', sans-serif;
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: 0.15s;
+    }
+
+    .btn-cancel:hover { color: var(--text); }
+
+    .btn-confirm {
+      flex: 1;
+      padding: 12px;
+      border-radius: 9px;
+      background: linear-gradient(135deg, var(--accent2), #7c5fca);
+      border: none;
+      color: white;
+      font-family: 'Outfit', sans-serif;
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: 0.15s;
+    }
+
+    .btn-confirm:hover { opacity: 0.9; }
+
+    /* DONE SCREEN */
+    #doneScreen {
+      position: fixed;
+      inset: 0;
+      z-index: 200;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--bg);
+      flex-direction: column;
+      text-align: center;
+      padding: 40px;
+    }
+
+    .done-glow {
+      width: 110px; height: 110px;
+      background: radial-gradient(circle, rgba(104,211,145,0.25), transparent 70%);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 52px;
+      margin: 0 auto 28px;
+    }
+
+    .done-title { font-size: 32px; font-weight: 800; letter-spacing: -1px; margin-bottom: 10px; }
+
+    .done-sub {
+      font-size: 15px;
+      color: var(--muted);
+      max-width: 400px;
+      line-height: 1.65;
+      margin-bottom: 28px;
+    }
+
+    .done-sample-note {
+      font-size: 13px;
+      color: var(--warn);
+      background: rgba(246,173,85,0.08);
+      border: 1px solid rgba(246,173,85,0.2);
+      border-radius: 10px;
+      padding: 12px 20px;
+      margin-bottom: 20px;
+      max-width: 400px;
+    }
+
+    .done-badge {
+      display: inline-block;
+      background: rgba(99,179,237,0.08);
+      border: 1px solid rgba(99,179,237,0.25);
+      color: var(--accent);
+      border-radius: 99px;
+      padding: 8px 20px;
+      font-size: 12px;
+      font-weight: 700;
+      font-family: 'JetBrains Mono', monospace;
+    }
+  </style>
+</head>
+<body>
+
+<!-- SAMPLE BANNER -->
+<div class="sample-banner">
+  <span>SAMPLE</span> This is a demo assessment only — not an official evaluation. Responses are not recorded or evaluated.
+</div>
+
+<!-- TOAST CONTAINER -->
+<div id="toastContainer"></div>
+
+<!-- FULLSCREEN PROMPT -->
+<div id="fsPrompt" class="hidden">
+  <div class="fs-box">
+    <div class="fs-icon">⛶</div>
+    <div class="fs-title">Fullscreen Required</div>
+    <div class="fs-sub">This assessment must be taken in fullscreen mode. Click below to continue. Exiting fullscreen will be flagged as a violation.</div>
+    <button class="btn-primary" onclick="requestFullscreen()">Enter Fullscreen →</button>
+  </div>
+</div>
+
+<!-- WARNING OVERLAY -->
+<div id="warningOverlay" class="hidden">
+  <div class="warning-box">
+    <div class="warning-icon">⚠️</div>
+    <div class="warning-title" id="warnTitle">Violation Detected</div>
+    <div class="warning-msg" id="warnMsg">Suspicious activity has been detected and logged.</div>
+    <div class="warning-strike" id="warnStrike">Strike 1 of 3 — 2 more will auto-submit your test.</div>
+    <button class="btn-warning-ok" onclick="closeWarning()">I Understand — Resume</button>
+  </div>
+</div>
+
+<!-- ============ LOGIN ============ -->
+<div id="loginScreen">
+  <div class="login-box">
+    <div class="brand">
+      <div class="brand-icon">⚡</div>
+      <div class="brand-name">Codi<span>vora</span> <span class="brand-tag">SAMPLE</span></div>
+    </div>
+    <div class="login-title">Practice Assessment</div>
+    <div class="login-sub">Explore how the Codivora assessment portal works before the real thing.</div>
+
+    <div class="sample-note-box">
+      <strong>📋 Sample Mode:</strong> This is not a real assessment. Use the credentials below to try out the platform. Questions are beginner-friendly and for practice only.
+    </div>
+
+    <label for="candidateId">Candidate ID</label>
+    <input type="text" id="candidateId" placeholder="SAMPLE001" autocomplete="off" spellcheck="false"/>
+
+    <label for="candidatePass">Password</label>
+    <input type="password" id="candidatePass" placeholder="demo123"/>
+
+    <div id="loginErr">Invalid credentials. Try: SAMPLE001 / demo123</div>
+
+    <button class="btn-primary" onclick="doLogin()">Begin Sample Assessment →</button>
+
+    <div class="login-creds">
+      Demo credentials &nbsp;·&nbsp;
+      <span class="cred-val">SAMPLE001</span> / <span class="cred-val">demo123</span><br>
+      20 questions &nbsp;·&nbsp; 20 minutes &nbsp;·&nbsp; Anti-cheat demo active
+    </div>
+  </div>
+</div>
+
+<!-- ============ TEST ============ -->
+<div id="testScreen" class="hidden">
+  <div class="topbar">
+    <div class="topbar-left">
+      <div class="topbar-brand">⚡ Codivora</div>
+      <div class="topbar-sample-tag">SAMPLE</div>
+    </div>
+    <div class="progress-wrap">
+      <div class="progress-label">
+        <span id="progressLabel">Question 1 of 20</span>
+        <span id="progressPct">0%</span>
+      </div>
+      <div class="progress-bar-bg">
+        <div class="progress-bar-fill" id="progressBar"></div>
+      </div>
+    </div>
+    <div class="strike-box">
+      <span style="font-size:10px;letter-spacing:1px;text-transform:uppercase;">Strikes</span>
+      <div class="strike-pips">
+        <div class="strike-pip" id="pip0"></div>
+        <div class="strike-pip" id="pip1"></div>
+        <div class="strike-pip" id="pip2"></div>
+      </div>
+    </div>
+    <div class="timer-box" id="timerBox">
+      <div class="timer-dot"></div>
+      <span id="timerDisplay">20:00</span>
+    </div>
+  </div>
+
+  <div class="test-layout">
+    <div class="question-card">
+      <div class="q-meta">
+        <div class="q-badge">SAMPLE — Beginner</div>
+        <div class="q-category" id="qCat">—</div>
+        <div class="q-number" id="qNum">01/20</div>
+      </div>
+      <div class="question-text" id="questionText">Loading...</div>
+      <div class="options-grid" id="optionsGrid"></div>
+      <div class="nav-btns">
+        <button class="btn-nav btn-prev" onclick="goPrev()">← Prev</button>
+        <button class="btn-nav btn-next" id="btnNext" onclick="goNext()">Next →</button>
+        <button class="btn-nav btn-submit hidden" id="btnSubmit" onclick="openModal()">Submit Sample</button>
+      </div>
+    </div>
+
+    <div class="sidebar">
+      <div class="cam-card">
+        <div class="cam-header">
+          <div class="cam-label">Proctoring</div>
+          <div class="rec-badge"><div class="rec-dot"></div> LIVE</div>
+        </div>
+        <video id="cam" autoplay muted playsinline></video>
+        <div class="cam-footer">📷 Camera active — stay visible</div>
+      </div>
+
+      <div class="qmap-card">
+        <div class="qmap-title">Question Navigator</div>
+        <div class="qmap-grid" id="qmapGrid"></div>
+        <div class="qmap-legend">
+          <div class="legend-item">
+            <div class="legend-dot" style="background:var(--accent);"></div> Answered
+          </div>
+          <div class="legend-item">
+            <div class="legend-dot" style="background:var(--surface2); border:1px solid rgba(255,255,255,0.08)"></div> Skipped
+          </div>
+        </div>
+      </div>
+
+      <div class="violation-card">
+        <div class="violation-card-title">🛡 Violation Log</div>
+        <div id="violationList">
+          <div class="vlog-empty">No violations yet.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SUBMIT MODAL -->
+<div id="submitModal" class="hidden">
+  <div class="modal-box">
+    <div class="modal-icon">📋</div>
+    <div class="modal-title">Submit Sample?</div>
+    <div class="modal-sub">This will end the demo. Your answers won't be evaluated — this is for practice only.</div>
+    <div class="modal-stats">
+      <div class="stat-box">
+        <div class="stat-val" id="mAnswered">0</div>
+        <div class="stat-lbl">Answered</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-val" id="mSkipped">20</div>
+        <div class="stat-lbl">Skipped</div>
+      </div>
+    </div>
+    <div class="modal-btns">
+      <button class="btn-cancel" onclick="closeModal()">Go Back</button>
+      <button class="btn-confirm" onclick="finalSubmit()">Confirm Submit</button>
+    </div>
+  </div>
+</div>
+
+<!-- DONE SCREEN -->
+<div id="doneScreen" class="hidden">
+  <div class="done-glow">✅</div>
+  <div class="done-title">Sample Complete!</div>
+  <div class="done-sub">You've finished the Codivora sample assessment. In a real test, your responses would be recorded and reviewed by our team.</div>
+  <div class="done-sample-note">⚠️ This was a practice run only. No data was recorded or sent anywhere.</div>
+  <div class="done-badge">SAMPLE-REF: CODI-<span id="refCode"></span></div>
+</div>
+
+<script>
+// ===================== DATA =====================
+const USERS = [
+  { id: "SAMPLE001", pass: "demo123" }
+];
+
+const QUESTIONS = [
+  { cat: "Programming Basics", q: "Which of the following is a valid variable name in most programming languages?", o: ["1variable", "my_variable", "my-variable", "my variable"], a: 1 },
+  { cat: "Data Structures", q: "What does an array store?", o: ["Only strings", "A collection of elements of the same type", "Only numbers", "Key-value pairs"], a: 1 },
+  { cat: "Web Basics", q: "What does HTML stand for?", o: ["HyperText Markup Language", "High Transfer Markup Language", "HyperText Machine Learning", "Hosted Text Markup Language"], a: 0 },
+  { cat: "Programming Basics", q: "What is the output of: print(2 + 3 * 4) in Python?", o: ["20", "14", "24", "10"], a: 1 },
+  { cat: "Data Structures", q: "Which data structure works on the FIFO (First In First Out) principle?", o: ["Stack", "Queue", "Tree", "Graph"], a: 1 },
+  { cat: "Databases", q: "Which SQL command is used to fetch data from a table?", o: ["INSERT", "UPDATE", "SELECT", "DELETE"], a: 2 },
+  { cat: "Networking", q: "What does URL stand for?", o: ["Uniform Resource Locator", "Universal Request Link", "Unique Resource Language", "Unified Resource Loader"], a: 0 },
+  { cat: "Programming Basics", q: "In Python, which keyword is used to define a function?", o: ["function", "define", "def", "func"], a: 2 },
+  { cat: "OOP Concepts", q: "What is a class in object-oriented programming?", o: ["A variable", "A blueprint for creating objects", "A function", "A database table"], a: 1 },
+  { cat: "Algorithms", q: "What does a loop do in programming?", o: ["Ends the program", "Repeats a block of code multiple times", "Declares a variable", "Imports a library"], a: 1 },
+  { cat: "Web Basics", q: "Which language is used to style web pages?", o: ["HTML", "Python", "CSS", "SQL"], a: 2 },
+  { cat: "Programming Basics", q: "What is the correct way to write a comment in Python?", o: ["// This is a comment", "/* This is a comment */", "# This is a comment", "-- This is a comment"], a: 2 },
+  { cat: "Data Structures", q: "What is the index of the first element in most programming language arrays?", o: ["1", "0", "-1", "Depends on the array size"], a: 1 },
+  { cat: "Algorithms", q: "What is the purpose of a sorting algorithm?", o: ["To find an element in a list", "To arrange elements in a specific order", "To remove duplicates", "To count elements"], a: 1 },
+  { cat: "Networking", q: "What does IP stand for in networking?", o: ["Internet Provider", "Internet Protocol", "Internal Processor", "Interface Port"], a: 1 },
+  { cat: "Databases", q: "Which of the following is a popular relational database system?", o: ["MongoDB", "Redis", "MySQL", "Cassandra"], a: 2 },
+  { cat: "Programming Basics", q: "What is a boolean data type?", o: ["A number with decimal points", "A sequence of characters", "A value that is either true or false", "A list of items"], a: 2 },
+  { cat: "OOP Concepts", q: "What does 'inheritance' mean in OOP?", o: ["A class can use properties and methods of another class", "A function is called inside another function", "Variables are shared across files", "An object is deleted after use"], a: 0 },
+  { cat: "Version Control", q: "What is Git primarily used for?", o: ["Designing databases", "Tracking changes in source code", "Hosting websites", "Writing HTML"], a: 1 },
+  { cat: "Web Basics", q: "What does the <a> tag do in HTML?", o: ["Displays an image", "Creates a hyperlink", "Adds a heading", "Creates a table"], a: 1 }
+];
+
+const KEYS = ['A','B','C','D'];
+let current = 0;
+let answers = new Array(QUESTIONS.length).fill(null);
+let totalTime = 20 * 60;
+let timerInt = null;
+let camStream = null;
+let strikes = 0;
+const MAX_STRIKES = 3;
+let violationLog = [];
+let testActive = false;
+let warningOpen = false;
+let devtoolsCheckInt = null;
+
+// ===================== LOGIN =====================
+function doLogin() {
+  const id = document.getElementById('candidateId').value.trim();
+  const pass = document.getElementById('candidatePass').value;
+  const valid = USERS.some(u => u.id === id && u.pass === pass);
+  const errEl = document.getElementById('loginErr');
+  if (!valid) { errEl.style.display = 'block'; return; }
+  errEl.style.display = 'none';
+  document.getElementById('loginScreen').classList.add('hidden');
+  document.getElementById('testScreen').classList.remove('hidden');
+  testActive = true;
+  startCam();
+  buildQMap();
+  renderQ();
+  startTimer();
+  requestFullscreen();
+  initAntiCheat();
+}
+
+// ===================== CAMERA =====================
+function startCam() {
+  navigator.mediaDevices.getUserMedia({ video: true, audio: false })
+    .then(stream => { camStream = stream; document.getElementById('cam').srcObject = stream; })
+    .catch(() => {
+      document.querySelector('.cam-footer').textContent = '⚠️ Camera permission denied';
+      logViolation('Camera access denied');
+    });
+}
+
+// ===================== TIMER =====================
+function startTimer() {
+  timerInt = setInterval(() => {
+    totalTime--;
+    const m = Math.floor(totalTime / 60);
+    const s = totalTime % 60;
+    document.getElementById('timerDisplay').textContent = String(m).padStart(2,'0') + ':' + String(s).padStart(2,'0');
+    const box = document.getElementById('timerBox');
+    box.className = 'timer-box';
+    if (totalTime <= 300) box.classList.add('warn');
+    if (totalTime <= 60) box.classList.add('danger');
+    if (totalTime <= 0) { clearInterval(timerInt); finalSubmit(); }
+  }, 1000);
+}
+
+// ===================== Q MAP =====================
+function buildQMap() {
+  const grid = document.getElementById('qmapGrid');
+  grid.innerHTML = '';
+  QUESTIONS.forEach((_, i) => {
+    const btn = document.createElement('button');
+    btn.className = 'qmap-btn' + (i === 0 ? ' active' : '');
+    btn.textContent = i + 1;
+    btn.id = 'qm' + i;
+    btn.onclick = () => { current = i; renderQ(); };
+    grid.appendChild(btn);
+  });
+}
+
+function updateQMap() {
+  QUESTIONS.forEach((_, i) => {
+    const btn = document.getElementById('qm' + i);
+    btn.className = 'qmap-btn';
+    if (answers[i] !== null) btn.classList.add('answered');
+    if (i === current) btn.classList.add('active');
+  });
+}
+
+// ===================== RENDER QUESTION =====================
+function renderQ() {
+  const qd = QUESTIONS[current];
+  document.getElementById('qCat').textContent = qd.cat;
+  document.getElementById('qNum').textContent = String(current + 1).padStart(2,'0') + '/' + QUESTIONS.length;
+  document.getElementById('questionText').textContent = (current + 1) + '. ' + qd.q;
+
+  const pct = Math.round((current / (QUESTIONS.length - 1)) * 100);
+  document.getElementById('progressLabel').textContent = `Question ${current + 1} of ${QUESTIONS.length}`;
+  document.getElementById('progressPct').textContent = pct + '%';
+  document.getElementById('progressBar').style.width = pct + '%';
+
+  const grid = document.getElementById('optionsGrid');
+  grid.innerHTML = '';
+  qd.o.forEach((opt, i) => {
+    const btn = document.createElement('button');
+    btn.className = 'option-btn' + (answers[current] === i ? ' selected' : '');
+    btn.innerHTML = `<div class="option-key">${KEYS[i]}</div><div>${opt}</div>`;
+    btn.onclick = () => selectAnswer(i);
+    grid.appendChild(btn);
+  });
+
+  document.getElementById('btnNext').classList.toggle('hidden', current === QUESTIONS.length - 1);
+  document.getElementById('btnSubmit').classList.toggle('hidden', current !== QUESTIONS.length - 1);
+  updateQMap();
+}
+
+function selectAnswer(i) { answers[current] = i; renderQ(); }
+function goPrev() { if (current > 0) { current--; renderQ(); } }
+function goNext() { if (current < QUESTIONS.length - 1) { current++; renderQ(); } }
+
+// ===================== SUBMIT =====================
+function openModal() {
+  const ans = answers.filter(a => a !== null).length;
+  document.getElementById('mAnswered').textContent = ans;
+  document.getElementById('mSkipped').textContent = QUESTIONS.length - ans;
+  document.getElementById('submitModal').classList.remove('hidden');
+}
+
+function closeModal() { document.getElementById('submitModal').classList.add('hidden'); }
+
+function finalSubmit() {
+  testActive = false;
+  clearInterval(timerInt);
+  clearInterval(devtoolsCheckInt);
+  if (camStream) camStream.getTracks().forEach(t => t.stop());
+  if (document.fullscreenElement) document.exitFullscreen().catch(() => {});
+  document.getElementById('submitModal').classList.add('hidden');
+  document.getElementById('testScreen').classList.add('hidden');
+  document.getElementById('doneScreen').classList.remove('hidden');
+  document.getElementById('refCode').textContent = Math.random().toString(36).substring(2,8).toUpperCase();
+}
+
+// ===================== ANTI-CHEAT ENGINE =====================
+function initAntiCheat() {
+  document.addEventListener('contextmenu', e => {
+    if (testActive) { e.preventDefault(); showToast('⛔ Right-click is disabled.'); logViolation('Right-click attempt'); }
+  });
+
+  ['copy','cut','paste'].forEach(evt => {
+    document.addEventListener(evt, e => {
+      if (testActive) { e.preventDefault(); showToast(`⛔ ${evt.charAt(0).toUpperCase()+evt.slice(1)} not allowed.`); logViolation(`${evt} attempt`); }
+    });
+  });
+
+  document.addEventListener('keydown', e => {
+    if (!testActive) return;
+    const key = e.key.toLowerCase();
+    const ctrl = e.ctrlKey || e.metaKey;
+    if (e.key === 'F12') { e.preventDefault(); handleViolation('DevTools key (F12) pressed'); return; }
+    if (ctrl && e.shiftKey && ['i','j','c','k','u'].includes(key)) { e.preventDefault(); handleViolation('DevTools shortcut detected'); return; }
+    if (ctrl && ['c','v','x','a','u','s','p'].includes(key)) { e.preventDefault(); showToast('⛔ Shortcuts disabled.'); logViolation(`Ctrl+${key.toUpperCase()} blocked`); return; }
+    if (e.key === 'PrintScreen') { e.preventDefault(); handleViolation('Screenshot attempt'); return; }
+    if (e.key === 'Escape') e.preventDefault();
+  });
+
+  document.addEventListener('visibilitychange', () => {
+    if (!testActive) return;
+    if (document.hidden) handleViolation('Tab switched or window minimized');
+  });
+
+  window.addEventListener('blur', () => {
+    if (!testActive) return;
+    handleViolation('Window lost focus');
+  });
+
+  document.addEventListener('fullscreenchange', () => {
+    if (!testActive) return;
+    if (!document.fullscreenElement) {
+      handleViolation('Fullscreen exited');
+      document.getElementById('fsPrompt').classList.remove('hidden');
+    }
+  });
+
+  devtoolsCheckInt = setInterval(() => {
+    if (!testActive) return;
+    const threshold = 160;
+    if ((window.outerWidth - window.innerWidth) > threshold || (window.outerHeight - window.innerHeight) > threshold) {
+      handleViolation('DevTools panel likely opened');
+    }
+  }, 2000);
+
+  document.addEventListener('dragstart', e => { if (testActive) e.preventDefault(); });
+  document.addEventListener('selectstart', e => { if (testActive) e.preventDefault(); });
+}
+
+// ===================== FULLSCREEN =====================
+function requestFullscreen() {
+  const el = document.documentElement;
+  const req = el.requestFullscreen || el.webkitRequestFullscreen || el.mozRequestFullScreen || el.msRequestFullscreen;
+  if (req) {
+    req.call(el).then(() => { document.getElementById('fsPrompt').classList.add('hidden'); }).catch(() => { document.getElementById('fsPrompt').classList.add('hidden'); });
+  } else {
+    document.getElementById('fsPrompt').classList.add('hidden');
+  }
+}
+
+// ===================== VIOLATION HANDLING =====================
+function handleViolation(reason) {
+  if (!testActive) return;
+  strikes++;
+  logViolation(reason);
+  updateStrikePips();
+  if (strikes >= MAX_STRIKES) { showAutoSubmitWarning(); return; }
+  showWarning('Violation Detected', `<strong style="color:var(--text)">${reason}</strong><br><br>This incident has been logged. Repeated violations will terminate the test.`, `Strike ${strikes} of ${MAX_STRIKES} — ${MAX_STRIKES - strikes} more will auto-submit.`);
+}
+
+function logViolation(reason) {
+  const now = new Date();
+  const ts = `${String(now.getHours()).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')}:${String(now.getSeconds()).padStart(2,'0')}`;
+  violationLog.push({ ts, reason });
+  const list = document.getElementById('violationList');
+  const empty = list.querySelector('.vlog-empty');
+  if (empty) empty.remove();
+  const item = document.createElement('div');
+  item.className = 'vlog-item';
+  item.textContent = `[${ts}] ${reason}`;
+  list.insertBefore(item, list.firstChild);
+}
+
+function updateStrikePips() {
+  for (let i = 0; i < 3; i++) {
+    const pip = document.getElementById('pip' + i);
+    if (pip) pip.classList.toggle('active', i < strikes);
+  }
+}
+
+function showWarning(title, msg, strikeText) {
+  if (warningOpen) return;
+  warningOpen = true;
+  document.getElementById('warnTitle').textContent = title;
+  document.getElementById('warnMsg').innerHTML = msg;
+  document.getElementById('warnStrike').textContent = strikeText;
+  document.getElementById('warningOverlay').classList.remove('hidden');
+}
+
+function closeWarning() {
+  warningOpen = false;
+  document.getElementById('warningOverlay').classList.add('hidden');
+  if (!document.fullscreenElement && testActive) document.getElementById('fsPrompt').classList.remove('hidden');
+}
+
+function showAutoSubmitWarning() {
+  testActive = false;
+  document.getElementById('warnTitle').textContent = '🚨 Test Auto-Submitted';
+  document.getElementById('warnMsg').innerHTML = 'You reached the maximum number of violations. The test has been automatically submitted and flagged.';
+  document.getElementById('warnStrike').textContent = 'Maximum strikes reached (3/3) — Assessment terminated.';
+  document.getElementById('warningOverlay').classList.remove('hidden');
+  const btn = document.querySelector('.btn-warning-ok');
+  btn.textContent = 'View Submission';
+  btn.onclick = () => { document.getElementById('warningOverlay').classList.add('hidden'); finalSubmit(); };
+  clearInterval(timerInt);
+  clearInterval(devtoolsCheckInt);
+  if (camStream) camStream.getTracks().forEach(t => t.stop());
+}
+
+// ===================== TOAST =====================
+function showToast(msg) {
+  const container = document.getElementById('toastContainer');
+  const toast = document.createElement('div');
+  toast.className = 'toast';
+  toast.textContent = msg;
+  container.appendChild(toast);
+  setTimeout(() => { toast.classList.add('fadeout'); setTimeout(() => toast.remove(), 500); }, 2500);
+}
+</script>
+</body>
+</html>

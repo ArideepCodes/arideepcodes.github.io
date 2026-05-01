@@ -4,36 +4,38 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Schedule Assessment</title>
-  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     :root {
-      --violet: #7c3aed;
-      --violet-light: #a78bfa;
-      --violet-dark: #5b21b6;
-      --pink: #ec4899;
-      --pink-light: #f9a8d4;
-      --amber: #f59e0b;
-      --emerald: #10b981;
-      --emerald-light: #6ee7b7;
-      --cyan: #06b6d4;
-      --bg: #0f0e17;
-      --bg-card: #16152b;
-      --bg-ele: #1e1c3a;
-      --bg-ele2: #252348;
-      --text: #f0eeff;
-      --text-muted: #9d9bc4;
-      --text-dim: #5c5a8a;
-      --border: rgba(124,58,237,0.18);
-      --border-bright: rgba(124,58,237,0.45);
-      --radius: 14px;
-      --radius-sm: 8px;
+      --ink: #0b0c10;
+      --ink2: #13151c;
+      --ink3: #1c1f2e;
+      --ink4: #252840;
+      --surface: #1a1d2e;
+      --line: rgba(255,255,255,0.07);
+      --line-bright: rgba(99,102,241,0.4);
+      --text: #e8eaf6;
+      --muted: #7b7fa8;
+      --dim: #3d4066;
+
+      --i: #6366f1;       /* indigo */
+      --i2: #818cf8;
+      --sky: #38bdf8;
+      --mint: #34d399;
+      --rose: #fb7185;
+      --amber: #fbbf24;
+
+      --r: 12px;
+      --r-sm: 8px;
     }
 
+    html { scroll-behavior: smooth; }
+
     body {
-      font-family: 'DM Sans', sans-serif;
-      background: var(--bg);
+      font-family: 'Outfit', sans-serif;
+      background: var(--ink);
       color: var(--text);
       min-height: 100vh;
       display: flex;
@@ -43,273 +45,414 @@
       overflow-x: hidden;
     }
 
-    /* Ambient background blobs */
-    body::before, body::after {
+    /* Grid texture */
+    body::before {
       content: '';
       position: fixed;
-      border-radius: 50%;
-      filter: blur(90px);
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(99,102,241,0.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(99,102,241,0.04) 1px, transparent 1px);
+      background-size: 32px 32px;
       pointer-events: none;
       z-index: 0;
     }
-    body::before {
-      width: 500px; height: 500px;
-      background: radial-gradient(circle, rgba(124,58,237,0.28) 0%, transparent 70%);
-      top: -150px; left: -150px;
+
+    /* Glow orbs */
+    .orb {
+      position: fixed;
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 0;
+      filter: blur(100px);
     }
-    body::after {
+    .orb-1 {
+      width: 560px; height: 560px;
+      background: radial-gradient(circle, rgba(99,102,241,0.22) 0%, transparent 70%);
+      top: -200px; left: -200px;
+    }
+    .orb-2 {
       width: 400px; height: 400px;
-      background: radial-gradient(circle, rgba(236,72,153,0.22) 0%, transparent 70%);
-      bottom: -100px; right: -100px;
+      background: radial-gradient(circle, rgba(56,189,248,0.15) 0%, transparent 70%);
+      bottom: -150px; right: -100px;
+    }
+    .orb-3 {
+      width: 300px; height: 300px;
+      background: radial-gradient(circle, rgba(52,211,153,0.1) 0%, transparent 70%);
+      top: 50%; left: 60%;
     }
 
     .wrap {
       width: 100%;
-      max-width: 480px;
+      max-width: 460px;
       position: relative;
       z-index: 1;
     }
 
+    /* ---- SCREENS ---- */
     .screen { display: none; }
-    .screen.active { display: block; animation: fadeUp 0.4s cubic-bezier(0.22,1,0.36,1) both; }
-
-    @keyframes fadeUp {
-      from { opacity: 0; transform: translateY(20px); }
-      to { opacity: 1; transform: translateY(0); }
+    .screen.active {
+      display: block;
+      animation: rise 0.42s cubic-bezier(0.16,1,0.3,1) both;
     }
 
+    @keyframes rise {
+      from { opacity: 0; transform: translateY(24px) scale(0.985); }
+      to   { opacity: 1; transform: translateY(0) scale(1); }
+    }
+
+    /* ---- CARD ---- */
     .card {
-      background: var(--bg-card);
-      border: 1px solid var(--border);
+      background: var(--surface);
+      border: 1px solid var(--line);
       border-radius: 20px;
-      padding: 2.2rem;
-      box-shadow: 0 0 0 1px rgba(255,255,255,0.03), 0 30px 60px rgba(0,0,0,0.5), 0 0 80px rgba(124,58,237,0.08);
+      padding: 2.4rem;
       position: relative;
       overflow: hidden;
+      box-shadow:
+        0 0 0 1px rgba(255,255,255,0.03),
+        0 40px 80px rgba(0,0,0,0.6),
+        inset 0 1px 0 rgba(255,255,255,0.06);
     }
 
-    /* Subtle shimmer top border */
+    /* Top shimmer bar */
     .card::before {
       content: '';
       position: absolute;
       top: 0; left: 0; right: 0;
-      height: 2px;
-      background: linear-gradient(90deg, transparent, var(--violet), var(--pink), var(--cyan), transparent);
-      opacity: 0.7;
+      height: 1px;
+      background: linear-gradient(90deg,
+        transparent 0%,
+        rgba(99,102,241,0.7) 30%,
+        rgba(56,189,248,0.7) 60%,
+        transparent 100%
+      );
     }
 
-    /* --- BADGE / ICON --- */
-    .badge {
+    /* Subtle noise texture */
+    .card::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E");
+      background-size: 200px 200px;
+      pointer-events: none;
+      border-radius: 20px;
+      opacity: 0.5;
+    }
+
+    /* ---- CHIP ---- */
+    .chip {
       display: inline-flex;
       align-items: center;
-      gap: 8px;
-      padding: 6px 14px 6px 8px;
-      background: linear-gradient(135deg, rgba(124,58,237,0.22), rgba(236,72,153,0.14));
-      border: 1px solid rgba(124,58,237,0.3);
+      gap: 7px;
+      padding: 5px 12px 5px 7px;
+      background: rgba(99,102,241,0.12);
+      border: 1px solid rgba(99,102,241,0.25);
       border-radius: 99px;
-      font-family: 'Syne', sans-serif;
       font-size: 11px;
-      letter-spacing: 0.07em;
+      font-weight: 500;
+      letter-spacing: 0.08em;
       text-transform: uppercase;
-      color: var(--violet-light);
+      color: var(--i2);
       margin-bottom: 1.4rem;
+      position: relative;
+      z-index: 1;
     }
 
-    .badge-dot {
-      width: 20px; height: 20px;
+    .chip-icon {
+      width: 18px; height: 18px;
       border-radius: 50%;
-      background: linear-gradient(135deg, var(--violet), var(--pink));
+      background: linear-gradient(135deg, var(--i), var(--sky));
       display: flex; align-items: center; justify-content: center;
       flex-shrink: 0;
     }
 
-    h2 {
-      font-family: 'Syne', sans-serif;
-      font-size: 22px;
-      font-weight: 700;
-      color: var(--text);
-      margin-bottom: 6px;
-      line-height: 1.25;
+    /* ---- PROGRESS DOTS ---- */
+    .progress {
+      display: flex;
+      gap: 5px;
+      margin-bottom: 1.6rem;
+      position: relative;
+      z-index: 1;
     }
 
-    h2 span {
-      background: linear-gradient(90deg, var(--violet-light), var(--pink-light));
+    .prog-step {
+      height: 3px;
+      flex: 1;
+      border-radius: 99px;
+      background: var(--ink4);
+      overflow: hidden;
+    }
+
+    .prog-step.done {
+      background: linear-gradient(90deg, var(--i), var(--sky));
+    }
+
+    .prog-step.active {
+      background: var(--ink4);
+      position: relative;
+    }
+
+    .prog-step.active::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(90deg, var(--i), var(--sky));
+      animation: fill 0.6s cubic-bezier(0.16,1,0.3,1) both;
+      transform-origin: left;
+    }
+
+    @keyframes fill {
+      from { transform: scaleX(0); }
+      to   { transform: scaleX(1); }
+    }
+
+    /* ---- HEADINGS ---- */
+    h2 {
+      font-size: 24px;
+      font-weight: 700;
+      line-height: 1.2;
+      margin-bottom: 6px;
+      position: relative;
+      z-index: 1;
+    }
+
+    h2 .grad {
+      background: linear-gradient(90deg, var(--i2), var(--sky));
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       background-clip: text;
     }
 
-    .subtitle {
+    .sub {
       font-size: 13.5px;
-      color: var(--text-muted);
-      margin-bottom: 1.8rem;
       font-weight: 300;
+      color: var(--muted);
+      margin-bottom: 1.8rem;
+      position: relative;
+      z-index: 1;
     }
 
-    /* --- FORM FIELDS --- */
-    .field { margin-bottom: 14px; }
+    /* ---- FIELDS ---- */
+    .field {
+      margin-bottom: 13px;
+      position: relative;
+      z-index: 1;
+    }
 
     .field label {
       display: block;
-      font-family: 'Syne', sans-serif;
       font-size: 10.5px;
-      color: var(--text-muted);
-      margin-bottom: 7px;
-      letter-spacing: 0.1em;
+      font-weight: 600;
+      letter-spacing: 0.12em;
       text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 7px;
     }
 
-    .input-wrap {
-      position: relative;
-    }
+    .inp-wrap { position: relative; }
 
-    .input-icon {
+    .inp-ico {
       position: absolute;
-      left: 12px; top: 50%; transform: translateY(-50%);
-      color: var(--text-dim);
+      left: 13px; top: 50%;
+      transform: translateY(-50%);
+      color: var(--dim);
       pointer-events: none;
+      transition: color 0.2s;
     }
 
     .field input {
       width: 100%;
-      padding: 11px 12px 11px 38px;
+      padding: 11.5px 13px 11.5px 40px;
       font-size: 14px;
-      font-family: 'DM Sans', sans-serif;
-      background: var(--bg-ele);
-      border: 1px solid var(--border);
-      border-radius: var(--radius-sm);
+      font-family: 'Outfit', sans-serif;
+      font-weight: 400;
+      background: var(--ink3);
+      border: 1px solid var(--line);
+      border-radius: var(--r-sm);
       color: var(--text);
       outline: none;
       transition: border-color 0.2s, box-shadow 0.2s, background 0.2s;
     }
 
     .field input:focus {
-      border-color: var(--violet);
-      background: var(--bg-ele2);
-      box-shadow: 0 0 0 3px rgba(124,58,237,0.15);
+      border-color: rgba(99,102,241,0.6);
+      background: var(--ink4);
+      box-shadow: 0 0 0 3px rgba(99,102,241,0.12);
     }
 
-    .field input::placeholder { color: var(--text-dim); }
+    .field input:focus + .inp-ico,
+    .inp-wrap:focus-within .inp-ico {
+      color: var(--i2);
+    }
 
-    /* --- BUTTONS --- */
-    .btn-primary {
-      width: 100%;
-      padding: 12px;
-      font-size: 14px;
-      font-weight: 500;
-      font-family: 'Syne', sans-serif;
-      letter-spacing: 0.04em;
-      background: linear-gradient(135deg, var(--violet) 0%, #9b3fbe 50%, var(--pink) 100%);
-      color: #fff;
-      border: none;
-      border-radius: var(--radius-sm);
-      cursor: pointer;
-      margin-top: 10px;
-      transition: opacity 0.15s, transform 0.15s, box-shadow 0.2s;
-      box-shadow: 0 4px 20px rgba(124,58,237,0.4);
+    .field input::placeholder { color: var(--dim); }
+
+    .field input.err-inp {
+      border-color: rgba(251,113,133,0.5);
+      box-shadow: 0 0 0 3px rgba(251,113,133,0.08);
+    }
+
+    /* ---- ERROR ---- */
+    .err-msg {
+      min-height: 20px;
+      font-size: 12.5px;
+      color: var(--rose);
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      margin-top: 8px;
       position: relative;
-      overflow: hidden;
+      z-index: 1;
     }
 
-    .btn-primary::after {
+    /* ---- BUTTON ---- */
+    .btn {
+      width: 100%;
+      padding: 12.5px;
+      font-size: 14px;
+      font-weight: 600;
+      font-family: 'Outfit', sans-serif;
+      letter-spacing: 0.04em;
+      border: none;
+      border-radius: var(--r-sm);
+      cursor: pointer;
+      margin-top: 12px;
+      position: relative;
+      z-index: 1;
+      overflow: hidden;
+      transition: transform 0.15s, box-shadow 0.2s, opacity 0.15s;
+    }
+
+    .btn-indigo {
+      background: linear-gradient(135deg, #4f52d3 0%, var(--i) 40%, #38a6f5 100%);
+      color: #fff;
+      box-shadow: 0 4px 24px rgba(99,102,241,0.4), inset 0 1px 0 rgba(255,255,255,0.15);
+    }
+
+    .btn::before {
       content: '';
       position: absolute;
       inset: 0;
-      background: linear-gradient(135deg, rgba(255,255,255,0.12), transparent);
+      background: linear-gradient(135deg, rgba(255,255,255,0.1), transparent);
     }
 
-    .btn-primary:hover {
-      opacity: 0.9;
-      transform: translateY(-1px);
-      box-shadow: 0 8px 28px rgba(124,58,237,0.55);
-    }
+    .btn:hover { transform: translateY(-1.5px); box-shadow: 0 8px 32px rgba(99,102,241,0.5); }
+    .btn:active { transform: scale(0.98); opacity: 0.92; }
 
-    .btn-primary:active { transform: scale(0.98); }
-
-    .err {
-      font-size: 13px;
-      color: #f87171;
-      margin-top: 10px;
-      min-height: 18px;
-      display: flex;
-      align-items: center;
-      gap: 6px;
-    }
-
-    /* --- DIVIDER --- */
-    .divider {
+    /* ---- DIVIDER ---- */
+    hr.div {
       border: none;
       height: 1px;
-      background: linear-gradient(90deg, transparent, var(--border-bright), transparent);
-      margin: 1.5rem 0;
+      background: linear-gradient(90deg, transparent, var(--line-bright), transparent);
+      margin: 1.6rem 0;
+      position: relative;
+      z-index: 1;
     }
 
-    /* --- MONTH TABS --- */
-    .section-label {
-      font-family: 'Syne', sans-serif;
-      font-size: 10.5px;
-      letter-spacing: 0.1em;
+    /* ---- MONTH SWITCHER ---- */
+    .sec-label {
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 0.12em;
       text-transform: uppercase;
-      color: var(--text-dim);
+      color: var(--dim);
       margin-bottom: 10px;
+      position: relative;
+      z-index: 1;
     }
 
-    .month-tabs {
+    .month-row {
       display: flex;
       gap: 8px;
       margin-bottom: 1.5rem;
-      flex-wrap: wrap;
+      position: relative;
+      z-index: 1;
     }
 
-    .month-tab {
-      padding: 7px 20px;
-      font-family: 'Syne', sans-serif;
+    .m-tab {
+      flex: 1;
+      padding: 9px 0;
+      font-family: 'Outfit', sans-serif;
+      font-size: 13.5px;
+      font-weight: 600;
+      background: var(--ink3);
+      border: 1px solid var(--line);
+      border-radius: var(--r-sm);
+      color: var(--muted);
+      cursor: pointer;
+      transition: all 0.18s;
+      letter-spacing: 0.02em;
+    }
+
+    .m-tab:hover {
+      border-color: rgba(99,102,241,0.4);
+      color: var(--i2);
+    }
+
+    .m-tab.active {
+      background: linear-gradient(135deg, rgba(99,102,241,0.25), rgba(56,189,248,0.15));
+      border-color: rgba(99,102,241,0.5);
+      color: var(--i2);
+      box-shadow: 0 0 20px rgba(99,102,241,0.15);
+    }
+
+    /* ---- CALENDAR ---- */
+    .cal-wrap {
+      background: var(--ink3);
+      border: 1px solid var(--line);
+      border-radius: var(--r);
+      padding: 1rem;
+      margin-bottom: 1.2rem;
+      position: relative;
+      z-index: 1;
+    }
+
+    .cal-month-header {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      margin-bottom: 14px;
+    }
+
+    .cal-month-title {
+      font-family: 'JetBrains Mono', monospace;
       font-size: 13px;
       font-weight: 500;
-      background: var(--bg-ele);
-      border: 1px solid var(--border);
-      border-radius: 99px;
-      cursor: pointer;
-      color: var(--text-muted);
-      transition: all 0.18s;
+      letter-spacing: 0.1em;
+      color: var(--i2);
+      text-transform: uppercase;
     }
 
-    .month-tab:hover {
-      border-color: var(--violet);
-      color: var(--violet-light);
-      background: rgba(124,58,237,0.1);
-    }
-
-    .month-tab.active {
-      background: linear-gradient(135deg, var(--violet), #9b3fbe);
-      color: #fff;
-      border-color: transparent;
-      box-shadow: 0 3px 14px rgba(124,58,237,0.45);
-    }
-
-    /* --- CALENDAR --- */
-    .cal-header {
+    .cal-head {
       display: grid;
       grid-template-columns: repeat(7, 1fr);
-      gap: 4px;
-      margin-bottom: 6px;
+      gap: 3px;
+      margin-bottom: 5px;
     }
 
-    .cal-header span {
-      font-family: 'Syne', sans-serif;
-      font-size: 10px;
-      color: var(--text-dim);
+    .cal-head span {
       text-align: center;
-      letter-spacing: 0.07em;
-      padding: 4px 0;
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 0.08em;
       text-transform: uppercase;
+      color: var(--dim);
+      padding: 4px 0;
+    }
+
+    /* highlight weekend headers */
+    .cal-head span:first-child,
+    .cal-head span:last-child {
+      color: rgba(251,113,133,0.5);
     }
 
     .cal-grid {
       display: grid;
       grid-template-columns: repeat(7, 1fr);
-      gap: 5px;
-      margin-bottom: 1.5rem;
+      gap: 3px;
     }
 
     .cal-day {
@@ -319,418 +462,527 @@
       justify-content: center;
       font-size: 13px;
       font-weight: 400;
-      border-radius: var(--radius-sm);
+      border-radius: 7px;
       cursor: pointer;
-      color: var(--text-muted);
-      background: var(--bg-ele);
+      color: var(--muted);
+      background: transparent;
       border: 1px solid transparent;
-      transition: all 0.14s;
+      transition: all 0.13s;
       user-select: none;
+      position: relative;
     }
 
     .cal-day:hover {
-      border-color: var(--violet);
-      color: var(--violet-light);
-      background: rgba(124,58,237,0.1);
-      transform: scale(1.05);
+      background: rgba(99,102,241,0.12);
+      border-color: rgba(99,102,241,0.3);
+      color: var(--i2);
+      transform: scale(1.07);
+    }
+
+    .cal-day.today {
+      color: var(--sky);
+      font-weight: 600;
+    }
+
+    .cal-day.today::after {
+      content: '';
+      position: absolute;
+      bottom: 3px; left: 50%;
+      transform: translateX(-50%);
+      width: 3px; height: 3px;
+      border-radius: 50%;
+      background: var(--sky);
     }
 
     .cal-day.selected {
-      background: linear-gradient(135deg, var(--violet), var(--pink));
+      background: linear-gradient(135deg, var(--i), #38a6f5);
       color: #fff;
       border-color: transparent;
-      font-weight: 600;
-      box-shadow: 0 3px 12px rgba(124,58,237,0.5);
-      transform: scale(1.06);
+      font-weight: 700;
+      box-shadow: 0 3px 14px rgba(99,102,241,0.5);
+      transform: scale(1.1);
     }
 
+    .cal-day.selected::after { display: none; }
+
     .cal-day.blank {
-      background: transparent;
-      border-color: transparent;
+      background: transparent !important;
+      border-color: transparent !important;
       cursor: default;
       pointer-events: none;
     }
 
-    /* --- SELECTED PILL --- */
-    .selected-pill {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      padding: 7px 16px;
-      background: linear-gradient(135deg, rgba(124,58,237,0.15), rgba(236,72,153,0.1));
-      border: 1px solid rgba(124,58,237,0.3);
-      border-radius: 99px;
-      font-size: 13px;
-      color: var(--violet-light);
-      margin-bottom: 1rem;
-      font-weight: 500;
-    }
+    .cal-day.weekend { color: rgba(251,113,133,0.6); }
+    .cal-day.weekend:hover { color: var(--rose); }
 
-    .selected-pill.hidden { display: none; }
-
-    /* --- SUCCESS --- */
-    .success-icon {
-      width: 58px; height: 58px;
-      background: linear-gradient(135deg, rgba(16,185,129,0.2), rgba(6,182,212,0.15));
-      border: 1px solid rgba(16,185,129,0.35);
-      border-radius: 50%;
+    /* ---- SELECTION PILL ---- */
+    .sel-pill {
       display: flex;
       align-items: center;
-      justify-content: center;
-      margin-bottom: 1.5rem;
+      gap: 10px;
+      padding: 10px 16px;
+      background: linear-gradient(135deg, rgba(99,102,241,0.12), rgba(56,189,248,0.08));
+      border: 1px solid rgba(99,102,241,0.25);
+      border-radius: 10px;
+      margin-bottom: 1rem;
+      font-size: 13.5px;
+      font-weight: 500;
+      color: var(--i2);
       position: relative;
+      z-index: 1;
+      transition: all 0.2s;
     }
 
-    .success-icon::after {
+    .sel-pill.hidden { display: none; }
+
+    .pill-dot {
+      width: 7px; height: 7px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--i), var(--sky));
+      flex-shrink: 0;
+      animation: pulse 2s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+      0%,100% { box-shadow: 0 0 0 0 rgba(99,102,241,0.4); }
+      50% { box-shadow: 0 0 0 5px rgba(99,102,241,0); }
+    }
+
+    /* ---- SUCCESS ---- */
+    .success-ring {
+      width: 62px; height: 62px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, rgba(52,211,153,0.15), rgba(56,189,248,0.1));
+      border: 1px solid rgba(52,211,153,0.3);
+      display: flex; align-items: center; justify-content: center;
+      margin-bottom: 1.6rem;
+      position: relative;
+      z-index: 1;
+      animation: scaleIn 0.5s cubic-bezier(0.16,1,0.3,1) both;
+    }
+
+    @keyframes scaleIn {
+      from { transform: scale(0.5); opacity: 0; }
+      to   { transform: scale(1); opacity: 1; }
+    }
+
+    .success-ring::before {
       content: '';
       position: absolute;
-      inset: -5px;
+      inset: -8px;
       border-radius: 50%;
-      border: 1px solid rgba(16,185,129,0.15);
+      border: 1px dashed rgba(52,211,153,0.2);
+      animation: spin 10s linear infinite;
     }
 
-    /* Confetti dots on success */
-    .confetti {
-      position: absolute;
-      top: 0; left: 0; right: 0; bottom: 0;
-      pointer-events: none;
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* ---- INFO TABLE ---- */
+    .info-table {
+      background: var(--ink3);
+      border: 1px solid var(--line);
+      border-radius: var(--r-sm);
       overflow: hidden;
-      border-radius: 20px;
-    }
-
-    .confetti span {
-      position: absolute;
-      width: 6px; height: 6px;
-      border-radius: 50%;
-      animation: confettiFall 2s ease-out both;
-    }
-
-    @keyframes confettiFall {
-      0% { opacity: 1; transform: translateY(-20px) scale(0); }
-      60% { opacity: 1; }
-      100% { opacity: 0; transform: translateY(120px) scale(1) rotate(360deg); }
-    }
-
-    /* --- INFO ROWS --- */
-    .info-block {
-      background: var(--bg-ele);
-      border: 1px solid var(--border);
-      border-radius: var(--radius-sm);
-      overflow: hidden;
-      margin-top: 1.2rem;
+      margin-top: 1.4rem;
+      position: relative;
+      z-index: 1;
     }
 
     .info-row {
       display: flex;
-      justify-content: space-between;
       align-items: center;
-      font-size: 13px;
+      justify-content: space-between;
       padding: 12px 16px;
-      border-bottom: 1px solid rgba(255,255,255,0.04);
+      border-bottom: 1px solid var(--line);
+      font-size: 13.5px;
     }
 
     .info-row:last-child { border-bottom: none; }
 
-    .info-row span:first-child {
-      color: var(--text-muted);
-      font-size: 12px;
-      font-family: 'Syne', sans-serif;
+    .info-key {
+      font-size: 10.5px;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    .info-val { font-weight: 500; font-family: 'JetBrains Mono', monospace; font-size: 13px; }
+
+    .tag-ok {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 3px 10px;
+      background: rgba(52,211,153,0.12);
+      border: 1px solid rgba(52,211,153,0.25);
+      border-radius: 99px;
+      color: var(--mint);
+      font-size: 11px;
+      font-weight: 600;
       letter-spacing: 0.06em;
       text-transform: uppercase;
     }
 
-    .info-row span:last-child { font-weight: 500; }
-
-    .tag-scheduled {
-      background: linear-gradient(135deg, rgba(16,185,129,0.2), rgba(6,182,212,0.15));
-      border: 1px solid rgba(16,185,129,0.3);
-      color: var(--emerald-light);
-      padding: 2px 10px;
-      border-radius: 99px;
-      font-size: 12px;
-      font-weight: 500;
+    /* ---- CONFETTI ---- */
+    .confetti {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      overflow: hidden;
+      border-radius: 20px;
+      z-index: 0;
     }
 
-    /* Login decorative steps */
-    .steps {
-      display: flex;
-      gap: 6px;
-      margin-bottom: 1.8rem;
-      align-items: center;
+    .confetti span {
+      position: absolute;
+      animation: fall 2.2s ease-out both;
     }
 
-    .step {
-      height: 3px;
-      border-radius: 99px;
-      flex: 1;
+    @keyframes fall {
+      0%   { opacity: 1; transform: translateY(-10px) rotate(0deg) scale(0); }
+      20%  { opacity: 1; transform: translateY(20px) rotate(120deg) scale(1); }
+      100% { opacity: 0; transform: translateY(200px) rotate(540deg) scale(0.5); }
     }
 
-    .step.done { background: linear-gradient(90deg, var(--violet), var(--pink)); }
-    .step.pending { background: var(--bg-ele2); }
+    /* Scrollbar */
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: var(--ink2); }
+    ::-webkit-scrollbar-thumb { background: var(--ink4); border-radius: 99px; }
   </style>
 </head>
 <body>
 
+<div class="orb orb-1"></div>
+<div class="orb orb-2"></div>
+<div class="orb orb-3"></div>
+
 <div class="wrap">
 
-  <!-- LOGIN -->
+  <!-- ===== LOGIN ===== -->
   <div id="s-login" class="screen active card">
-    <div class="badge">
-      <div class="badge-dot">
-        <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-          <rect x="3" y="4" width="18" height="18" rx="2"/>
-          <path d="M16 2v4M8 2v4M3 10h18"/>
+    <div class="chip">
+      <div class="chip-icon">
+        <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/>
         </svg>
       </div>
       Assessment Portal
     </div>
 
-    <div class="steps">
-      <div class="step done"></div>
-      <div class="step pending"></div>
-      <div class="step pending"></div>
+    <div class="progress">
+      <div class="prog-step active"></div>
+      <div class="prog-step"></div>
+      <div class="prog-step"></div>
     </div>
 
-    <h2>Schedule your <span>assessment</span></h2>
-    <p class="subtitle">Enter your credentials to access available slots</p>
+    <h2>Sign in to <span class="grad">schedule</span></h2>
+    <p class="sub">Enter your candidate credentials to continue</p>
 
     <div class="field">
       <label>Candidate ID</label>
-      <div class="input-wrap">
-        <span class="input-icon">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <div class="inp-wrap">
+        <input id="inp-id" placeholder="e.g. CODIIND000000" autocomplete="off">
+        <span class="inp-ico">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>
           </svg>
         </span>
-        <input id="inp-id" placeholder="e.g. CODIIND000000" autocomplete="off">
       </div>
     </div>
 
     <div class="field">
       <label>Password</label>
-      <div class="input-wrap">
-        <span class="input-icon">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <div class="inp-wrap">
+        <input id="inp-pass" type="password" placeholder="Enter your password">
+        <span class="inp-ico">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/>
           </svg>
         </span>
-        <input id="inp-pass" type="password" placeholder="Enter your password">
       </div>
     </div>
 
-    <p class="err" id="err-msg">
-      <svg id="err-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:none;flex-shrink:0">
+    <div class="err-msg" id="err-msg">
+      <svg id="err-ico" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:none;flex-shrink:0">
         <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>
       </svg>
       <span id="err-text"></span>
-    </p>
+    </div>
 
-    <button class="btn-primary" onclick="doLogin()">
-      Continue &rarr;
-    </button>
+    <button class="btn btn-indigo" onclick="doLogin()">Continue &rarr;</button>
   </div>
 
-  <!-- CALENDAR -->
+  <!-- ===== CALENDAR ===== -->
   <div id="s-calendar" class="screen card">
-    <div class="badge">
-      <div class="badge-dot">
-        <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+    <div class="chip">
+      <div class="chip-icon">
+        <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
           <path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01"/>
         </svg>
       </div>
       Step 2 of 3
     </div>
 
-    <h2>Pick a <span>date</span></h2>
-    <p class="subtitle">Select any available slot for your assessment</p>
-
-    <hr class="divider">
-
-    <p class="section-label">Month</p>
-    <div class="month-tabs" id="month-tabs"></div>
-
-    <p class="section-label">Day</p>
-    <div class="cal-header">
-      <span>Su</span><span>Mo</span><span>Tu</span><span>We</span><span>Th</span><span>Fr</span><span>Sa</span>
-    </div>
-    <div class="cal-grid" id="cal-grid"></div>
-
-    <div class="selected-pill hidden" id="sel-pill">
-      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M20 6L9 17l-5-5"/>
-      </svg>
-      <span id="sel-text"></span>
+    <div class="progress">
+      <div class="prog-step done"></div>
+      <div class="prog-step active"></div>
+      <div class="prog-step"></div>
     </div>
 
-    <button class="btn-primary" onclick="doSubmit()">Confirm date &rarr;</button>
+    <h2>Pick a <span class="grad">date</span></h2>
+    <p class="sub">Select your preferred assessment slot</p>
+
+    <hr class="div">
+
+    <p class="sec-label">Month</p>
+    <div class="month-row" id="month-row"></div>
+
+    <div class="cal-wrap">
+      <div class="cal-month-header">
+        <div class="cal-month-title" id="cal-title">May 2026</div>
+      </div>
+      <div class="cal-head">
+        <span>Su</span><span>Mo</span><span>Tu</span><span>We</span><span>Th</span><span>Fr</span><span>Sa</span>
+      </div>
+      <div class="cal-grid" id="cal-grid"></div>
+    </div>
+
+    <div class="sel-pill hidden" id="sel-pill">
+      <div class="pill-dot"></div>
+      <span id="sel-text">No date selected</span>
+    </div>
+
+    <button class="btn btn-indigo" onclick="doSubmit()">Confirm date &rarr;</button>
   </div>
 
-  <!-- SUCCESS -->
+  <!-- ===== SUCCESS ===== -->
   <div id="s-done" class="screen card">
     <div class="confetti" id="confetti"></div>
 
-    <div class="success-icon">
-      <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+    <div class="success-ring">
+      <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#34d399" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
         <path d="M20 6L9 17l-5-5"/>
       </svg>
     </div>
 
-    <h2>All <span style="background:linear-gradient(90deg,#10b981,#06b6d4);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text">set!</span></h2>
-    <p class="subtitle" style="margin-bottom:0">Your assessment has been booked. A confirmation email is on its way.</p>
+    <div class="progress">
+      <div class="prog-step done"></div>
+      <div class="prog-step done"></div>
+      <div class="prog-step done"></div>
+    </div>
 
-    <div class="info-block" id="summary-rows"></div>
+    <h2>All <span style="background:linear-gradient(90deg,#34d399,#38bdf8);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text">confirmed!</span></h2>
+    <p class="sub" style="margin-bottom:0">Your assessment slot is booked. A confirmation email is on its way.</p>
+
+    <div class="info-table" id="summary"></div>
   </div>
 
 </div>
 
 <script>
+  // ── Data ──
   const USERS = [
     { id: "CODIUAE736197", pass: "9641568694" }
   ];
 
-  const MONTHS = [
-    "January","February","March","April","May","June",
-    "July","August","September","October","November","December"
-  ];
+  const MONTHS = ["January","February","March","April","May","June",
+                  "July","August","September","October","November","December"];
 
-  const AVAILABLE_MONTHS = [4, 5];
+  // May = index 4, June = index 5, year 2026
+  const AVAIL = [4, 5];
+  const YEAR  = 2026;
+
+  // Today
+  const TODAY = new Date();
+  const T_MONTH = TODAY.getMonth();
+  const T_DAY   = TODAY.getDate();
+  const T_YEAR  = TODAY.getFullYear();
 
   let activeMon = 4;
-  let selDay = null;
+  let selDay    = null;
+  let loggedUser = null;
 
+  // ── Helpers ──
   function show(id) {
     document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
     document.getElementById(id).classList.add('active');
   }
 
+  function isToday(d) {
+    return T_YEAR === YEAR && T_MONTH === activeMon && T_DAY === d;
+  }
+
+  function isWeekend(d) {
+    const dow = new Date(YEAR, activeMon, d).getDay();
+    return dow === 0 || dow === 6;
+  }
+
+  // ── Login ──
   function doLogin() {
     const id = document.getElementById('inp-id').value.trim();
     const pw = document.getElementById('inp-pass').value;
-    const ok = USERS.some(u => u.id === id && u.pass === pw);
+    const user = USERS.find(u => u.id === id && u.pass === pw);
+
     const errText = document.getElementById('err-text');
-    const errIcon = document.getElementById('err-icon');
-    if (!ok) {
-      errText.textContent = 'Invalid credentials. Please try again.';
-      errIcon.style.display = 'block';
-      document.getElementById('inp-id').style.borderColor = 'rgba(248,113,113,0.5)';
-      document.getElementById('inp-pass').style.borderColor = 'rgba(248,113,113,0.5)';
+    const errIco  = document.getElementById('err-ico');
+    const idInput = document.getElementById('inp-id');
+    const pwInput = document.getElementById('inp-pass');
+
+    if (!user) {
+      errText.textContent = 'Invalid credentials. Please check and try again.';
+      errIco.style.display = 'inline';
+      idInput.classList.add('err-inp');
+      pwInput.classList.add('err-inp');
       return;
     }
+
+    loggedUser = user;
     errText.textContent = '';
-    errIcon.style.display = 'none';
-    buildMonthTabs();
+    errIco.style.display = 'none';
+    idInput.classList.remove('err-inp');
+    pwInput.classList.remove('err-inp');
+
+    buildMonthRow();
     renderCal();
     show('s-calendar');
   }
 
-  function buildMonthTabs() {
-    const el = document.getElementById('month-tabs');
+  // ── Month switcher ──
+  function buildMonthRow() {
+    const el = document.getElementById('month-row');
     el.innerHTML = '';
-    AVAILABLE_MONTHS.forEach(m => {
+    AVAIL.forEach(m => {
       const b = document.createElement('button');
-      b.className = 'month-tab' + (m === activeMon ? ' active' : '');
+      b.className = 'm-tab' + (m === activeMon ? ' active' : '');
       b.textContent = MONTHS[m];
       b.onclick = () => {
         activeMon = m;
         selDay = null;
         updatePill();
-        buildMonthTabs();
+        buildMonthRow();
         renderCal();
       };
       el.appendChild(b);
     });
   }
 
+  // ── Calendar render ──
   function renderCal() {
+    document.getElementById('cal-title').textContent = MONTHS[activeMon] + ' ' + YEAR;
+
     const grid = document.getElementById('cal-grid');
     grid.innerHTML = '';
-    const firstDay = new Date(2025, activeMon, 1).getDay();
-    const totalDays = new Date(2025, activeMon + 1, 0).getDate();
 
-    for (let i = 0; i < firstDay; i++) {
+    // First day of month (0=Sun … 6=Sat)
+    const firstDow  = new Date(YEAR, activeMon, 1).getDay();
+    const totalDays = new Date(YEAR, activeMon + 1, 0).getDate();
+
+    // Blanks
+    for (let i = 0; i < firstDow; i++) {
       const blank = document.createElement('div');
       blank.className = 'cal-day blank';
       grid.appendChild(blank);
     }
 
+    // Days
     for (let d = 1; d <= totalDays; d++) {
       const div = document.createElement('div');
       div.textContent = d;
-      div.className = 'cal-day' + (selDay === d ? ' selected' : '');
-      div.style.animationDelay = (d * 0.012) + 's';
+
+      let cls = 'cal-day';
+      if (selDay === d) cls += ' selected';
+      else if (isToday(d)) cls += ' today';
+      else if (isWeekend(d)) cls += ' weekend';
+
+      div.className = cls;
+
       const day = d;
       div.onclick = () => {
         selDay = day;
         renderCal();
         updatePill();
       };
+
       grid.appendChild(div);
     }
   }
 
+  // ── Selected pill ──
   function updatePill() {
     const pill = document.getElementById('sel-pill');
-    const txt = document.getElementById('sel-text');
+    const txt  = document.getElementById('sel-text');
     if (selDay) {
       pill.classList.remove('hidden');
-      txt.textContent = selDay + ' ' + MONTHS[activeMon] + ' 2025';
+      const dow = new Date(YEAR, activeMon, selDay);
+      const dayName = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'][dow.getDay()];
+      txt.textContent = dayName + ', ' + selDay + ' ' + MONTHS[activeMon] + ' ' + YEAR;
     } else {
       pill.classList.add('hidden');
     }
   }
 
-  function spawnConfetti() {
-    const container = document.getElementById('confetti');
-    const colors = ['#7c3aed','#ec4899','#06b6d4','#f59e0b','#10b981','#a78bfa','#f9a8d4'];
-    container.innerHTML = '';
-    for (let i = 0; i < 18; i++) {
-      const s = document.createElement('span');
-      s.style.cssText = `
-        left:${Math.random()*100}%;
-        top:${Math.random()*60}%;
-        background:${colors[Math.floor(Math.random()*colors.length)]};
-        animation-delay:${Math.random()*0.8}s;
-        animation-duration:${1.5 + Math.random()*1}s;
-        width:${4+Math.random()*6}px;
-        height:${4+Math.random()*6}px;
-        border-radius:${Math.random()>0.5?'50%':'2px'};
-      `;
-      container.appendChild(s);
-    }
-  }
-
+  // ── Submit ──
   function doSubmit() {
     if (!selDay) {
-      alert('Please select a date first.');
+      const pill = document.getElementById('sel-pill');
+      pill.classList.remove('hidden');
+      document.getElementById('sel-text').textContent = '⚠ Please select a date first';
+      document.getElementById('sel-pill').style.borderColor = 'rgba(251,113,133,0.4)';
+      document.getElementById('sel-pill').style.color = 'var(--rose)';
       return;
     }
-    const dateStr = selDay + ' ' + MONTHS[activeMon] + ' 2025';
-    const rows = document.getElementById('summary-rows');
-    const data = [
-      ['Candidate', USERS[0].id],
+
+    const dow = new Date(YEAR, activeMon, selDay);
+    const dayName = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'][dow.getDay()];
+    const dateStr = dayName + ', ' + selDay + ' ' + MONTHS[activeMon] + ' ' + YEAR;
+
+    const summary = document.getElementById('summary');
+    const rows = [
+      ['Candidate', loggedUser.id],
       ['Date', dateStr],
-      ['Status', 'scheduled']
+      ['Status', 'confirmed']
     ];
-    rows.innerHTML = data.map(([k, v]) => {
-      const valHtml = v === 'scheduled'
-        ? `<span class="tag-scheduled">Scheduled</span>`
-        : `<span>${v}</span>`;
-      return `<div class="info-row"><span>${k}</span>${valHtml}</div>`;
+
+    summary.innerHTML = rows.map(([k, v]) => {
+      const valHtml = v === 'confirmed'
+        ? `<span class="tag-ok"><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>Confirmed</span>`
+        : `<span class="info-val">${v}</span>`;
+      return `<div class="info-row"><span class="info-key">${k}</span>${valHtml}</div>`;
     }).join('');
+
     show('s-done');
     spawnConfetti();
   }
 
-  // Enter key support
-  document.addEventListener('keydown', e => {
-    if (e.key === 'Enter') {
-      const login = document.getElementById('s-login');
-      const cal = document.getElementById('s-calendar');
-      if (login.classList.contains('active')) doLogin();
-      else if (cal.classList.contains('active')) doSubmit();
+  // ── Confetti ──
+  function spawnConfetti() {
+    const c = document.getElementById('confetti');
+    const colors = ['#6366f1','#38bdf8','#34d399','#fbbf24','#fb7185','#a78bfa','#f0abfc'];
+    c.innerHTML = '';
+    for (let i = 0; i < 24; i++) {
+      const s = document.createElement('span');
+      const size = 4 + Math.random() * 7;
+      s.style.cssText = `
+        left:${Math.random()*100}%;
+        top:${Math.random()*50}%;
+        width:${size}px;
+        height:${size}px;
+        background:${colors[i % colors.length]};
+        border-radius:${Math.random() > 0.4 ? '50%' : '2px'};
+        animation-delay:${Math.random() * 0.6}s;
+        animation-duration:${1.8 + Math.random() * 1.2}s;
+      `;
+      c.appendChild(s);
     }
+  }
+
+  // ── Enter key ──
+  document.addEventListener('keydown', e => {
+    if (e.key !== 'Enter') return;
+    if (document.getElementById('s-login').classList.contains('active'))    doLogin();
+    if (document.getElementById('s-calendar').classList.contains('active')) doSubmit();
   });
 </script>
-
 </body>
 </html>

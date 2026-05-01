@@ -1,0 +1,736 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Schedule Assessment</title>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --violet: #7c3aed;
+      --violet-light: #a78bfa;
+      --violet-dark: #5b21b6;
+      --pink: #ec4899;
+      --pink-light: #f9a8d4;
+      --amber: #f59e0b;
+      --emerald: #10b981;
+      --emerald-light: #6ee7b7;
+      --cyan: #06b6d4;
+      --bg: #0f0e17;
+      --bg-card: #16152b;
+      --bg-ele: #1e1c3a;
+      --bg-ele2: #252348;
+      --text: #f0eeff;
+      --text-muted: #9d9bc4;
+      --text-dim: #5c5a8a;
+      --border: rgba(124,58,237,0.18);
+      --border-bright: rgba(124,58,237,0.45);
+      --radius: 14px;
+      --radius-sm: 8px;
+    }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem 1rem;
+      overflow-x: hidden;
+    }
+
+    /* Ambient background blobs */
+    body::before, body::after {
+      content: '';
+      position: fixed;
+      border-radius: 50%;
+      filter: blur(90px);
+      pointer-events: none;
+      z-index: 0;
+    }
+    body::before {
+      width: 500px; height: 500px;
+      background: radial-gradient(circle, rgba(124,58,237,0.28) 0%, transparent 70%);
+      top: -150px; left: -150px;
+    }
+    body::after {
+      width: 400px; height: 400px;
+      background: radial-gradient(circle, rgba(236,72,153,0.22) 0%, transparent 70%);
+      bottom: -100px; right: -100px;
+    }
+
+    .wrap {
+      width: 100%;
+      max-width: 480px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .screen { display: none; }
+    .screen.active { display: block; animation: fadeUp 0.4s cubic-bezier(0.22,1,0.36,1) both; }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 2.2rem;
+      box-shadow: 0 0 0 1px rgba(255,255,255,0.03), 0 30px 60px rgba(0,0,0,0.5), 0 0 80px rgba(124,58,237,0.08);
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* Subtle shimmer top border */
+    .card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, var(--violet), var(--pink), var(--cyan), transparent);
+      opacity: 0.7;
+    }
+
+    /* --- BADGE / ICON --- */
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 14px 6px 8px;
+      background: linear-gradient(135deg, rgba(124,58,237,0.22), rgba(236,72,153,0.14));
+      border: 1px solid rgba(124,58,237,0.3);
+      border-radius: 99px;
+      font-family: 'Syne', sans-serif;
+      font-size: 11px;
+      letter-spacing: 0.07em;
+      text-transform: uppercase;
+      color: var(--violet-light);
+      margin-bottom: 1.4rem;
+    }
+
+    .badge-dot {
+      width: 20px; height: 20px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--violet), var(--pink));
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+    }
+
+    h2 {
+      font-family: 'Syne', sans-serif;
+      font-size: 22px;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 6px;
+      line-height: 1.25;
+    }
+
+    h2 span {
+      background: linear-gradient(90deg, var(--violet-light), var(--pink-light));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .subtitle {
+      font-size: 13.5px;
+      color: var(--text-muted);
+      margin-bottom: 1.8rem;
+      font-weight: 300;
+    }
+
+    /* --- FORM FIELDS --- */
+    .field { margin-bottom: 14px; }
+
+    .field label {
+      display: block;
+      font-family: 'Syne', sans-serif;
+      font-size: 10.5px;
+      color: var(--text-muted);
+      margin-bottom: 7px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+
+    .input-wrap {
+      position: relative;
+    }
+
+    .input-icon {
+      position: absolute;
+      left: 12px; top: 50%; transform: translateY(-50%);
+      color: var(--text-dim);
+      pointer-events: none;
+    }
+
+    .field input {
+      width: 100%;
+      padding: 11px 12px 11px 38px;
+      font-size: 14px;
+      font-family: 'DM Sans', sans-serif;
+      background: var(--bg-ele);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      color: var(--text);
+      outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s, background 0.2s;
+    }
+
+    .field input:focus {
+      border-color: var(--violet);
+      background: var(--bg-ele2);
+      box-shadow: 0 0 0 3px rgba(124,58,237,0.15);
+    }
+
+    .field input::placeholder { color: var(--text-dim); }
+
+    /* --- BUTTONS --- */
+    .btn-primary {
+      width: 100%;
+      padding: 12px;
+      font-size: 14px;
+      font-weight: 500;
+      font-family: 'Syne', sans-serif;
+      letter-spacing: 0.04em;
+      background: linear-gradient(135deg, var(--violet) 0%, #9b3fbe 50%, var(--pink) 100%);
+      color: #fff;
+      border: none;
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      margin-top: 10px;
+      transition: opacity 0.15s, transform 0.15s, box-shadow 0.2s;
+      box-shadow: 0 4px 20px rgba(124,58,237,0.4);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .btn-primary::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, rgba(255,255,255,0.12), transparent);
+    }
+
+    .btn-primary:hover {
+      opacity: 0.9;
+      transform: translateY(-1px);
+      box-shadow: 0 8px 28px rgba(124,58,237,0.55);
+    }
+
+    .btn-primary:active { transform: scale(0.98); }
+
+    .err {
+      font-size: 13px;
+      color: #f87171;
+      margin-top: 10px;
+      min-height: 18px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    /* --- DIVIDER --- */
+    .divider {
+      border: none;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--border-bright), transparent);
+      margin: 1.5rem 0;
+    }
+
+    /* --- MONTH TABS --- */
+    .section-label {
+      font-family: 'Syne', sans-serif;
+      font-size: 10.5px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--text-dim);
+      margin-bottom: 10px;
+    }
+
+    .month-tabs {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 1.5rem;
+      flex-wrap: wrap;
+    }
+
+    .month-tab {
+      padding: 7px 20px;
+      font-family: 'Syne', sans-serif;
+      font-size: 13px;
+      font-weight: 500;
+      background: var(--bg-ele);
+      border: 1px solid var(--border);
+      border-radius: 99px;
+      cursor: pointer;
+      color: var(--text-muted);
+      transition: all 0.18s;
+    }
+
+    .month-tab:hover {
+      border-color: var(--violet);
+      color: var(--violet-light);
+      background: rgba(124,58,237,0.1);
+    }
+
+    .month-tab.active {
+      background: linear-gradient(135deg, var(--violet), #9b3fbe);
+      color: #fff;
+      border-color: transparent;
+      box-shadow: 0 3px 14px rgba(124,58,237,0.45);
+    }
+
+    /* --- CALENDAR --- */
+    .cal-header {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 4px;
+      margin-bottom: 6px;
+    }
+
+    .cal-header span {
+      font-family: 'Syne', sans-serif;
+      font-size: 10px;
+      color: var(--text-dim);
+      text-align: center;
+      letter-spacing: 0.07em;
+      padding: 4px 0;
+      text-transform: uppercase;
+    }
+
+    .cal-grid {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 5px;
+      margin-bottom: 1.5rem;
+    }
+
+    .cal-day {
+      aspect-ratio: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 13px;
+      font-weight: 400;
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      color: var(--text-muted);
+      background: var(--bg-ele);
+      border: 1px solid transparent;
+      transition: all 0.14s;
+      user-select: none;
+    }
+
+    .cal-day:hover {
+      border-color: var(--violet);
+      color: var(--violet-light);
+      background: rgba(124,58,237,0.1);
+      transform: scale(1.05);
+    }
+
+    .cal-day.selected {
+      background: linear-gradient(135deg, var(--violet), var(--pink));
+      color: #fff;
+      border-color: transparent;
+      font-weight: 600;
+      box-shadow: 0 3px 12px rgba(124,58,237,0.5);
+      transform: scale(1.06);
+    }
+
+    .cal-day.blank {
+      background: transparent;
+      border-color: transparent;
+      cursor: default;
+      pointer-events: none;
+    }
+
+    /* --- SELECTED PILL --- */
+    .selected-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 7px 16px;
+      background: linear-gradient(135deg, rgba(124,58,237,0.15), rgba(236,72,153,0.1));
+      border: 1px solid rgba(124,58,237,0.3);
+      border-radius: 99px;
+      font-size: 13px;
+      color: var(--violet-light);
+      margin-bottom: 1rem;
+      font-weight: 500;
+    }
+
+    .selected-pill.hidden { display: none; }
+
+    /* --- SUCCESS --- */
+    .success-icon {
+      width: 58px; height: 58px;
+      background: linear-gradient(135deg, rgba(16,185,129,0.2), rgba(6,182,212,0.15));
+      border: 1px solid rgba(16,185,129,0.35);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 1.5rem;
+      position: relative;
+    }
+
+    .success-icon::after {
+      content: '';
+      position: absolute;
+      inset: -5px;
+      border-radius: 50%;
+      border: 1px solid rgba(16,185,129,0.15);
+    }
+
+    /* Confetti dots on success */
+    .confetti {
+      position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
+      pointer-events: none;
+      overflow: hidden;
+      border-radius: 20px;
+    }
+
+    .confetti span {
+      position: absolute;
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      animation: confettiFall 2s ease-out both;
+    }
+
+    @keyframes confettiFall {
+      0% { opacity: 1; transform: translateY(-20px) scale(0); }
+      60% { opacity: 1; }
+      100% { opacity: 0; transform: translateY(120px) scale(1) rotate(360deg); }
+    }
+
+    /* --- INFO ROWS --- */
+    .info-block {
+      background: var(--bg-ele);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      overflow: hidden;
+      margin-top: 1.2rem;
+    }
+
+    .info-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 13px;
+      padding: 12px 16px;
+      border-bottom: 1px solid rgba(255,255,255,0.04);
+    }
+
+    .info-row:last-child { border-bottom: none; }
+
+    .info-row span:first-child {
+      color: var(--text-muted);
+      font-size: 12px;
+      font-family: 'Syne', sans-serif;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+
+    .info-row span:last-child { font-weight: 500; }
+
+    .tag-scheduled {
+      background: linear-gradient(135deg, rgba(16,185,129,0.2), rgba(6,182,212,0.15));
+      border: 1px solid rgba(16,185,129,0.3);
+      color: var(--emerald-light);
+      padding: 2px 10px;
+      border-radius: 99px;
+      font-size: 12px;
+      font-weight: 500;
+    }
+
+    /* Login decorative steps */
+    .steps {
+      display: flex;
+      gap: 6px;
+      margin-bottom: 1.8rem;
+      align-items: center;
+    }
+
+    .step {
+      height: 3px;
+      border-radius: 99px;
+      flex: 1;
+    }
+
+    .step.done { background: linear-gradient(90deg, var(--violet), var(--pink)); }
+    .step.pending { background: var(--bg-ele2); }
+  </style>
+</head>
+<body>
+
+<div class="wrap">
+
+  <!-- LOGIN -->
+  <div id="s-login" class="screen active card">
+    <div class="badge">
+      <div class="badge-dot">
+        <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="3" y="4" width="18" height="18" rx="2"/>
+          <path d="M16 2v4M8 2v4M3 10h18"/>
+        </svg>
+      </div>
+      Assessment Portal
+    </div>
+
+    <div class="steps">
+      <div class="step done"></div>
+      <div class="step pending"></div>
+      <div class="step pending"></div>
+    </div>
+
+    <h2>Schedule your <span>assessment</span></h2>
+    <p class="subtitle">Enter your credentials to access available slots</p>
+
+    <div class="field">
+      <label>Candidate ID</label>
+      <div class="input-wrap">
+        <span class="input-icon">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>
+          </svg>
+        </span>
+        <input id="inp-id" placeholder="e.g. CODIIND000000" autocomplete="off">
+      </div>
+    </div>
+
+    <div class="field">
+      <label>Password</label>
+      <div class="input-wrap">
+        <span class="input-icon">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+          </svg>
+        </span>
+        <input id="inp-pass" type="password" placeholder="Enter your password">
+      </div>
+    </div>
+
+    <p class="err" id="err-msg">
+      <svg id="err-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:none;flex-shrink:0">
+        <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>
+      </svg>
+      <span id="err-text"></span>
+    </p>
+
+    <button class="btn-primary" onclick="doLogin()">
+      Continue &rarr;
+    </button>
+  </div>
+
+  <!-- CALENDAR -->
+  <div id="s-calendar" class="screen card">
+    <div class="badge">
+      <div class="badge-dot">
+        <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01"/>
+        </svg>
+      </div>
+      Step 2 of 3
+    </div>
+
+    <h2>Pick a <span>date</span></h2>
+    <p class="subtitle">Select any available slot for your assessment</p>
+
+    <hr class="divider">
+
+    <p class="section-label">Month</p>
+    <div class="month-tabs" id="month-tabs"></div>
+
+    <p class="section-label">Day</p>
+    <div class="cal-header">
+      <span>Su</span><span>Mo</span><span>Tu</span><span>We</span><span>Th</span><span>Fr</span><span>Sa</span>
+    </div>
+    <div class="cal-grid" id="cal-grid"></div>
+
+    <div class="selected-pill hidden" id="sel-pill">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M20 6L9 17l-5-5"/>
+      </svg>
+      <span id="sel-text"></span>
+    </div>
+
+    <button class="btn-primary" onclick="doSubmit()">Confirm date &rarr;</button>
+  </div>
+
+  <!-- SUCCESS -->
+  <div id="s-done" class="screen card">
+    <div class="confetti" id="confetti"></div>
+
+    <div class="success-icon">
+      <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M20 6L9 17l-5-5"/>
+      </svg>
+    </div>
+
+    <h2>All <span style="background:linear-gradient(90deg,#10b981,#06b6d4);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text">set!</span></h2>
+    <p class="subtitle" style="margin-bottom:0">Your assessment has been booked. A confirmation email is on its way.</p>
+
+    <div class="info-block" id="summary-rows"></div>
+  </div>
+
+</div>
+
+<script>
+  const USERS = [
+    { id: "CODIUAE736197", pass: "9641568694" }
+  ];
+
+  const MONTHS = [
+    "January","February","March","April","May","June",
+    "July","August","September","October","November","December"
+  ];
+
+  const AVAILABLE_MONTHS = [4, 5];
+
+  let activeMon = 4;
+  let selDay = null;
+
+  function show(id) {
+    document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+  }
+
+  function doLogin() {
+    const id = document.getElementById('inp-id').value.trim();
+    const pw = document.getElementById('inp-pass').value;
+    const ok = USERS.some(u => u.id === id && u.pass === pw);
+    const errText = document.getElementById('err-text');
+    const errIcon = document.getElementById('err-icon');
+    if (!ok) {
+      errText.textContent = 'Invalid credentials. Please try again.';
+      errIcon.style.display = 'block';
+      document.getElementById('inp-id').style.borderColor = 'rgba(248,113,113,0.5)';
+      document.getElementById('inp-pass').style.borderColor = 'rgba(248,113,113,0.5)';
+      return;
+    }
+    errText.textContent = '';
+    errIcon.style.display = 'none';
+    buildMonthTabs();
+    renderCal();
+    show('s-calendar');
+  }
+
+  function buildMonthTabs() {
+    const el = document.getElementById('month-tabs');
+    el.innerHTML = '';
+    AVAILABLE_MONTHS.forEach(m => {
+      const b = document.createElement('button');
+      b.className = 'month-tab' + (m === activeMon ? ' active' : '');
+      b.textContent = MONTHS[m];
+      b.onclick = () => {
+        activeMon = m;
+        selDay = null;
+        updatePill();
+        buildMonthTabs();
+        renderCal();
+      };
+      el.appendChild(b);
+    });
+  }
+
+  function renderCal() {
+    const grid = document.getElementById('cal-grid');
+    grid.innerHTML = '';
+    const firstDay = new Date(2025, activeMon, 1).getDay();
+    const totalDays = new Date(2025, activeMon + 1, 0).getDate();
+
+    for (let i = 0; i < firstDay; i++) {
+      const blank = document.createElement('div');
+      blank.className = 'cal-day blank';
+      grid.appendChild(blank);
+    }
+
+    for (let d = 1; d <= totalDays; d++) {
+      const div = document.createElement('div');
+      div.textContent = d;
+      div.className = 'cal-day' + (selDay === d ? ' selected' : '');
+      div.style.animationDelay = (d * 0.012) + 's';
+      const day = d;
+      div.onclick = () => {
+        selDay = day;
+        renderCal();
+        updatePill();
+      };
+      grid.appendChild(div);
+    }
+  }
+
+  function updatePill() {
+    const pill = document.getElementById('sel-pill');
+    const txt = document.getElementById('sel-text');
+    if (selDay) {
+      pill.classList.remove('hidden');
+      txt.textContent = selDay + ' ' + MONTHS[activeMon] + ' 2025';
+    } else {
+      pill.classList.add('hidden');
+    }
+  }
+
+  function spawnConfetti() {
+    const container = document.getElementById('confetti');
+    const colors = ['#7c3aed','#ec4899','#06b6d4','#f59e0b','#10b981','#a78bfa','#f9a8d4'];
+    container.innerHTML = '';
+    for (let i = 0; i < 18; i++) {
+      const s = document.createElement('span');
+      s.style.cssText = `
+        left:${Math.random()*100}%;
+        top:${Math.random()*60}%;
+        background:${colors[Math.floor(Math.random()*colors.length)]};
+        animation-delay:${Math.random()*0.8}s;
+        animation-duration:${1.5 + Math.random()*1}s;
+        width:${4+Math.random()*6}px;
+        height:${4+Math.random()*6}px;
+        border-radius:${Math.random()>0.5?'50%':'2px'};
+      `;
+      container.appendChild(s);
+    }
+  }
+
+  function doSubmit() {
+    if (!selDay) {
+      alert('Please select a date first.');
+      return;
+    }
+    const dateStr = selDay + ' ' + MONTHS[activeMon] + ' 2025';
+    const rows = document.getElementById('summary-rows');
+    const data = [
+      ['Candidate', USERS[0].id],
+      ['Date', dateStr],
+      ['Status', 'scheduled']
+    ];
+    rows.innerHTML = data.map(([k, v]) => {
+      const valHtml = v === 'scheduled'
+        ? `<span class="tag-scheduled">Scheduled</span>`
+        : `<span>${v}</span>`;
+      return `<div class="info-row"><span>${k}</span>${valHtml}</div>`;
+    }).join('');
+    show('s-done');
+    spawnConfetti();
+  }
+
+  // Enter key support
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Enter') {
+      const login = document.getElementById('s-login');
+      const cal = document.getElementById('s-calendar');
+      if (login.classList.contains('active')) doLogin();
+      else if (cal.classList.contains('active')) doSubmit();
+    }
+  });
+</script>
+
+</body>
+</html>

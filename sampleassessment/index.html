@@ -35,7 +35,6 @@
       -webkit-user-select: none;
     }
 
-    /* Dot grid background */
     body::before {
       content: '';
       position: fixed;
@@ -46,7 +45,6 @@
       z-index: 0;
     }
 
-    /* Ambient glow blobs */
     body::after {
       content: '';
       position: fixed;
@@ -59,7 +57,6 @@
 
     .hidden { display: none !important; }
 
-    /* ===================== SAMPLE BANNER ===================== */
     .sample-banner {
       position: fixed;
       top: 0; left: 0; right: 0;
@@ -83,7 +80,6 @@
       margin-right: 8px;
     }
 
-    /* ===================== LOGIN ===================== */
     #loginScreen {
       position: relative;
       z-index: 1;
@@ -247,12 +243,6 @@
       line-height: 1.8;
     }
 
-    .login-creds .cred-row {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-    }
-
     .cred-val {
       color: var(--accent3);
       font-weight: 600;
@@ -272,7 +262,6 @@
     @keyframes fadeOut { from{opacity:1;} to{opacity:0;} }
     @keyframes popIn { 0%{transform:scale(0.9);opacity:0;} 100%{transform:scale(1);opacity:1;} }
 
-    /* ===================== TEST SCREEN ===================== */
     #testScreen {
       position: relative;
       z-index: 1;
@@ -578,7 +567,6 @@
 
     .btn-submit:hover { opacity: 0.9; transform: translateY(-1px); }
 
-    /* SIDEBAR */
     .sidebar { display: flex; flex-direction: column; gap: 14px; }
 
     .cam-card {
@@ -654,17 +642,17 @@
 
     .qmap-grid {
       display: grid;
-      grid-template-columns: repeat(7, 1fr);
-      gap: 4px;
+      grid-template-columns: repeat(10, 1fr);
+      gap: 3px;
     }
 
     .qmap-btn {
       aspect-ratio: 1;
-      border-radius: 5px;
+      border-radius: 4px;
       border: 1px solid rgba(255,255,255,0.07);
       background: var(--bg);
       color: var(--muted);
-      font-size: 9px;
+      font-size: 8px;
       font-weight: 700;
       font-family: 'JetBrains Mono', monospace;
       cursor: pointer;
@@ -731,7 +719,6 @@
       opacity: 0.5;
     }
 
-    /* ===================== WARNING OVERLAY ===================== */
     #warningOverlay {
       position: fixed;
       inset: 0;
@@ -756,20 +743,8 @@
     }
 
     .warning-icon { font-size: 48px; margin-bottom: 14px; }
-
-    .warning-title {
-      font-size: 20px;
-      font-weight: 800;
-      color: var(--danger);
-      margin-bottom: 10px;
-    }
-
-    .warning-msg {
-      font-size: 14px;
-      color: var(--muted);
-      line-height: 1.7;
-      margin-bottom: 18px;
-    }
+    .warning-title { font-size: 20px; font-weight: 800; color: var(--danger); margin-bottom: 10px; }
+    .warning-msg { font-size: 14px; color: var(--muted); line-height: 1.7; margin-bottom: 18px; }
 
     .warning-strike {
       font-size: 12px;
@@ -797,7 +772,6 @@
 
     .btn-warning-ok:hover { opacity: 0.9; }
 
-    /* FULLSCREEN PROMPT */
     #fsPrompt {
       position: fixed;
       inset: 0;
@@ -823,7 +797,6 @@
     .fs-title { font-size: 20px; font-weight: 800; margin-bottom: 10px; }
     .fs-sub { font-size: 13px; color: var(--muted); line-height: 1.6; margin-bottom: 26px; }
 
-    /* TOAST */
     #toastContainer {
       position: fixed;
       top: 52px;
@@ -851,7 +824,6 @@
 
     .toast.fadeout { animation: fadeOut 0.5s ease forwards; }
 
-    /* SUBMIT MODAL */
     #submitModal {
       position: fixed;
       inset: 0;
@@ -901,7 +873,6 @@
     }
 
     .stat-lbl { font-size: 11px; color: var(--muted); margin-top: 4px; font-weight: 500; }
-
     .modal-btns { display: flex; gap: 10px; }
 
     .btn-cancel {
@@ -936,7 +907,6 @@
 
     .btn-confirm:hover { opacity: 0.9; }
 
-    /* DONE SCREEN */
     #doneScreen {
       position: fixed;
       inset: 0;
@@ -995,15 +965,12 @@
 </head>
 <body>
 
-<!-- SAMPLE BANNER -->
 <div class="sample-banner">
   <span>SAMPLE</span> This is a demo assessment only — not an official evaluation. Responses are not recorded or evaluated.
 </div>
 
-<!-- TOAST CONTAINER -->
 <div id="toastContainer"></div>
 
-<!-- FULLSCREEN PROMPT -->
 <div id="fsPrompt" class="hidden">
   <div class="fs-box">
     <div class="fs-icon">⛶</div>
@@ -1013,7 +980,6 @@
   </div>
 </div>
 
-<!-- WARNING OVERLAY -->
 <div id="warningOverlay" class="hidden">
   <div class="warning-box">
     <div class="warning-icon">⚠️</div>
@@ -1024,7 +990,6 @@
   </div>
 </div>
 
-<!-- ============ LOGIN ============ -->
 <div id="loginScreen">
   <div class="login-box">
     <div class="brand">
@@ -1035,7 +1000,7 @@
     <div class="login-sub">Explore how the Codivora assessment portal works before the real thing.</div>
 
     <div class="sample-note-box">
-      <strong>📋 Sample Mode:</strong> This is not a real assessment. Use the credentials below to try out the platform. Questions are beginner-friendly and for practice only.
+      <strong>📋 Sample Mode:</strong> This is not a real assessment. Use the credentials below to try out the platform. 100 software development questions for intern-level candidates.
     </div>
 
     <label for="candidateId">Candidate ID</label>
@@ -1051,12 +1016,11 @@
     <div class="login-creds">
       Demo credentials &nbsp;·&nbsp;
       <span class="cred-val">SAMPLE001</span> / <span class="cred-val">demo123</span><br>
-      20 questions &nbsp;·&nbsp; 20 minutes &nbsp;·&nbsp; Anti-cheat demo active
+      100 questions &nbsp;·&nbsp; 90 minutes &nbsp;·&nbsp; Anti-cheat demo active
     </div>
   </div>
 </div>
 
-<!-- ============ TEST ============ -->
 <div id="testScreen" class="hidden">
   <div class="topbar">
     <div class="topbar-left">
@@ -1065,7 +1029,7 @@
     </div>
     <div class="progress-wrap">
       <div class="progress-label">
-        <span id="progressLabel">Question 1 of 20</span>
+        <span id="progressLabel">Question 1 of 100</span>
         <span id="progressPct">0%</span>
       </div>
       <div class="progress-bar-bg">
@@ -1082,16 +1046,16 @@
     </div>
     <div class="timer-box" id="timerBox">
       <div class="timer-dot"></div>
-      <span id="timerDisplay">20:00</span>
+      <span id="timerDisplay">90:00</span>
     </div>
   </div>
 
   <div class="test-layout">
     <div class="question-card">
       <div class="q-meta">
-        <div class="q-badge">SAMPLE — Beginner</div>
+        <div class="q-badge">SAMPLE — Intern Level</div>
         <div class="q-category" id="qCat">—</div>
-        <div class="q-number" id="qNum">01/20</div>
+        <div class="q-number" id="qNum">001/100</div>
       </div>
       <div class="question-text" id="questionText">Loading...</div>
       <div class="options-grid" id="optionsGrid"></div>
@@ -1135,7 +1099,6 @@
   </div>
 </div>
 
-<!-- SUBMIT MODAL -->
 <div id="submitModal" class="hidden">
   <div class="modal-box">
     <div class="modal-icon">📋</div>
@@ -1147,7 +1110,7 @@
         <div class="stat-lbl">Answered</div>
       </div>
       <div class="stat-box">
-        <div class="stat-val" id="mSkipped">20</div>
+        <div class="stat-val" id="mSkipped">100</div>
         <div class="stat-lbl">Skipped</div>
       </div>
     </div>
@@ -1158,7 +1121,6 @@
   </div>
 </div>
 
-<!-- DONE SCREEN -->
 <div id="doneScreen" class="hidden">
   <div class="done-glow">✅</div>
   <div class="done-title">Sample Complete!</div>
@@ -1168,38 +1130,134 @@
 </div>
 
 <script>
-// ===================== DATA =====================
-const USERS = [
-  { id: "SAMPLE001", pass: "demo123" }
-];
+const USERS = [{ id: "SAMPLE001", pass: "demo123" }];
 
 const QUESTIONS = [
+  // Programming Basics (1-15)
   { cat: "Programming Basics", q: "Which of the following is a valid variable name in most programming languages?", o: ["1variable", "my_variable", "my-variable", "my variable"], a: 1 },
-  { cat: "Data Structures", q: "What does an array store?", o: ["Only strings", "A collection of elements of the same type", "Only numbers", "Key-value pairs"], a: 1 },
-  { cat: "Web Basics", q: "What does HTML stand for?", o: ["HyperText Markup Language", "High Transfer Markup Language", "HyperText Machine Learning", "Hosted Text Markup Language"], a: 0 },
   { cat: "Programming Basics", q: "What is the output of: print(2 + 3 * 4) in Python?", o: ["20", "14", "24", "10"], a: 1 },
-  { cat: "Data Structures", q: "Which data structure works on the FIFO (First In First Out) principle?", o: ["Stack", "Queue", "Tree", "Graph"], a: 1 },
-  { cat: "Databases", q: "Which SQL command is used to fetch data from a table?", o: ["INSERT", "UPDATE", "SELECT", "DELETE"], a: 2 },
-  { cat: "Networking", q: "What does URL stand for?", o: ["Uniform Resource Locator", "Universal Request Link", "Unique Resource Language", "Unified Resource Loader"], a: 0 },
   { cat: "Programming Basics", q: "In Python, which keyword is used to define a function?", o: ["function", "define", "def", "func"], a: 2 },
-  { cat: "OOP Concepts", q: "What is a class in object-oriented programming?", o: ["A variable", "A blueprint for creating objects", "A function", "A database table"], a: 1 },
-  { cat: "Algorithms", q: "What does a loop do in programming?", o: ["Ends the program", "Repeats a block of code multiple times", "Declares a variable", "Imports a library"], a: 1 },
-  { cat: "Web Basics", q: "Which language is used to style web pages?", o: ["HTML", "Python", "CSS", "SQL"], a: 2 },
-  { cat: "Programming Basics", q: "What is the correct way to write a comment in Python?", o: ["// This is a comment", "/* This is a comment */", "# This is a comment", "-- This is a comment"], a: 2 },
-  { cat: "Data Structures", q: "What is the index of the first element in most programming language arrays?", o: ["1", "0", "-1", "Depends on the array size"], a: 1 },
-  { cat: "Algorithms", q: "What is the purpose of a sorting algorithm?", o: ["To find an element in a list", "To arrange elements in a specific order", "To remove duplicates", "To count elements"], a: 1 },
-  { cat: "Networking", q: "What does IP stand for in networking?", o: ["Internet Provider", "Internet Protocol", "Internal Processor", "Interface Port"], a: 1 },
-  { cat: "Databases", q: "Which of the following is a popular relational database system?", o: ["MongoDB", "Redis", "MySQL", "Cassandra"], a: 2 },
   { cat: "Programming Basics", q: "What is a boolean data type?", o: ["A number with decimal points", "A sequence of characters", "A value that is either true or false", "A list of items"], a: 2 },
+  { cat: "Programming Basics", q: "What is the correct way to write a comment in Python?", o: ["// This is a comment", "/* This is a comment */", "# This is a comment", "-- This is a comment"], a: 2 },
+  { cat: "Programming Basics", q: "Which of the following is NOT a primitive data type in Java?", o: ["int", "boolean", "String", "double"], a: 2 },
+  { cat: "Programming Basics", q: "What does the modulo operator (%) do?", o: ["Divides two numbers", "Returns the remainder of division", "Multiplies two numbers", "Returns the quotient of division"], a: 1 },
+  { cat: "Programming Basics", q: "What is a null pointer?", o: ["A pointer to zero", "A pointer that doesn't point to any memory location", "An empty string", "A variable with no data type"], a: 1 },
+  { cat: "Programming Basics", q: "Which keyword is used to prevent a variable from being modified in Java?", o: ["static", "const", "final", "immutable"], a: 2 },
+  { cat: "Programming Basics", q: "What is the difference between == and === in JavaScript?", o: ["No difference", "== checks value only, === checks value and type", "=== checks value only, == checks value and type", "Both check type only"], a: 1 },
+  { cat: "Programming Basics", q: "What does 'DRY' stand for in software development?", o: ["Don't Repeat Yourself", "Do Repeat Yourself", "Data Retrieval Yield", "Dynamic Runtime Yield"], a: 0 },
+  { cat: "Programming Basics", q: "Which of the following is a compiled language?", o: ["Python", "JavaScript", "Ruby", "C++"], a: 3 },
+  { cat: "Programming Basics", q: "What is a runtime error?", o: ["An error that occurs while typing code", "An error that occurs during program execution", "An error detected by the compiler", "An error in the program's logic"], a: 1 },
+  { cat: "Programming Basics", q: "What does 'IDE' stand for?", o: ["Integrated Development Environment", "Internal Data Engine", "Integrated Debug Extension", "Interface Design Engine"], a: 0 },
+  { cat: "Programming Basics", q: "Which symbol is typically used for string concatenation in Python?", o: ["&", ".", "+", "||"], a: 2 },
+
+  // Data Structures (16-28)
+  { cat: "Data Structures", q: "What does an array store?", o: ["Only strings", "A collection of elements of the same type", "Only numbers", "Key-value pairs"], a: 1 },
+  { cat: "Data Structures", q: "Which data structure works on the FIFO (First In First Out) principle?", o: ["Stack", "Queue", "Tree", "Graph"], a: 1 },
+  { cat: "Data Structures", q: "What is the index of the first element in most programming language arrays?", o: ["1", "0", "-1", "Depends on the array size"], a: 1 },
+  { cat: "Data Structures", q: "What data structure uses the LIFO (Last In First Out) principle?", o: ["Queue", "Linked List", "Stack", "Tree"], a: 2 },
+  { cat: "Data Structures", q: "What is a linked list?", o: ["An array with links between elements", "A list of nodes where each node points to the next", "A circular array", "A sorted array"], a: 1 },
+  { cat: "Data Structures", q: "What is a hash table used for?", o: ["Sorting elements", "Storing key-value pairs for fast lookup", "Traversing graphs", "Balancing trees"], a: 1 },
+  { cat: "Data Structures", q: "What is the time complexity of searching in a binary search tree (average case)?", o: ["O(1)", "O(n)", "O(log n)", "O(n²)"], a: 2 },
+  { cat: "Data Structures", q: "Which of the following is a non-linear data structure?", o: ["Array", "Stack", "Queue", "Tree"], a: 3 },
+  { cat: "Data Structures", q: "What is a graph in data structures?", o: ["A chart of data", "A collection of nodes connected by edges", "A sorted list", "A matrix of values"], a: 1 },
+  { cat: "Data Structures", q: "What does 'push' do in a stack?", o: ["Removes the top element", "Adds an element to the top", "Returns the top element without removing it", "Clears the stack"], a: 1 },
+  { cat: "Data Structures", q: "What is a deque?", o: ["A queue with two ends allowing insertion/deletion at both ends", "A doubly linked list", "A double-ended stack", "A dynamic array"], a: 0 },
+  { cat: "Data Structures", q: "What is the worst-case time complexity of bubble sort?", o: ["O(log n)", "O(n)", "O(n log n)", "O(n²)"], a: 3 },
+  { cat: "Data Structures", q: "In a binary tree, a node with no children is called?", o: ["Root", "Parent", "Leaf", "Branch"], a: 2 },
+
+  // Web Development (29-42)
+  { cat: "Web Development", q: "What does HTML stand for?", o: ["HyperText Markup Language", "High Transfer Markup Language", "HyperText Machine Learning", "Hosted Text Markup Language"], a: 0 },
+  { cat: "Web Development", q: "Which language is used to style web pages?", o: ["HTML", "Python", "CSS", "SQL"], a: 2 },
+  { cat: "Web Development", q: "What does the <a> tag do in HTML?", o: ["Displays an image", "Creates a hyperlink", "Adds a heading", "Creates a table"], a: 1 },
+  { cat: "Web Development", q: "What does CSS stand for?", o: ["Computer Style Sheets", "Cascading Style Sheets", "Creative Style System", "Colorful Styling Syntax"], a: 1 },
+  { cat: "Web Development", q: "Which HTTP method is used to send data to a server to create/update a resource?", o: ["GET", "DELETE", "POST", "HEAD"], a: 2 },
+  { cat: "Web Development", q: "What is the purpose of the <meta> tag in HTML?", o: ["To add JavaScript", "To style elements", "To provide metadata about the document", "To create links"], a: 2 },
+  { cat: "Web Development", q: "What does API stand for?", o: ["Application Programming Interface", "Automated Program Instruction", "Application Process Integration", "Advanced Programming Input"], a: 0 },
+  { cat: "Web Development", q: "Which of the following is a JavaScript framework?", o: ["Django", "Laravel", "React", "Flask"], a: 2 },
+  { cat: "Web Development", q: "What is the difference between GET and POST requests?", o: ["GET is for deleting, POST is for creating", "GET retrieves data, POST sends data to the server", "GET is faster than POST always", "POST is only for file uploads"], a: 1 },
+  { cat: "Web Development", q: "What does JSON stand for?", o: ["JavaScript Object Notation", "Java Serialized Object Network", "JavaScript Online Network", "Java Structured Object Name"], a: 0 },
+  { cat: "Web Development", q: "What is a RESTful API?", o: ["An API that uses XML only", "An API following REST architectural principles using HTTP methods", "An API that requires authentication", "An API built with JavaScript"], a: 1 },
+  { cat: "Web Development", q: "What does the DOM stand for in web development?", o: ["Document Object Model", "Data Object Manager", "Dynamic Object Mechanism", "Display Object Model"], a: 0 },
+  { cat: "Web Development", q: "Which HTML tag is used to include external JavaScript?", o: ["<js>", "<javascript>", "<script>", "<code>"], a: 2 },
+  { cat: "Web Development", q: "What is the purpose of `display: flex` in CSS?", o: ["Makes elements invisible", "Enables a flexible box layout model", "Creates a grid layout", "Adds animation"], a: 1 },
+
+  // Databases (43-53)
+  { cat: "Databases", q: "Which SQL command is used to fetch data from a table?", o: ["INSERT", "UPDATE", "SELECT", "DELETE"], a: 2 },
+  { cat: "Databases", q: "Which of the following is a popular relational database system?", o: ["MongoDB", "Redis", "MySQL", "Cassandra"], a: 2 },
+  { cat: "Databases", q: "What is a primary key in a database?", o: ["The first column in a table", "A unique identifier for each record", "A foreign reference to another table", "An auto-increment field"], a: 1 },
+  { cat: "Databases", q: "What does SQL stand for?", o: ["Structured Query Language", "Simple Query Logic", "System Query Language", "Sorted Query List"], a: 0 },
+  { cat: "Databases", q: "What is a foreign key?", o: ["A key used for encryption", "A field that links to the primary key of another table", "A key imported from another database", "A secondary primary key"], a: 1 },
+  { cat: "Databases", q: "Which SQL clause is used to filter records?", o: ["ORDER BY", "GROUP BY", "WHERE", "HAVING"], a: 2 },
+  { cat: "Databases", q: "What is the difference between SQL and NoSQL databases?", o: ["SQL is faster, NoSQL is slower", "SQL uses tables, NoSQL uses various models like documents or key-value", "NoSQL only stores numbers", "SQL is newer than NoSQL"], a: 1 },
+  { cat: "Databases", q: "What does CRUD stand for?", o: ["Create, Read, Update, Delete", "Copy, Replace, Update, Delete", "Create, Retrieve, Update, Destroy", "Compile, Run, Update, Debug"], a: 0 },
+  { cat: "Databases", q: "What is an index in a database?", o: ["A list of table names", "A data structure that improves the speed of data retrieval", "A backup of a table", "A constraint on a column"], a: 1 },
+  { cat: "Databases", q: "Which SQL keyword removes duplicate rows from results?", o: ["UNIQUE", "DISTINCT", "FILTER", "REMOVE"], a: 1 },
+  { cat: "Databases", q: "What is a JOIN in SQL?", o: ["Combining two databases", "Combining rows from two or more tables based on a related column", "Creating a new table", "Merging duplicate rows"], a: 1 },
+
+  // OOP & Software Design (54-64)
+  { cat: "OOP Concepts", q: "What is a class in object-oriented programming?", o: ["A variable", "A blueprint for creating objects", "A function", "A database table"], a: 1 },
   { cat: "OOP Concepts", q: "What does 'inheritance' mean in OOP?", o: ["A class can use properties and methods of another class", "A function is called inside another function", "Variables are shared across files", "An object is deleted after use"], a: 0 },
+  { cat: "OOP Concepts", q: "What is encapsulation in OOP?", o: ["Creating multiple classes", "Hiding internal implementation and exposing only necessary parts", "Inheriting from multiple classes", "Converting one type to another"], a: 1 },
+  { cat: "OOP Concepts", q: "What is polymorphism in OOP?", o: ["A class inheriting from multiple classes", "The ability of objects to take on different forms or behaviors", "Hiding data from the user", "Writing code without classes"], a: 1 },
+  { cat: "OOP Concepts", q: "What is an interface in programming?", o: ["A GUI element", "A contract that defines methods a class must implement", "A type of loop", "A database connection"], a: 1 },
+  { cat: "OOP Concepts", q: "What is method overloading?", o: ["Using a method from a parent class", "Defining multiple methods with the same name but different parameters", "Replacing a method from a parent class", "Calling a method multiple times"], a: 1 },
+  { cat: "OOP Concepts", q: "What does 'abstract class' mean?", o: ["A class with no methods", "A class that cannot be instantiated and may have abstract methods", "A class with only static methods", "A class imported from a library"], a: 1 },
+  { cat: "OOP Concepts", q: "What is a constructor in OOP?", o: ["A method that destroys an object", "A special method called when an object is created", "A method that returns a value", "A static method"], a: 1 },
+  { cat: "OOP Concepts", q: "What is the SOLID principle?", o: ["A database design pattern", "Five design principles for maintainable OOP software", "A testing framework", "A type of inheritance"], a: 1 },
+  { cat: "OOP Concepts", q: "What is a design pattern?", o: ["A CSS layout technique", "A reusable solution to a commonly occurring problem in software design", "A type of algorithm", "A database schema"], a: 1 },
+  { cat: "OOP Concepts", q: "What is a Singleton design pattern?", o: ["A class with a single method", "A pattern that ensures only one instance of a class exists", "A class that inherits from one parent only", "A pattern for single-page applications"], a: 1 },
+
+  // Algorithms (65-73)
+  { cat: "Algorithms", q: "What does a loop do in programming?", o: ["Ends the program", "Repeats a block of code multiple times", "Declares a variable", "Imports a library"], a: 1 },
+  { cat: "Algorithms", q: "What is the purpose of a sorting algorithm?", o: ["To find an element in a list", "To arrange elements in a specific order", "To remove duplicates", "To count elements"], a: 1 },
+  { cat: "Algorithms", q: "What is binary search?", o: ["Searching through all elements one by one", "A search that divides the search space in half each time", "A search using binary numbers", "A search algorithm for linked lists"], a: 1 },
+  { cat: "Algorithms", q: "What does Big O notation describe?", o: ["The size of a program", "The worst-case time or space complexity of an algorithm", "The number of bugs in code", "The number of lines of code"], a: 1 },
+  { cat: "Algorithms", q: "What is recursion?", o: ["A loop that runs forever", "A function that calls itself", "A type of sorting", "An error in the code"], a: 1 },
+  { cat: "Algorithms", q: "What is the time complexity of linear search?", o: ["O(1)", "O(log n)", "O(n)", "O(n²)"], a: 2 },
+  { cat: "Algorithms", q: "Which sorting algorithm has the best average-case time complexity?", o: ["Bubble Sort", "Insertion Sort", "Merge Sort", "Selection Sort"], a: 2 },
+  { cat: "Algorithms", q: "What is dynamic programming?", o: ["Programming with dynamic typing", "Solving problems by breaking them into overlapping subproblems and caching results", "A type of GUI programming", "Running code dynamically at runtime"], a: 1 },
+  { cat: "Algorithms", q: "What is a greedy algorithm?", o: ["An algorithm that uses the most memory", "An algorithm that makes the locally optimal choice at each step", "An algorithm that tries all possibilities", "An algorithm with no loops"], a: 1 },
+
+  // Version Control & Tools (74-80)
   { cat: "Version Control", q: "What is Git primarily used for?", o: ["Designing databases", "Tracking changes in source code", "Hosting websites", "Writing HTML"], a: 1 },
-  { cat: "Web Basics", q: "What does the <a> tag do in HTML?", o: ["Displays an image", "Creates a hyperlink", "Adds a heading", "Creates a table"], a: 1 }
+  { cat: "Version Control", q: "What does 'git commit' do?", o: ["Uploads code to a server", "Saves a snapshot of changes to the local repository", "Creates a new branch", "Merges two branches"], a: 1 },
+  { cat: "Version Control", q: "What is a Git branch?", o: ["A copy of the entire repository", "A separate line of development within a repository", "A remote server connection", "A backup of the main code"], a: 1 },
+  { cat: "Version Control", q: "What does 'git pull' do?", o: ["Uploads local changes to remote", "Fetches and merges changes from the remote repository", "Creates a new repository", "Deletes a branch"], a: 1 },
+  { cat: "Version Control", q: "What is a merge conflict in Git?", o: ["An error when pushing code", "A conflict that occurs when two branches have incompatible changes to the same file", "A slow internet connection issue", "A syntax error in code"], a: 1 },
+  { cat: "Version Control", q: "What does GitHub/GitLab provide on top of Git?", o: ["Better code performance", "A web-based platform for hosting and collaborating on Git repositories", "A replacement for Git", "A GUI for writing code"], a: 1 },
+  { cat: "Version Control", q: "What is a pull request (PR)?", o: ["A request to download code", "A proposal to merge changes from one branch into another", "A request for code review only", "A way to delete branches"], a: 1 },
+
+  // Networking & Security (81-88)
+  { cat: "Networking", q: "What does URL stand for?", o: ["Uniform Resource Locator", "Universal Request Link", "Unique Resource Language", "Unified Resource Loader"], a: 0 },
+  { cat: "Networking", q: "What does IP stand for in networking?", o: ["Internet Provider", "Internet Protocol", "Internal Processor", "Interface Port"], a: 1 },
+  { cat: "Networking", q: "What is the purpose of HTTPS?", o: ["Faster data transfer", "Secure encrypted communication over HTTP", "Hosting static websites", "Domain name resolution"], a: 1 },
+  { cat: "Networking", q: "What is a DNS server?", o: ["A server that stores databases", "A server that translates domain names to IP addresses", "A secure file server", "A development server"], a: 1 },
+  { cat: "Networking", q: "What does HTTP status code 404 mean?", o: ["Internal Server Error", "Unauthorized", "Resource Not Found", "Bad Request"], a: 2 },
+  { cat: "Networking", q: "What is a firewall?", o: ["A hardware component for faster processing", "A security system that monitors and controls network traffic", "A type of database", "A cooling system for servers"], a: 1 },
+  { cat: "Networking", q: "What is SQL injection?", o: ["A method to optimize SQL queries", "A security vulnerability where malicious SQL is inserted into a query", "A way to add data to a database quickly", "A database backup technique"], a: 1 },
+  { cat: "Networking", q: "What does XSS stand for in web security?", o: ["Cross-Site Scripting", "External Style Sheets", "Cross-Server Syntax", "XML Style Script"], a: 0 },
+
+  // DevOps & Tools (89-95)
+  { cat: "DevOps & Tools", q: "What is Docker used for?", o: ["Version control", "Containerizing applications for consistent deployment", "Database management", "Frontend development"], a: 1 },
+  { cat: "DevOps & Tools", q: "What is CI/CD?", o: ["Code Integration / Code Deployment", "Continuous Integration / Continuous Deployment", "Container Infrastructure / Container Delivery", "Code Inspection / Code Debugging"], a: 1 },
+  { cat: "DevOps & Tools", q: "What is a container in software development?", o: ["A type of array", "A lightweight, standalone executable package that includes everything needed to run an application", "A database container", "A CSS layout element"], a: 1 },
+  { cat: "DevOps & Tools", q: "What does 'npm' stand for?", o: ["Node Package Manager", "New Program Module", "Network Protocol Manager", "Node Program Method"], a: 0 },
+  { cat: "DevOps & Tools", q: "What is the purpose of a `.gitignore` file?", o: ["To list contributors to a project", "To specify files Git should not track", "To store Git credentials", "To define Git commands"], a: 1 },
+  { cat: "DevOps & Tools", q: "What is an environment variable?", o: ["A variable that changes with the weather", "A dynamic value stored outside source code, used to configure applications", "A CSS variable for themes", "A JavaScript global variable"], a: 1 },
+  { cat: "DevOps & Tools", q: "What is unit testing?", o: ["Testing the entire application at once", "Testing individual units or components of code in isolation", "Testing the network performance", "Testing the UI design"], a: 1 },
+
+  // Software Engineering Concepts (96-100)
+  { cat: "Software Engineering", q: "What is Agile methodology?", o: ["A strict waterfall process", "An iterative, flexible approach to software development", "A type of programming language", "A database management approach"], a: 1 },
+  { cat: "Software Engineering", q: "What is a code review?", o: ["Automated testing of code", "A systematic examination of source code by peers to find bugs and improve quality", "A performance benchmark", "A review of UI/UX design"], a: 1 },
+  { cat: "Software Engineering", q: "What is technical debt?", o: ["The cost of purchasing software licenses", "The implied cost of rework caused by choosing quick solutions now instead of better approaches", "The time spent on documentation", "Money owed for cloud services"], a: 1 },
+  { cat: "Software Engineering", q: "What is the purpose of a README file?", o: ["To list all bugs in the project", "To provide documentation and instructions about a project", "To store configuration settings", "To define the project's license"], a: 1 },
+  { cat: "Software Engineering", q: "What does MVC stand for in software architecture?", o: ["Most Valuable Component", "Model-View-Controller", "Multiple Version Control", "Managed Virtual Container"], a: 1 }
 ];
 
 const KEYS = ['A','B','C','D'];
 let current = 0;
 let answers = new Array(QUESTIONS.length).fill(null);
-let totalTime = 20 * 60;
+let totalTime = 90 * 60;
 let timerInt = null;
 let camStream = null;
 let strikes = 0;
@@ -1209,7 +1267,6 @@ let testActive = false;
 let warningOpen = false;
 let devtoolsCheckInt = null;
 
-// ===================== LOGIN =====================
 function doLogin() {
   const id = document.getElementById('candidateId').value.trim();
   const pass = document.getElementById('candidatePass').value;
@@ -1228,7 +1285,6 @@ function doLogin() {
   initAntiCheat();
 }
 
-// ===================== CAMERA =====================
 function startCam() {
   navigator.mediaDevices.getUserMedia({ video: true, audio: false })
     .then(stream => { camStream = stream; document.getElementById('cam').srcObject = stream; })
@@ -1238,7 +1294,6 @@ function startCam() {
     });
 }
 
-// ===================== TIMER =====================
 function startTimer() {
   timerInt = setInterval(() => {
     totalTime--;
@@ -1247,13 +1302,12 @@ function startTimer() {
     document.getElementById('timerDisplay').textContent = String(m).padStart(2,'0') + ':' + String(s).padStart(2,'0');
     const box = document.getElementById('timerBox');
     box.className = 'timer-box';
-    if (totalTime <= 300) box.classList.add('warn');
-    if (totalTime <= 60) box.classList.add('danger');
+    if (totalTime <= 600) box.classList.add('warn');
+    if (totalTime <= 120) box.classList.add('danger');
     if (totalTime <= 0) { clearInterval(timerInt); finalSubmit(); }
   }, 1000);
 }
 
-// ===================== Q MAP =====================
 function buildQMap() {
   const grid = document.getElementById('qmapGrid');
   grid.innerHTML = '';
@@ -1276,11 +1330,10 @@ function updateQMap() {
   });
 }
 
-// ===================== RENDER QUESTION =====================
 function renderQ() {
   const qd = QUESTIONS[current];
   document.getElementById('qCat').textContent = qd.cat;
-  document.getElementById('qNum').textContent = String(current + 1).padStart(2,'0') + '/' + QUESTIONS.length;
+  document.getElementById('qNum').textContent = String(current + 1).padStart(3,'0') + '/' + QUESTIONS.length;
   document.getElementById('questionText').textContent = (current + 1) + '. ' + qd.q;
 
   const pct = Math.round((current / (QUESTIONS.length - 1)) * 100);
@@ -1307,7 +1360,6 @@ function selectAnswer(i) { answers[current] = i; renderQ(); }
 function goPrev() { if (current > 0) { current--; renderQ(); } }
 function goNext() { if (current < QUESTIONS.length - 1) { current++; renderQ(); } }
 
-// ===================== SUBMIT =====================
 function openModal() {
   const ans = answers.filter(a => a !== null).length;
   document.getElementById('mAnswered').textContent = ans;
@@ -1329,7 +1381,6 @@ function finalSubmit() {
   document.getElementById('refCode').textContent = Math.random().toString(36).substring(2,8).toUpperCase();
 }
 
-// ===================== ANTI-CHEAT ENGINE =====================
 function initAntiCheat() {
   document.addEventListener('contextmenu', e => {
     if (testActive) { e.preventDefault(); showToast('⛔ Right-click is disabled.'); logViolation('Right-click attempt'); }
@@ -1382,7 +1433,6 @@ function initAntiCheat() {
   document.addEventListener('selectstart', e => { if (testActive) e.preventDefault(); });
 }
 
-// ===================== FULLSCREEN =====================
 function requestFullscreen() {
   const el = document.documentElement;
   const req = el.requestFullscreen || el.webkitRequestFullscreen || el.mozRequestFullScreen || el.msRequestFullscreen;
@@ -1393,7 +1443,6 @@ function requestFullscreen() {
   }
 }
 
-// ===================== VIOLATION HANDLING =====================
 function handleViolation(reason) {
   if (!testActive) return;
   strikes++;
@@ -1452,7 +1501,6 @@ function showAutoSubmitWarning() {
   if (camStream) camStream.getTracks().forEach(t => t.stop());
 }
 
-// ===================== TOAST =====================
 function showToast(msg) {
   const container = document.getElementById('toastContainer');
   const toast = document.createElement('div');

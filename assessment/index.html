@@ -1687,12 +1687,18 @@ const USERS = [
   { id: "CODIUAE736197", pass: "Moumi@2002@SDE@INTERN" }
 ];
 
-// Language config for Piston API
+// Language config for Judge0 CE (language_id reference)
+// Python 3: 71, Java: 62, C++ (GCC 9.2): 54
 const LANG_CONFIGS = {
-  python: { language: 'python', version: '3.10.0', filename: 'solution.py' },
-  java:   { language: 'java',   version: '15.0.2',  filename: 'Solution.java' },
-  cpp:    { language: 'c++',    version: '10.2.0',  filename: 'solution.cpp' }
+  python: { language: 'python', version: '3.8.1',   filename: 'solution.py',  language_id: 71 },
+  java:   { language: 'java',   version: '13.0.1',  filename: 'Solution.java', language_id: 62 },
+  cpp:    { language: 'c++',    version: 'GCC 9.2', filename: 'solution.cpp', language_id: 54 }
 };
+
+const JUDGE0_BASE = 'https://judge0-ce.p.rapidapi.com';
+// Uses Judge0 CE via RapidAPI free tier — no key needed for low-volume public use
+// Fallback: direct CE endpoint
+const JUDGE0_DIRECT = 'https://ce.judge0.com';
 
 // Per-question language selection state
 let questionLang = {};
@@ -2098,72 +2104,126 @@ async function runCode(idx) {
   const langConfig = LANG_CONFIGS[lang];
   const stdinVal = stdinEl ? stdinEl.value : '';
 
-  // Set loading state
   btnRun.disabled = true;
   btnRun.classList.add('loading');
-  runStatus.textContent = 'Running…';
+  runStatus.textContent = 'Submitting…';
   runStatus.className = 'run-status running';
-  outputArea.innerHTML = '<div class="output-content system-msg">⏳ Executing code on remote sandbox…</div>';
+  outputArea.innerHTML = '<div class="output-content system-msg">⏳ Sending code to execution sandbox…</div>';
   outputMeta.classList.add('hidden');
 
   const startTime = Date.now();
 
   try {
-    const body = {
-      language: langConfig.language,
-      version: langConfig.version,
-      files: [{ name: langConfig.filename, content: code }],
-      stdin: stdinVal,
-      args: [],
-      compile_timeout: 10000,
-      run_timeout: 5000,
-      compile_memory_limit: -1,
-      run_memory_limit: -1
-    };
-
-    const resp = await fetch('https://emkc.org/api/v2/piston/execute', {
+    // Step 1: Submit to Judge0 CE (no-auth public endpoint)
+    const submitResp = await fetch('https://judge0-ce.p.rapidapi.com/submissions?base64_encoded=false&wait=false', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(body)
+      headers: {
+        'Content-Type': 'application/json',
+        'X-RapidAPI-Host': 'judge0-ce.p.rapidapi.com',
+        // fallback: try without key first via direct endpoint
+      },
+      body: JSON.stringify({
+        language_id: langConfig.language_id,
+        source_code: code,
+        stdin: stdinVal,
+        cpu_time_limit: 5,
+        memory_limit: 128000
+      })
     });
 
-    const elapsed = Date.now() - startTime;
-
-    if (!resp.ok) {
-      throw new Error(`API error: ${resp.status} ${resp.statusText}`);
+    // If RapidAPI fails (401/403), fall back to judge0-ce.p.rapidapi.com direct
+    if (submitResp.status === 401 || submitResp.status === 403) {
+      await runCodeDirect(idx, code, stdinVal, lang, langConfig, startTime, btnRun, runStatus, outputArea, outputMeta);
+      return;
     }
 
-    const data = await resp.json();
-    displayOutput(data, elapsed, outputArea, outputMeta, runStatus, lang);
+    if (!submitResp.ok) throw new Error(`Submit failed: ${submitResp.status}`);
+
+    const { token } = await submitResp.json();
+    if (!token) throw new Error('No token returned from judge');
+
+    outputArea.innerHTML = '<div class="output-content system-msg">⏳ Running… waiting for result…</div>';
+    runStatus.textContent = 'Running…';
+
+    // Step 2: Poll for result
+    const result = await pollJudge0(token, 'https://judge0-ce.p.rapidapi.com');
+    const elapsed = Date.now() - startTime;
+    displayOutputJudge0(result, elapsed, outputArea, outputMeta, runStatus, lang);
 
   } catch (err) {
-    runStatus.textContent = 'Error';
-    runStatus.className = 'run-status error';
-    outputArea.innerHTML = `<pre class="output-content compile-err">⚠️ Could not connect to execution server.\n\nDetails: ${err.message}\n\nPlease check your internet connection and try again.</pre>`;
-    outputMeta.classList.add('hidden');
+    // Final fallback: try the open CE instance
+    try {
+      await runCodeDirect(idx, code, stdinVal, lang, langConfig, startTime, btnRun, runStatus, outputArea, outputMeta);
+    } catch (err2) {
+      runStatus.textContent = 'Error';
+      runStatus.className = 'run-status error';
+      outputArea.innerHTML = `<pre class="output-content compile-err">⚠️ Execution server unavailable.\n\nError: ${err2.message}\n\nTry again in a moment.</pre>`;
+      outputMeta.classList.add('hidden');
+    }
   } finally {
     btnRun.disabled = false;
     btnRun.classList.remove('loading');
   }
 }
 
-function displayOutput(data, elapsed, outputArea, outputMeta, runStatus, lang) {
-  const run = data.run || {};
-  const compile = data.compile || {};
+async function runCodeDirect(idx, code, stdinVal, lang, langConfig, startTime, btnRun, runStatus, outputArea, outputMeta) {
+  // Use Judge0 open CE instance (no auth required)
+  const BASE = 'https://ce.judge0.com';
 
-  // Check for compile error
-  const compileErr = (compile.stderr || '').trim();
-  const compileOut = (compile.stdout || '').trim();
-  const stdout = (run.stdout || '').trim();
-  const stderr = (run.stderr || '').trim();
-  const exitCode = run.code !== undefined ? run.code : 0;
-  const signal = run.signal;
+  runStatus.textContent = 'Running…';
+  outputArea.innerHTML = '<div class="output-content system-msg">⏳ Connecting to sandbox…</div>';
+
+  const submitResp = await fetch(`${BASE}/submissions?base64_encoded=false&wait=false`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      language_id: langConfig.language_id,
+      source_code: code,
+      stdin: stdinVal,
+      cpu_time_limit: 5,
+      memory_limit: 128000
+    })
+  });
+
+  if (!submitResp.ok) throw new Error(`${submitResp.status} ${submitResp.statusText}`);
+  const { token } = await submitResp.json();
+  if (!token) throw new Error('No execution token received');
+
+  outputArea.innerHTML = '<div class="output-content system-msg">⏳ Executing…</div>';
+
+  const result = await pollJudge0(token, BASE);
+  const elapsed = Date.now() - startTime;
+  displayOutputJudge0(result, elapsed, outputArea, outputMeta, runStatus, lang);
+  btnRun.disabled = false;
+  btnRun.classList.remove('loading');
+}
+
+async function pollJudge0(token, base, attempts = 0) {
+  if (attempts > 20) throw new Error('Execution timed out — no response after 10s');
+  await new Promise(r => setTimeout(r, 500));
+  const resp = await fetch(`${base}/submissions/${token}?base64_encoded=false&fields=stdout,stderr,compile_output,status,time,memory,exit_code`);
+  if (!resp.ok) throw new Error(`Poll error: ${resp.status}`);
+  const data = await resp.json();
+  // Status IDs: 1=In Queue, 2=Processing, 3=Accepted, 4+=done
+  if (data.status && (data.status.id === 1 || data.status.id === 2)) {
+    return pollJudge0(token, base, attempts + 1);
+  }
+  return data;
+}
+
+function displayOutputJudge0(data, elapsed, outputArea, outputMeta, runStatus, lang) {
+  const stdout = (data.stdout || '').trim();
+  const stderr = (data.stderr || '').trim();
+  const compileErr = (data.compile_output || '').trim();
+  const statusId = data.status ? data.status.id : 3;
+  const statusDesc = data.status ? data.status.description : 'Done';
+  const exitCode = data.exit_code;
+  const timeUsed = data.time ? (parseFloat(data.time) * 1000).toFixed(0) + 'ms' : `${elapsed}ms`;
+  const memUsed = data.memory ? (data.memory / 1024).toFixed(1) + ' MB' : '—';
 
   outputArea.innerHTML = '';
-
   let hasOutput = false;
 
-  // Compile errors (Java/C++)
   if (compileErr) {
     runStatus.textContent = 'Compile Error';
     runStatus.className = 'run-status error';
@@ -2174,15 +2234,6 @@ function displayOutput(data, elapsed, outputArea, outputMeta, runStatus, lang) {
     hasOutput = true;
   }
 
-  if (compileOut && !compileErr) {
-    const pre = document.createElement('pre');
-    pre.className = 'output-content system-msg';
-    pre.textContent = compileOut;
-    outputArea.appendChild(pre);
-    hasOutput = true;
-  }
-
-  // Runtime output
   if (stdout) {
     const pre = document.createElement('pre');
     pre.className = 'output-content stdout';
@@ -2191,20 +2242,27 @@ function displayOutput(data, elapsed, outputArea, outputMeta, runStatus, lang) {
     hasOutput = true;
   }
 
-  // Runtime errors
   if (stderr && !compileErr) {
     const pre = document.createElement('pre');
     pre.className = 'output-content stderr';
-    pre.textContent = '🟡 Runtime Error / Stderr:\n\n' + stderr;
+    pre.textContent = '🟡 Stderr:\n\n' + stderr;
     outputArea.appendChild(pre);
     hasOutput = true;
   }
 
-  // Killed by signal (TLE, MLE, etc.)
-  if (signal) {
+  // Special statuses: TLE, MLE, etc.
+  if (statusId === 5) {
     const pre = document.createElement('pre');
     pre.className = 'output-content compile-err';
-    pre.textContent = `⏱️ Process killed by signal: ${signal} (possible timeout or memory limit exceeded)`;
+    pre.textContent = '⏱️ Time Limit Exceeded';
+    outputArea.appendChild(pre);
+    hasOutput = true;
+  } else if (statusId === 6) {
+    // compile error already shown above
+  } else if (statusId >= 7 && statusId <= 12) {
+    const pre = document.createElement('pre');
+    pre.className = 'output-content stderr';
+    pre.textContent = `⚠️ Runtime Error: ${statusDesc}`;
     outputArea.appendChild(pre);
     hasOutput = true;
   }
@@ -2216,24 +2274,26 @@ function displayOutput(data, elapsed, outputArea, outputMeta, runStatus, lang) {
     outputArea.appendChild(div);
   }
 
-  // Status
+  // Status label
   if (!compileErr) {
-    if (exitCode === 0 && !stderr && !signal) {
-      runStatus.textContent = '✓ Success';
+    if (statusId === 3) {
+      runStatus.textContent = '✓ Accepted';
       runStatus.className = 'run-status success';
-    } else if (!compileErr) {
-      runStatus.textContent = 'Runtime Error';
+    } else if (statusId === 5) {
+      runStatus.textContent = 'Time Limit Exceeded';
+      runStatus.className = 'run-status error';
+    } else if (statusId >= 6) {
+      runStatus.textContent = statusDesc || 'Runtime Error';
       runStatus.className = 'run-status error';
     }
   }
 
-  // Meta bar
-  const exitClass = (exitCode === 0 && !signal && !compileErr) ? 'exit-ok' : 'exit-err';
-  const exitText = signal ? `Signal: ${signal}` : (compileErr ? 'Compile Error' : `Exit: ${exitCode}`);
+  const isOk = statusId === 3;
   outputMeta.innerHTML = `
-    <div class="output-meta-item"><span class="exit-badge ${exitClass}">${exitText}</span></div>
-    <div class="output-meta-item">⏱ <span class="meta-val">${elapsed}ms</span></div>
-    <div class="output-meta-item">🌐 <span class="meta-val">${LANG_CONFIGS[lang].language} ${LANG_CONFIGS[lang].version}</span></div>
+    <div class="output-meta-item"><span class="exit-badge ${isOk ? 'exit-ok' : 'exit-err'}">${statusDesc}</span></div>
+    <div class="output-meta-item">⏱ <span class="meta-val">${timeUsed}</span></div>
+    <div class="output-meta-item">🧠 <span class="meta-val">${memUsed}</span></div>
+    <div class="output-meta-item">🌐 <span class="meta-val">${LANG_CONFIGS[lang].language}</span></div>
   `;
   outputMeta.classList.remove('hidden');
   outputArea.scrollTop = 0;

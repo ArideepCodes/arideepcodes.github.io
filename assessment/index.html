@@ -203,10 +203,6 @@
       to { opacity: 0; }
     }
 
-    @keyframes spin {
-      to { transform: rotate(360deg); }
-    }
-
     #loginErr {
       color: var(--danger);
       font-size: 13px;
@@ -326,6 +322,7 @@
       box-shadow: 0 0 6px rgba(244,63,94,0.5);
     }
 
+    /* Calculator toggle button in topbar */
     .calc-toggle-btn {
       display: flex;
       align-items: center;
@@ -593,29 +590,6 @@
       color: var(--muted);
     }
 
-    /* Language selector */
-    .lang-selector {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-    }
-
-    .lang-select {
-      background: var(--surface2);
-      border: 1px solid rgba(124,58,237,0.3);
-      border-radius: 6px;
-      padding: 4px 10px;
-      color: #a78bfa;
-      font-family: 'Space Mono', monospace;
-      font-size: 11px;
-      font-weight: 700;
-      cursor: pointer;
-      outline: none;
-      transition: 0.15s;
-    }
-
-    .lang-select:focus { border-color: #a78bfa; }
-
     .editor-clear {
       font-family: 'Space Mono', monospace;
       font-size: 11px;
@@ -674,195 +648,6 @@
     }
 
     .code-saved-indicator.show { opacity: 1; }
-
-    /* ===================== RUN CODE PANEL ===================== */
-    .run-panel {
-      margin-top: 12px;
-      border: 1px solid rgba(0,220,180,0.2);
-      border-radius: 12px;
-      overflow: hidden;
-      background: var(--code-bg);
-    }
-
-    .run-toolbar {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 10px 16px;
-      background: rgba(0,220,180,0.05);
-      border-bottom: 1px solid rgba(0,220,180,0.12);
-    }
-
-    .run-toolbar-left {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-
-    .run-title {
-      font-size: 11px;
-      font-weight: 700;
-      letter-spacing: 1px;
-      text-transform: uppercase;
-      color: var(--accent);
-      font-family: 'Space Mono', monospace;
-    }
-
-    .run-status {
-      font-size: 11px;
-      font-family: 'Space Mono', monospace;
-      color: var(--muted);
-      transition: color 0.3s;
-    }
-
-    .run-status.running { color: var(--warn); }
-    .run-status.success { color: var(--accent); }
-    .run-status.error { color: var(--danger); }
-
-    .btn-run {
-      display: flex;
-      align-items: center;
-      gap: 7px;
-      padding: 8px 18px;
-      background: linear-gradient(135deg, var(--accent), #00b896);
-      border: none;
-      border-radius: 8px;
-      color: #05070f;
-      font-family: 'Space Mono', monospace;
-      font-size: 12px;
-      font-weight: 700;
-      cursor: pointer;
-      transition: all 0.18s;
-      letter-spacing: 0.5px;
-      user-select: none;
-    }
-
-    .btn-run:hover { opacity: 0.9; transform: translateY(-1px); }
-    .btn-run:active { transform: scale(0.97); }
-    .btn-run:disabled {
-      opacity: 0.5;
-      cursor: not-allowed;
-      transform: none;
-    }
-
-    .run-icon { font-size: 13px; }
-
-    .spinner {
-      width: 13px; height: 13px;
-      border: 2px solid rgba(5,7,15,0.3);
-      border-top-color: #05070f;
-      border-radius: 50%;
-      animation: spin 0.7s linear infinite;
-      display: none;
-    }
-
-    .btn-run.loading .spinner { display: block; }
-    .btn-run.loading .run-icon { display: none; }
-
-    /* Stdin input area */
-    .stdin-wrap {
-      padding: 10px 16px;
-      border-bottom: 1px solid rgba(255,255,255,0.04);
-    }
-
-    .stdin-label {
-      font-size: 10px;
-      font-weight: 700;
-      letter-spacing: 1.5px;
-      text-transform: uppercase;
-      color: var(--muted);
-      margin-bottom: 6px;
-      font-family: 'Space Mono', monospace;
-    }
-
-    .stdin-input {
-      width: 100%;
-      background: rgba(255,255,255,0.03);
-      border: 1px solid rgba(255,255,255,0.06);
-      border-radius: 7px;
-      padding: 8px 12px;
-      color: #94a3b8;
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 12px;
-      outline: none;
-      resize: none;
-      min-height: 48px;
-      user-select: text;
-      -webkit-user-select: text;
-      transition: border-color 0.2s;
-    }
-
-    .stdin-input:focus {
-      border-color: rgba(0,220,180,0.3);
-    }
-
-    .stdin-hint {
-      font-size: 10px;
-      color: var(--muted);
-      font-family: 'Space Mono', monospace;
-      margin-top: 4px;
-      opacity: 0.6;
-    }
-
-    /* Output area */
-    .output-area {
-      padding: 14px 16px;
-      min-height: 80px;
-      max-height: 280px;
-      overflow-y: auto;
-    }
-
-    .output-empty {
-      font-family: 'Space Mono', monospace;
-      font-size: 12px;
-      color: var(--muted);
-      opacity: 0.4;
-      font-style: italic;
-    }
-
-    .output-content {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 13px;
-      line-height: 1.7;
-      white-space: pre-wrap;
-      word-break: break-all;
-    }
-
-    .output-content.stdout { color: #e2e8f0; }
-    .output-content.stderr { color: #fb923c; }
-    .output-content.compile-err { color: var(--danger); }
-    .output-content.system-msg { color: var(--muted); font-style: italic; }
-
-    .output-meta {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      padding: 8px 16px;
-      border-top: 1px solid rgba(255,255,255,0.04);
-      background: rgba(255,255,255,0.01);
-    }
-
-    .output-meta-item {
-      font-family: 'Space Mono', monospace;
-      font-size: 10px;
-      color: var(--muted);
-      display: flex;
-      align-items: center;
-      gap: 4px;
-    }
-
-    .meta-val { color: var(--text); font-weight: 700; }
-
-    .exit-badge {
-      padding: 2px 8px;
-      border-radius: 4px;
-      font-family: 'Space Mono', monospace;
-      font-size: 10px;
-      font-weight: 700;
-    }
-
-    .exit-ok { background: rgba(0,220,180,0.12); color: var(--accent); border: 1px solid rgba(0,220,180,0.25); }
-    .exit-err { background: rgba(244,63,94,0.12); color: var(--danger); border: 1px solid rgba(244,63,94,0.25); }
 
     /* ===================== NAV BUTTONS ===================== */
     .nav-btns {
@@ -1472,6 +1257,7 @@
       font-family: 'Space Mono', monospace;
     }
 
+    /* scrollbar styling for code editor and violation log */
     ::-webkit-scrollbar { width: 4px; }
     ::-webkit-scrollbar-track { background: transparent; }
     ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 99px; }
@@ -1621,22 +1407,27 @@
     <div class="calc-display" id="calcDisplay">0</div>
   </div>
   <div class="calc-grid">
+    <!-- Row 1 -->
     <button class="c-btn c-clear" onclick="calcClear()">AC</button>
     <button class="c-btn c-fn" onclick="calcFn('sign')">+/−</button>
     <button class="c-btn c-fn" onclick="calcFn('pct')">%</button>
     <button class="c-btn c-op" onclick="calcOp('/')">÷</button>
+    <!-- Row 2 -->
     <button class="c-btn c-num" onclick="calcNum('7')">7</button>
     <button class="c-btn c-num" onclick="calcNum('8')">8</button>
     <button class="c-btn c-num" onclick="calcNum('9')">9</button>
     <button class="c-btn c-op" onclick="calcOp('*')">×</button>
+    <!-- Row 3 -->
     <button class="c-btn c-num" onclick="calcNum('4')">4</button>
     <button class="c-btn c-num" onclick="calcNum('5')">5</button>
     <button class="c-btn c-num" onclick="calcNum('6')">6</button>
     <button class="c-btn c-op" onclick="calcOp('-')">−</button>
+    <!-- Row 4 -->
     <button class="c-btn c-num" onclick="calcNum('1')">1</button>
     <button class="c-btn c-num" onclick="calcNum('2')">2</button>
     <button class="c-btn c-num" onclick="calcNum('3')">3</button>
     <button class="c-btn c-op" onclick="calcOp('+')">+</button>
+    <!-- Row 5 -->
     <button class="c-btn c-num c-zero" onclick="calcNum('0')">0</button>
     <button class="c-btn c-num" onclick="calcDot()">.</button>
     <button class="c-btn c-eq" onclick="calcEq()">=</button>
@@ -1687,22 +1478,7 @@ const USERS = [
   { id: "CODIUAE736197", pass: "Moumi@2002@SDE@INTERN" }
 ];
 
-// Language config for Judge0 CE (language_id reference)
-// Python 3: 71, Java: 62, C++ (GCC 9.2): 54
-const LANG_CONFIGS = {
-  python: { language: 'python', version: '3.8.1',   filename: 'solution.py',  language_id: 71 },
-  java:   { language: 'java',   version: '13.0.1',  filename: 'Solution.java', language_id: 62 },
-  cpp:    { language: 'c++',    version: 'GCC 9.2', filename: 'solution.cpp', language_id: 54 }
-};
-
-const JUDGE0_BASE = 'https://judge0-ce.p.rapidapi.com';
-// Uses Judge0 CE via RapidAPI free tier — no key needed for low-volume public use
-// Fallback: direct CE endpoint
-const JUDGE0_DIRECT = 'https://ce.judge0.com';
-
-// Per-question language selection state
-let questionLang = {};
-
+// MCQ questions
 const MCQ_QUESTIONS = [
   { type:'mcq', cat: "Data Structures", q: "What is the time complexity of searching for an element in a balanced Binary Search Tree (BST)?", o: ["O(n)", "O(log n)", "O(n log n)", "O(1)"], a: 1 },
   { type:'mcq', cat: "Algorithms", q: "Which sorting algorithm has the best average-case time complexity among the following?", o: ["Bubble Sort", "Selection Sort", "Merge Sort", "Insertion Sort"], a: 2 },
@@ -1741,79 +1517,103 @@ const MCQ_QUESTIONS = [
   { type:'mcq', cat: "Databases", q: "What does ACID stand for in database transactions?", o: ["Atomicity, Consistency, Isolation, Durability", "Accuracy, Concurrency, Integrity, Distribution", "Atomicity, Concurrency, Isolation, Distribution", "Availability, Consistency, Integrity, Durability"], a: 0 }
 ];
 
+// Coding questions
 const CODING_QUESTIONS = [
   {
-    type: 'coding', cat: 'Coding Challenge', difficulty: 'easy', lang: 'Python / Java / C++',
+    type: 'coding',
+    cat: 'Coding Challenge',
+    difficulty: 'easy',
+    lang: 'Python / Java / C++',
     q: 'Reverse a String',
     problem: 'Write a function that takes a string as input and returns the string reversed. Do not use any built-in reverse functions.',
-    examples: [{ input: '"hello"', output: '"olleh"' }, { input: '"Codivora"', output: '"arovidor"' }],
+    examples: [
+      { input: '"hello"', output: '"olleh"' },
+      { input: '"Codivora"', output: '"arovidor"' }
+    ],
     constraints: '1 ≤ len(s) ≤ 10⁵ | String contains only printable ASCII characters',
-    placeholders: {
-      python: `def reverse_string(s):\n    # TODO: implement without using built-in reverse\n    pass\n\n# Example usage\nprint(reverse_string("hello"))   # Expected: olleh\nprint(reverse_string("Codivora")) # Expected: arovidoC`,
-      java: `import java.util.*;\n\npublic class Solution {\n    public static String reverseString(String s) {\n        // TODO: implement without using built-in reverse\n        return "";\n    }\n\n    public static void main(String[] args) {\n        System.out.println(reverseString("hello"));    // Expected: olleh\n        System.out.println(reverseString("Codivora")); // Expected: arovidoC\n    }\n}`,
-      cpp: `#include <iostream>\n#include <string>\nusing namespace std;\n\nstring reverseString(string s) {\n    // TODO: implement without using built-in reverse\n    return "";\n}\n\nint main() {\n    cout << reverseString("hello") << endl;    // Expected: olleh\n    cout << reverseString("Codivora") << endl; // Expected: arovidoC\n    return 0;\n}`
-    }
+    placeholder: `# Write your solution here\ndef reverse_string(s):\n    # TODO: implement\n    pass\n\n# Example usage\nprint(reverse_string("hello"))  # Expected: "olleh"`
   },
   {
-    type: 'coding', cat: 'Coding Challenge', difficulty: 'easy', lang: 'Python / Java / C++',
+    type: 'coding',
+    cat: 'Coding Challenge',
+    difficulty: 'easy',
+    lang: 'Python / Java / C++',
     q: 'Two Sum',
     problem: 'Given an array of integers nums and an integer target, return the indices of the two numbers such that they add up to target. You may assume that each input would have exactly one solution, and you may not use the same element twice.',
-    examples: [{ input: 'nums = [2,7,11,15], target = 9', output: '[0, 1]' }, { input: 'nums = [3,2,4], target = 6', output: '[1, 2]' }],
+    examples: [
+      { input: 'nums = [2,7,11,15], target = 9', output: '[0, 1]' },
+      { input: 'nums = [3,2,4], target = 6', output: '[1, 2]' }
+    ],
     constraints: '2 ≤ nums.length ≤ 10⁴ | Only one valid answer exists | −10⁹ ≤ nums[i] ≤ 10⁹',
-    placeholders: {
-      python: `def two_sum(nums, target):\n    # TODO: implement using O(n) approach\n    pass\n\n# Example usage\nprint(two_sum([2, 7, 11, 15], 9))  # Expected: [0, 1]\nprint(two_sum([3, 2, 4], 6))       # Expected: [1, 2]`,
-      java: `import java.util.*;\n\npublic class Solution {\n    public static int[] twoSum(int[] nums, int target) {\n        // TODO: implement using O(n) approach\n        return new int[]{};\n    }\n\n    public static void main(String[] args) {\n        System.out.println(Arrays.toString(twoSum(new int[]{2,7,11,15}, 9))); // [0, 1]\n        System.out.println(Arrays.toString(twoSum(new int[]{3,2,4}, 6)));     // [1, 2]\n    }\n}`,
-      cpp: `#include <iostream>\n#include <vector>\n#include <unordered_map>\nusing namespace std;\n\nvector<int> twoSum(vector<int>& nums, int target) {\n    // TODO: implement using O(n) approach\n    return {};\n}\n\nint main() {\n    vector<int> nums1 = {2,7,11,15};\n    auto r1 = twoSum(nums1, 9);\n    cout << "[" << r1[0] << ", " << r1[1] << "]" << endl; // [0, 1]\n    return 0;\n}`
-    }
+    placeholder: `# Write your solution here\ndef two_sum(nums, target):\n    # TODO: implement using O(n) approach\n    pass\n\n# Example usage\nprint(two_sum([2,7,11,15], 9))  # Expected: [0, 1]`
   },
   {
-    type: 'coding', cat: 'Coding Challenge', difficulty: 'medium', lang: 'Python / Java / C++',
+    type: 'coding',
+    cat: 'Coding Challenge',
+    difficulty: 'medium',
+    lang: 'Python / Java / C++',
     q: 'Valid Parentheses',
-    problem: "Given a string s containing only the characters '(', ')', '{', '}', '[' and ']', determine if the input string is valid. A string is valid if: open brackets are closed by the same type of brackets, and open brackets are closed in the correct order.",
-    examples: [{ input: 's = "([]{})"', output: 'True' }, { input: 's = "([)]"', output: 'False' }],
+    problem: 'Given a string s containing only the characters \'(\', \')\', \'{\', \'}\', \'[\' and \']\', determine if the input string is valid. A string is valid if: open brackets are closed by the same type of brackets, and open brackets are closed in the correct order.',
+    examples: [
+      { input: 's = "([]{})"', output: 'True' },
+      { input: 's = "([)]"', output: 'False' }
+    ],
     constraints: '1 ≤ s.length ≤ 10⁴ | s consists of brackets only',
-    placeholders: {
-      python: `def is_valid(s):\n    # Hint: use a Stack\n    pass\n\n# Example usage\nprint(is_valid("()[]{}"))  # Expected: True\nprint(is_valid("([)]"))    # Expected: False\nprint(is_valid("{[]}"))    # Expected: True`,
-      java: `import java.util.*;\n\npublic class Solution {\n    public static boolean isValid(String s) {\n        // Hint: use a Stack\n        return false;\n    }\n\n    public static void main(String[] args) {\n        System.out.println(isValid("()[]{}"));  // true\n        System.out.println(isValid("([)]"));    // false\n        System.out.println(isValid("{[]}"));    // true\n    }\n}`,
-      cpp: `#include <iostream>\n#include <stack>\n#include <string>\nusing namespace std;\n\nbool isValid(string s) {\n    // Hint: use a Stack\n    return false;\n}\n\nint main() {\n    cout << boolalpha;\n    cout << isValid("()[]{}") << endl;  // true\n    cout << isValid("([)]") << endl;    // false\n    cout << isValid("{[]}") << endl;    // true\n    return 0;\n}`
-    }
+    placeholder: `# Write your solution here\ndef is_valid(s):\n    # Hint: Think about using a Stack\n    pass\n\n# Example usage\nprint(is_valid("()[]{}"))  # Expected: True\nprint(is_valid("([)]"))    # Expected: False`
   },
   {
-    type: 'coding', cat: 'Coding Challenge', difficulty: 'medium', lang: 'Python / Java / C++',
+    type: 'coding',
+    cat: 'Coding Challenge',
+    difficulty: 'medium',
+    lang: 'Python / Java / C++',
     q: 'Find the Duplicate Number',
     problem: 'Given an array nums containing n + 1 integers where each integer is in the range [1, n] inclusive, there is exactly one repeated number. Find and return that number. You must solve it without modifying the array and using only O(1) extra space.',
-    examples: [{ input: 'nums = [1,3,4,2,2]', output: '2' }, { input: 'nums = [3,1,3,4,2]', output: '3' }],
+    examples: [
+      { input: 'nums = [1,3,4,2,2]', output: '2' },
+      { input: 'nums = [3,1,3,4,2]', output: '3' }
+    ],
     constraints: '1 ≤ n ≤ 10⁵ | nums.length == n + 1 | 1 ≤ nums[i] ≤ n | Only one duplicate exists | O(1) extra space required',
-    placeholders: {
-      python: `def find_duplicate(nums):\n    # Hint: Floyd's Tortoise and Hare cycle detection\n    pass\n\n# Example usage\nprint(find_duplicate([1,3,4,2,2]))  # Expected: 2\nprint(find_duplicate([3,1,3,4,2]))  # Expected: 3`,
-      java: `import java.util.*;\n\npublic class Solution {\n    public static int findDuplicate(int[] nums) {\n        // Hint: Floyd's cycle detection\n        return -1;\n    }\n\n    public static void main(String[] args) {\n        System.out.println(findDuplicate(new int[]{1,3,4,2,2})); // 2\n        System.out.println(findDuplicate(new int[]{3,1,3,4,2})); // 3\n    }\n}`,
-      cpp: `#include <iostream>\n#include <vector>\nusing namespace std;\n\nint findDuplicate(vector<int>& nums) {\n    // Hint: Floyd's cycle detection\n    return -1;\n}\n\nint main() {\n    vector<int> n1 = {1,3,4,2,2};\n    vector<int> n2 = {3,1,3,4,2};\n    cout << findDuplicate(n1) << endl; // 2\n    cout << findDuplicate(n2) << endl; // 3\n    return 0;\n}`
-    }
+    placeholder: `# Write your solution here\n# Hint: Consider Floyd's Tortoise and Hare cycle detection\ndef find_duplicate(nums):\n    # TODO: implement\n    pass\n\n# Example usage\nprint(find_duplicate([1,3,4,2,2]))  # Expected: 2`
   },
   {
-    type: 'coding', cat: 'Coding Challenge', difficulty: 'hard', lang: 'Python / Java / C++',
+    type: 'coding',
+    cat: 'Coding Challenge',
+    difficulty: 'hard',
+    lang: 'Python / Java / C++',
     q: 'Longest Substring Without Repeating Characters',
     problem: 'Given a string s, find the length of the longest substring without repeating characters. A substring is a contiguous non-empty sequence of characters within a string.',
-    examples: [{ input: 's = "abcabcbb"', output: '3   (substring: "abc")' }, { input: 's = "pwwkew"', output: '3   (substring: "wke")' }],
+    examples: [
+      { input: 's = "abcabcbb"', output: '3   (substring: "abc")' },
+      { input: 's = "pwwkew"', output: '3   (substring: "wke")' }
+    ],
     constraints: '0 ≤ s.length ≤ 5 × 10⁴ | s consists of English letters, digits, symbols and spaces | Expected time complexity: O(n)',
-    placeholders: {
-      python: `def length_of_longest_substring(s):\n    # Hint: sliding window + HashSet\n    pass\n\n# Example usage\nprint(length_of_longest_substring("abcabcbb"))  # Expected: 3\nprint(length_of_longest_substring("bbbbb"))     # Expected: 1\nprint(length_of_longest_substring("pwwkew"))    # Expected: 3`,
-      java: `import java.util.*;\n\npublic class Solution {\n    public static int lengthOfLongestSubstring(String s) {\n        // Hint: sliding window + HashSet\n        return 0;\n    }\n\n    public static void main(String[] args) {\n        System.out.println(lengthOfLongestSubstring("abcabcbb")); // 3\n        System.out.println(lengthOfLongestSubstring("bbbbb"));    // 1\n        System.out.println(lengthOfLongestSubstring("pwwkew"));   // 3\n    }\n}`,
-      cpp: `#include <iostream>\n#include <unordered_set>\n#include <string>\nusing namespace std;\n\nint lengthOfLongestSubstring(string s) {\n    // Hint: sliding window + unordered_set\n    return 0;\n}\n\nint main() {\n    cout << lengthOfLongestSubstring("abcabcbb") << endl; // 3\n    cout << lengthOfLongestSubstring("bbbbb") << endl;    // 1\n    cout << lengthOfLongestSubstring("pwwkew") << endl;   // 3\n    return 0;\n}`
-    }
+    placeholder: `# Write your solution here\n# Hint: Use a sliding window with a HashSet\ndef length_of_longest_substring(s):\n    # TODO: implement\n    pass\n\n# Example usage\nprint(length_of_longest_substring("abcabcbb"))  # Expected: 3\nprint(length_of_longest_substring("bbbbb"))     # Expected: 1`
   }
 ];
 
-// Build interleaved question list
+// Interleave coding questions into MCQ list
+// Insert coding Qs at positions 7, 15, 22, 29, 36 (0-indexed)
 const QUESTIONS = [];
-const tempMcq = [...MCQ_QUESTIONS];
-const tempCoding = [...CODING_QUESTIONS];
-const insertPattern = [7, 7, 7, 7, 7];
-let mPos = 0, cPos = 0;
-insertPattern.forEach(count => {
-  for (let i = 0; i < count && mPos < tempMcq.length; i++) QUESTIONS.push(tempMcq[mPos++]);
-  if (cPos < tempCoding.length) QUESTIONS.push(tempCoding[cPos++]);
+let mcqIdx = 0;
+let codingIdx = 0;
+const codingInsertAfter = new Set([6, 13, 20, 27, 34]); // insert coding after these MCQ-relative indices
+
+let tempMcq = [...MCQ_QUESTIONS];
+let tempCoding = [...CODING_QUESTIONS];
+
+// Build interleaved: after every ~7 MCQs, insert a coding question
+const insertPattern = [7, 7, 7, 7, 7]; // insert coding after every 7 mcqs
+let mPos = 0;
+let cPos = 0;
+insertPattern.forEach((count, segment) => {
+  for (let i = 0; i < count && mPos < tempMcq.length; i++) {
+    QUESTIONS.push(tempMcq[mPos++]);
+  }
+  if (cPos < tempCoding.length) {
+    QUESTIONS.push(tempCoding[cPos++]);
+  }
 });
+// Add remaining MCQs
 while (mPos < tempMcq.length) QUESTIONS.push(tempMcq[mPos++]);
 
 const TOTAL = QUESTIONS.length;
@@ -1821,10 +1621,10 @@ const KEYS = ['A','B','C','D'];
 let current = 0;
 let answers = new Array(TOTAL).fill(null);
 let codeAnswers = new Array(TOTAL).fill('');
-let stdinValues = new Array(TOTAL).fill('');
 let totalTime = 45 * 60;
 let timerInt = null;
 let camStream = null;
+
 let strikes = 0;
 const MAX_STRIKES = 3;
 let violationLog = [];
@@ -1854,16 +1654,24 @@ function doLogin() {
 // ===================== CAMERA =====================
 function startCam() {
   navigator.mediaDevices.getUserMedia({ video: true, audio: false })
-    .then(stream => { camStream = stream; document.getElementById('cam').srcObject = stream; })
-    .catch(() => { document.querySelector('.cam-footer').textContent = '⚠️ Camera permission denied'; logViolation('Camera access denied'); });
+    .then(stream => {
+      camStream = stream;
+      document.getElementById('cam').srcObject = stream;
+    })
+    .catch(() => {
+      document.querySelector('.cam-footer').textContent = '⚠️ Camera permission denied';
+      logViolation('Camera access denied');
+    });
 }
 
 // ===================== TIMER =====================
 function startTimer() {
   timerInt = setInterval(() => {
     totalTime--;
-    const m = Math.floor(totalTime / 60), s = totalTime % 60;
-    document.getElementById('timerDisplay').textContent = String(m).padStart(2,'0') + ':' + String(s).padStart(2,'0');
+    const m = Math.floor(totalTime / 60);
+    const s = totalTime % 60;
+    document.getElementById('timerDisplay').textContent =
+      String(m).padStart(2,'0') + ':' + String(s).padStart(2,'0');
     const box = document.getElementById('timerBox');
     box.className = 'timer-box';
     if (totalTime <= 300) box.classList.add('warn');
@@ -1903,21 +1711,33 @@ function updateQMap() {
 function renderQ() {
   const qd = QUESTIONS[current];
   const isCoding = qd.type === 'coding';
+
+  // Badge
   const badge = document.getElementById('qBadge');
   badge.textContent = isCoding ? '💻 Coding' : 'SDE — Intern';
   badge.className = isCoding ? 'q-badge coding-badge' : 'q-badge';
+
   document.getElementById('qCat').textContent = qd.cat;
-  document.getElementById('qNum').textContent = String(current + 1).padStart(2,'0') + '/' + TOTAL;
+  document.getElementById('qNum').textContent =
+    String(current + 1).padStart(2,'0') + '/' + TOTAL;
   document.getElementById('questionText').textContent = (current + 1) + '. ' + qd.q;
+
   const pct = Math.round((current / (TOTAL - 1)) * 100);
   document.getElementById('progressLabel').textContent = `Question ${current + 1} of ${TOTAL}`;
   document.getElementById('progressPct').textContent = pct + '%';
   document.getElementById('progressBar').style.width = pct + '%';
+
   const body = document.getElementById('questionBody');
-  if (isCoding) renderCodingQ(qd, body, current);
-  else renderMCQ(qd, body);
+
+  if (isCoding) {
+    renderCodingQ(qd, body, current);
+  } else {
+    renderMCQ(qd, body);
+  }
+
   document.getElementById('btnNext').classList.toggle('hidden', current === TOTAL - 1);
   document.getElementById('btnSubmit').classList.toggle('hidden', current !== TOTAL - 1);
+
   updateQMap();
 }
 
@@ -1938,13 +1758,17 @@ function renderMCQ(qd, container) {
 function renderCodingQ(qd, container, idx) {
   const diffMap = { easy: 'diff-easy', medium: 'diff-medium', hard: 'diff-hard' };
   const examplesHTML = qd.examples.map(ex => `
-    <div class="io-box"><div class="io-label">Input</div><div class="io-val">${ex.input}</div></div>
-    <div class="io-box"><div class="io-label">Output</div><div class="io-val">${ex.output}</div></div>
+    <div class="io-box">
+      <div class="io-label">Input</div>
+      <div class="io-val">${ex.input}</div>
+    </div>
+    <div class="io-box">
+      <div class="io-label">Output</div>
+      <div class="io-val">${ex.output}</div>
+    </div>
   `).join('');
 
   const savedCode = codeAnswers[idx] || '';
-  const savedStdin = stdinValues[idx] || '';
-  const activeLang = questionLang[idx] || 'python';
 
   container.innerHTML = `
     <div class="coding-section">
@@ -1964,49 +1788,19 @@ function renderCodingQ(qd, container, idx) {
             <div class="editor-dot dot-yellow"></div>
             <div class="editor-dot dot-green"></div>
           </div>
-          <div class="lang-selector">
-            <select class="lang-select" id="langSelect_${idx}" onchange="switchLang(${idx}, this.value)">
-              <option value="python" ${activeLang === 'python' ? 'selected' : ''}>Python 3</option>
-              <option value="java"   ${activeLang === 'java'   ? 'selected' : ''}>Java</option>
-              <option value="cpp"    ${activeLang === 'cpp'    ? 'selected' : ''}>C++</option>
-            </select>
-          </div>
-          <div class="editor-filename" id="editorFilename_${idx}">${LANG_CONFIGS[activeLang].filename}</div>
+          <div class="editor-filename">solution.py</div>
           <button class="editor-clear" onclick="clearCode(${idx})">Clear</button>
         </div>
-        <textarea class="code-editor" id="codeEditor_${idx}" spellcheck="false" autocorrect="off" autocapitalize="off">${savedCode || (qd.placeholders ? qd.placeholders[activeLang] : '')}</textarea>
+        <textarea class="code-editor" id="codeEditor_${idx}" placeholder="${qd.placeholder}" spellcheck="false" autocorrect="off" autocapitalize="off">${savedCode}</textarea>
         <div class="editor-footer">
-          <div class="char-count" id="charCount_${idx}">${(savedCode || '').length} chars</div>
+          <div class="char-count" id="charCount_${idx}">${savedCode.length} chars</div>
           <div class="code-saved-indicator" id="savedInd_${idx}">✓ Saved</div>
         </div>
-      </div>
-
-      <!-- RUN CODE PANEL -->
-      <div class="run-panel" id="runPanel_${idx}">
-        <div class="run-toolbar">
-          <div class="run-toolbar-left">
-            <span class="run-title">▶ Output</span>
-            <span class="run-status" id="runStatus_${idx}">Ready</span>
-          </div>
-          <button class="btn-run" id="btnRun_${idx}" onclick="runCode(${idx})">
-            <span class="run-icon">▶ Run</span>
-            <div class="spinner"></div>
-          </button>
-        </div>
-        <div class="stdin-wrap">
-          <div class="stdin-label">Stdin (optional input)</div>
-          <textarea class="stdin-input" id="stdinInput_${idx}" placeholder="Enter custom input here if your code reads from stdin...">${savedStdin}</textarea>
-          <div class="stdin-hint">💡 Leave blank if your code doesn't use input(). Results appear below.</div>
-        </div>
-        <div class="output-area" id="outputArea_${idx}">
-          <div class="output-empty">No output yet. Click "Run" to execute your code.</div>
-        </div>
-        <div class="output-meta hidden" id="outputMeta_${idx}"></div>
       </div>
     </div>
   `;
 
-  // Editor listeners
+  // Attach listeners — allow typing in code editor
   const editor = document.getElementById('codeEditor_' + idx);
   if (editor) {
     editor.addEventListener('input', () => {
@@ -2017,62 +1811,28 @@ function renderCodingQ(qd, container, idx) {
       setTimeout(() => ind.classList.remove('show'), 1500);
       updateQMap();
     });
+
+    // Allow Tab key in editor
     editor.addEventListener('keydown', e => {
       if (e.key === 'Tab') {
-        e.preventDefault(); e.stopPropagation();
-        const start = editor.selectionStart, end = editor.selectionEnd;
+        e.preventDefault();
+        e.stopPropagation();
+        const start = editor.selectionStart;
+        const end = editor.selectionEnd;
         editor.value = editor.value.substring(0, start) + '    ' + editor.value.substring(end);
         editor.selectionStart = editor.selectionEnd = start + 4;
         codeAnswers[idx] = editor.value;
       }
     });
   }
-
-  // Stdin listener
-  const stdinEl = document.getElementById('stdinInput_' + idx);
-  if (stdinEl) {
-    stdinEl.addEventListener('input', () => { stdinValues[idx] = stdinEl.value; });
-  }
-}
-
-function switchLang(idx, lang) {
-  const qd = QUESTIONS[idx];
-  questionLang[idx] = lang;
-  // Only load placeholder if editor is empty or was previously a placeholder
-  const editor = document.getElementById('codeEditor_' + idx);
-  const filenameEl = document.getElementById('editorFilename_' + idx);
-  if (filenameEl) filenameEl.textContent = LANG_CONFIGS[lang].filename;
-  if (editor) {
-    // If no saved code or code matches any placeholder, switch to new lang placeholder
-    const placeholderValues = qd.placeholders ? Object.values(qd.placeholders) : [];
-    const currentVal = editor.value.trim();
-    const isPlaceholder = placeholderValues.some(p => p.trim() === currentVal) || currentVal === '';
-    if (isPlaceholder) {
-      editor.value = qd.placeholders ? (qd.placeholders[lang] || '') : '';
-      codeAnswers[idx] = '';
-      document.getElementById('charCount_' + idx).textContent = '0 chars';
-    }
-    // Clear output when switching languages
-    const outArea = document.getElementById('outputArea_' + idx);
-    if (outArea) outArea.innerHTML = '<div class="output-empty">Language switched. Click "Run" to execute.</div>';
-    const outMeta = document.getElementById('outputMeta_' + idx);
-    if (outMeta) outMeta.classList.add('hidden');
-    const runStatus = document.getElementById('runStatus_' + idx);
-    if (runStatus) { runStatus.textContent = 'Ready'; runStatus.className = 'run-status'; }
-  }
 }
 
 function clearCode(idx) {
   codeAnswers[idx] = '';
   const editor = document.getElementById('codeEditor_' + idx);
-  if (editor) editor.value = '';
+  if (editor) { editor.value = ''; }
   const cc = document.getElementById('charCount_' + idx);
   if (cc) cc.textContent = '0 chars';
-  // Also clear output
-  const outArea = document.getElementById('outputArea_' + idx);
-  if (outArea) outArea.innerHTML = '<div class="output-empty">No output yet. Click "Run" to execute your code.</div>';
-  const outMeta = document.getElementById('outputMeta_' + idx);
-  if (outMeta) outMeta.classList.add('hidden');
   updateQMap();
 }
 
@@ -2081,222 +1841,12 @@ function selectAnswer(i) {
   renderQ();
 }
 
-function goPrev() { if (current > 0) { current--; renderQ(); } }
-function goNext() { if (current < TOTAL - 1) { current++; renderQ(); } }
-
-// ===================== RUN CODE =====================
-async function runCode(idx) {
-  const editor = document.getElementById('codeEditor_' + idx);
-  const stdinEl = document.getElementById('stdinInput_' + idx);
-  const btnRun = document.getElementById('btnRun_' + idx);
-  const runStatus = document.getElementById('runStatus_' + idx);
-  const outputArea = document.getElementById('outputArea_' + idx);
-  const outputMeta = document.getElementById('outputMeta_' + idx);
-
-  if (!editor) return;
-  const code = editor.value.trim();
-  if (!code) {
-    outputArea.innerHTML = '<div class="output-content system-msg">⚠️ No code to run. Write your solution first.</div>';
-    return;
-  }
-
-  const lang = questionLang[idx] || 'python';
-  const langConfig = LANG_CONFIGS[lang];
-  const stdinVal = stdinEl ? stdinEl.value : '';
-
-  btnRun.disabled = true;
-  btnRun.classList.add('loading');
-  runStatus.textContent = 'Submitting…';
-  runStatus.className = 'run-status running';
-  outputArea.innerHTML = '<div class="output-content system-msg">⏳ Sending code to execution sandbox…</div>';
-  outputMeta.classList.add('hidden');
-
-  const startTime = Date.now();
-
-  try {
-    // Step 1: Submit to Judge0 CE (no-auth public endpoint)
-    const submitResp = await fetch('https://judge0-ce.p.rapidapi.com/submissions?base64_encoded=false&wait=false', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'X-RapidAPI-Host': 'judge0-ce.p.rapidapi.com',
-        // fallback: try without key first via direct endpoint
-      },
-      body: JSON.stringify({
-        language_id: langConfig.language_id,
-        source_code: code,
-        stdin: stdinVal,
-        cpu_time_limit: 5,
-        memory_limit: 128000
-      })
-    });
-
-    // If RapidAPI fails (401/403), fall back to judge0-ce.p.rapidapi.com direct
-    if (submitResp.status === 401 || submitResp.status === 403) {
-      await runCodeDirect(idx, code, stdinVal, lang, langConfig, startTime, btnRun, runStatus, outputArea, outputMeta);
-      return;
-    }
-
-    if (!submitResp.ok) throw new Error(`Submit failed: ${submitResp.status}`);
-
-    const { token } = await submitResp.json();
-    if (!token) throw new Error('No token returned from judge');
-
-    outputArea.innerHTML = '<div class="output-content system-msg">⏳ Running… waiting for result…</div>';
-    runStatus.textContent = 'Running…';
-
-    // Step 2: Poll for result
-    const result = await pollJudge0(token, 'https://judge0-ce.p.rapidapi.com');
-    const elapsed = Date.now() - startTime;
-    displayOutputJudge0(result, elapsed, outputArea, outputMeta, runStatus, lang);
-
-  } catch (err) {
-    // Final fallback: try the open CE instance
-    try {
-      await runCodeDirect(idx, code, stdinVal, lang, langConfig, startTime, btnRun, runStatus, outputArea, outputMeta);
-    } catch (err2) {
-      runStatus.textContent = 'Error';
-      runStatus.className = 'run-status error';
-      outputArea.innerHTML = `<pre class="output-content compile-err">⚠️ Execution server unavailable.\n\nError: ${err2.message}\n\nTry again in a moment.</pre>`;
-      outputMeta.classList.add('hidden');
-    }
-  } finally {
-    btnRun.disabled = false;
-    btnRun.classList.remove('loading');
-  }
+function goPrev() {
+  if (current > 0) { current--; renderQ(); }
 }
 
-async function runCodeDirect(idx, code, stdinVal, lang, langConfig, startTime, btnRun, runStatus, outputArea, outputMeta) {
-  // Use Judge0 open CE instance (no auth required)
-  const BASE = 'https://ce.judge0.com';
-
-  runStatus.textContent = 'Running…';
-  outputArea.innerHTML = '<div class="output-content system-msg">⏳ Connecting to sandbox…</div>';
-
-  const submitResp = await fetch(`${BASE}/submissions?base64_encoded=false&wait=false`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-      language_id: langConfig.language_id,
-      source_code: code,
-      stdin: stdinVal,
-      cpu_time_limit: 5,
-      memory_limit: 128000
-    })
-  });
-
-  if (!submitResp.ok) throw new Error(`${submitResp.status} ${submitResp.statusText}`);
-  const { token } = await submitResp.json();
-  if (!token) throw new Error('No execution token received');
-
-  outputArea.innerHTML = '<div class="output-content system-msg">⏳ Executing…</div>';
-
-  const result = await pollJudge0(token, BASE);
-  const elapsed = Date.now() - startTime;
-  displayOutputJudge0(result, elapsed, outputArea, outputMeta, runStatus, lang);
-  btnRun.disabled = false;
-  btnRun.classList.remove('loading');
-}
-
-async function pollJudge0(token, base, attempts = 0) {
-  if (attempts > 20) throw new Error('Execution timed out — no response after 10s');
-  await new Promise(r => setTimeout(r, 500));
-  const resp = await fetch(`${base}/submissions/${token}?base64_encoded=false&fields=stdout,stderr,compile_output,status,time,memory,exit_code`);
-  if (!resp.ok) throw new Error(`Poll error: ${resp.status}`);
-  const data = await resp.json();
-  // Status IDs: 1=In Queue, 2=Processing, 3=Accepted, 4+=done
-  if (data.status && (data.status.id === 1 || data.status.id === 2)) {
-    return pollJudge0(token, base, attempts + 1);
-  }
-  return data;
-}
-
-function displayOutputJudge0(data, elapsed, outputArea, outputMeta, runStatus, lang) {
-  const stdout = (data.stdout || '').trim();
-  const stderr = (data.stderr || '').trim();
-  const compileErr = (data.compile_output || '').trim();
-  const statusId = data.status ? data.status.id : 3;
-  const statusDesc = data.status ? data.status.description : 'Done';
-  const exitCode = data.exit_code;
-  const timeUsed = data.time ? (parseFloat(data.time) * 1000).toFixed(0) + 'ms' : `${elapsed}ms`;
-  const memUsed = data.memory ? (data.memory / 1024).toFixed(1) + ' MB' : '—';
-
-  outputArea.innerHTML = '';
-  let hasOutput = false;
-
-  if (compileErr) {
-    runStatus.textContent = 'Compile Error';
-    runStatus.className = 'run-status error';
-    const pre = document.createElement('pre');
-    pre.className = 'output-content compile-err';
-    pre.textContent = '🔴 Compilation Failed:\n\n' + compileErr;
-    outputArea.appendChild(pre);
-    hasOutput = true;
-  }
-
-  if (stdout) {
-    const pre = document.createElement('pre');
-    pre.className = 'output-content stdout';
-    pre.textContent = stdout;
-    outputArea.appendChild(pre);
-    hasOutput = true;
-  }
-
-  if (stderr && !compileErr) {
-    const pre = document.createElement('pre');
-    pre.className = 'output-content stderr';
-    pre.textContent = '🟡 Stderr:\n\n' + stderr;
-    outputArea.appendChild(pre);
-    hasOutput = true;
-  }
-
-  // Special statuses: TLE, MLE, etc.
-  if (statusId === 5) {
-    const pre = document.createElement('pre');
-    pre.className = 'output-content compile-err';
-    pre.textContent = '⏱️ Time Limit Exceeded';
-    outputArea.appendChild(pre);
-    hasOutput = true;
-  } else if (statusId === 6) {
-    // compile error already shown above
-  } else if (statusId >= 7 && statusId <= 12) {
-    const pre = document.createElement('pre');
-    pre.className = 'output-content stderr';
-    pre.textContent = `⚠️ Runtime Error: ${statusDesc}`;
-    outputArea.appendChild(pre);
-    hasOutput = true;
-  }
-
-  if (!hasOutput) {
-    const div = document.createElement('div');
-    div.className = 'output-content system-msg';
-    div.textContent = '(No output produced)';
-    outputArea.appendChild(div);
-  }
-
-  // Status label
-  if (!compileErr) {
-    if (statusId === 3) {
-      runStatus.textContent = '✓ Accepted';
-      runStatus.className = 'run-status success';
-    } else if (statusId === 5) {
-      runStatus.textContent = 'Time Limit Exceeded';
-      runStatus.className = 'run-status error';
-    } else if (statusId >= 6) {
-      runStatus.textContent = statusDesc || 'Runtime Error';
-      runStatus.className = 'run-status error';
-    }
-  }
-
-  const isOk = statusId === 3;
-  outputMeta.innerHTML = `
-    <div class="output-meta-item"><span class="exit-badge ${isOk ? 'exit-ok' : 'exit-err'}">${statusDesc}</span></div>
-    <div class="output-meta-item">⏱ <span class="meta-val">${timeUsed}</span></div>
-    <div class="output-meta-item">🧠 <span class="meta-val">${memUsed}</span></div>
-    <div class="output-meta-item">🌐 <span class="meta-val">${LANG_CONFIGS[lang].language}</span></div>
-  `;
-  outputMeta.classList.remove('hidden');
-  outputArea.scrollTop = 0;
+function goNext() {
+  if (current < TOTAL - 1) { current++; renderQ(); }
 }
 
 // ===================== SUBMIT =====================
@@ -2310,7 +1860,9 @@ function openModal() {
   document.getElementById('submitModal').classList.remove('hidden');
 }
 
-function closeModal() { document.getElementById('submitModal').classList.add('hidden'); }
+function closeModal() {
+  document.getElementById('submitModal').classList.add('hidden');
+}
 
 function finalSubmit() {
   testActive = false;
@@ -2322,40 +1874,65 @@ function finalSubmit() {
   document.getElementById('testScreen').classList.add('hidden');
   document.getElementById('calcPanel').classList.add('hidden');
   document.getElementById('doneScreen').classList.remove('hidden');
-  document.getElementById('refCode').textContent = Math.random().toString(36).substring(2,8).toUpperCase();
+  document.getElementById('refCode').textContent =
+    Math.random().toString(36).substring(2,8).toUpperCase();
 }
 
 // ===================== CALCULATOR =====================
-let calcState = { display: '0', expr: '', prevVal: null, pendingOp: null, waitingForOperand: false, history: [] };
+let calcState = {
+  display: '0',
+  expr: '',
+  prevVal: null,
+  pendingOp: null,
+  waitingForOperand: false,
+  history: []
+};
 
-function toggleCalculator() { document.getElementById('calcPanel').classList.toggle('hidden'); }
+function toggleCalculator() {
+  const panel = document.getElementById('calcPanel');
+  panel.classList.toggle('hidden');
+}
 
 function updateCalcDisplay() {
-  document.getElementById('calcDisplay').textContent = calcState.display;
+  const d = document.getElementById('calcDisplay');
+  d.textContent = calcState.display;
+  d.className = 'calc-display';
   document.getElementById('calcExpr').textContent = calcState.expr;
 }
 
 function calcNum(n) {
-  if (calcState.waitingForOperand) { calcState.display = n; calcState.waitingForOperand = false; }
-  else { calcState.display = calcState.display === '0' ? n : calcState.display + n; }
+  if (calcState.waitingForOperand) {
+    calcState.display = n;
+    calcState.waitingForOperand = false;
+  } else {
+    calcState.display = calcState.display === '0' ? n : calcState.display + n;
+  }
   if (calcState.display.length > 12) calcState.display = calcState.display.slice(0, 12);
   updateCalcDisplay();
 }
 
 function calcDot() {
-  if (calcState.waitingForOperand) { calcState.display = '0.'; calcState.waitingForOperand = false; }
-  else if (!calcState.display.includes('.')) { calcState.display += '.'; }
+  if (calcState.waitingForOperand) {
+    calcState.display = '0.';
+    calcState.waitingForOperand = false;
+  } else if (!calcState.display.includes('.')) {
+    calcState.display += '.';
+  }
   updateCalcDisplay();
 }
 
 function calcOp(op) {
   const val = parseFloat(calcState.display);
   const opSymbols = { '+': '+', '-': '−', '*': '×', '/': '÷' };
+
   if (calcState.prevVal !== null && !calcState.waitingForOperand) {
     const result = compute(calcState.prevVal, val, calcState.pendingOp);
     calcState.display = formatResult(result);
     calcState.prevVal = result;
-  } else { calcState.prevVal = val; }
+  } else {
+    calcState.prevVal = val;
+  }
+
   calcState.expr = calcState.display + ' ' + opSymbols[op];
   calcState.pendingOp = op;
   calcState.waitingForOperand = true;
@@ -2370,14 +1947,23 @@ function calcEq() {
   const histEntry = `${calcState.prevVal} ${opSymbols[calcState.pendingOp]} ${val} = ${formatResult(result)}`;
   calcState.history.unshift(histEntry);
   if (calcState.history.length > 5) calcState.history.pop();
+
   calcState.expr = histEntry;
   calcState.display = formatResult(result);
-  calcState.prevVal = null; calcState.pendingOp = null; calcState.waitingForOperand = true;
-  updateCalcDisplay(); renderCalcHistory();
+  calcState.prevVal = null;
+  calcState.pendingOp = null;
+  calcState.waitingForOperand = true;
+  updateCalcDisplay();
+  renderCalcHistory();
 }
 
 function compute(a, b, op) {
-  switch(op) { case '+': return a+b; case '-': return a-b; case '*': return a*b; case '/': return b===0?NaN:a/b; }
+  switch(op) {
+    case '+': return a + b;
+    case '-': return a - b;
+    case '*': return a * b;
+    case '/': return b === 0 ? NaN : a / b;
+  }
 }
 
 function formatResult(r) {
@@ -2388,8 +1974,11 @@ function formatResult(r) {
 }
 
 function calcClear() {
-  calcState.display = '0'; calcState.expr = ''; calcState.prevVal = null;
-  calcState.pendingOp = null; calcState.waitingForOperand = false;
+  calcState.display = '0';
+  calcState.expr = '';
+  calcState.prevVal = null;
+  calcState.pendingOp = null;
+  calcState.waitingForOperand = false;
   updateCalcDisplay();
 }
 
@@ -2397,7 +1986,8 @@ function calcFn(fn) {
   let val = parseFloat(calcState.display);
   if (fn === 'sign') { val = -val; calcState.display = formatResult(val); }
   if (fn === 'pct') { val = val / 100; calcState.display = formatResult(val); }
-  calcState.waitingForOperand = true; updateCalcDisplay();
+  calcState.waitingForOperand = true;
+  updateCalcDisplay();
 }
 
 function renderCalcHistory() {
@@ -2408,40 +1998,61 @@ function renderCalcHistory() {
   }).join('');
 }
 
-// Draggable calculator
+// Make calculator draggable
 (function() {
-  let isDragging = false, startX, startY, initLeft, initTop;
+  let isDragging = false;
+  let startX, startY, initLeft, initTop;
+
   document.addEventListener('DOMContentLoaded', () => {
     const header = document.getElementById('calcHeader');
     const panel = document.getElementById('calcPanel');
+
     header.addEventListener('mousedown', e => {
-      isDragging = true; panel.classList.add('dragging');
+      isDragging = true;
+      panel.classList.add('dragging');
       const rect = panel.getBoundingClientRect();
-      startX = e.clientX; startY = e.clientY; initLeft = rect.left; initTop = rect.top;
-      panel.style.bottom = 'auto'; panel.style.right = 'auto';
-      panel.style.left = initLeft + 'px'; panel.style.top = initTop + 'px';
+      startX = e.clientX;
+      startY = e.clientY;
+      initLeft = rect.left;
+      initTop = rect.top;
+      panel.style.bottom = 'auto';
+      panel.style.right = 'auto';
+      panel.style.left = initLeft + 'px';
+      panel.style.top = initTop + 'px';
       e.preventDefault();
     });
+
     document.addEventListener('mousemove', e => {
       if (!isDragging) return;
-      panel.style.left = (initLeft + e.clientX - startX) + 'px';
-      panel.style.top = (initTop + e.clientY - startY) + 'px';
+      const dx = e.clientX - startX;
+      const dy = e.clientY - startY;
+      panel.style.left = (initLeft + dx) + 'px';
+      panel.style.top = (initTop + dy) + 'px';
     });
-    document.addEventListener('mouseup', () => { isDragging = false; panel.classList.remove('dragging'); });
+
+    document.addEventListener('mouseup', () => {
+      isDragging = false;
+      panel.classList.remove('dragging');
+    });
   });
 })();
 
 // ===================== ANTI-CHEAT ENGINE =====================
 function initAntiCheat() {
   document.addEventListener('contextmenu', e => {
-    if (testActive) { e.preventDefault(); showToast('⛔ Right-click is disabled during the assessment.'); logViolation('Right-click attempt'); }
+    if (testActive) {
+      e.preventDefault();
+      showToast('⛔ Right-click is disabled during the assessment.');
+      logViolation('Right-click attempt');
+    }
   });
 
   ['copy', 'cut', 'paste'].forEach(evt => {
     document.addEventListener(evt, e => {
       if (!testActive) return;
       const target = e.target;
-      if (target && target.classList && (target.classList.contains('code-editor') || target.classList.contains('stdin-input'))) return;
+      // Allow paste into code editor
+      if (target && target.classList && target.classList.contains('code-editor')) return;
       e.preventDefault();
       showToast(`⛔ ${evt.charAt(0).toUpperCase() + evt.slice(1)} is not allowed.`);
       logViolation(`${evt} attempt`);
@@ -2452,43 +2063,74 @@ function initAntiCheat() {
     if (!testActive) return;
     const key = e.key.toLowerCase();
     const ctrl = e.ctrlKey || e.metaKey;
-    const isCodeEditor = e.target && e.target.classList && (e.target.classList.contains('code-editor') || e.target.classList.contains('stdin-input'));
+    const isCodeEditor = e.target && e.target.classList && e.target.classList.contains('code-editor');
 
     if (e.key === 'F12') { e.preventDefault(); handleViolation('DevTools key (F12) pressed'); return; }
     if (ctrl && e.shiftKey && ['i','j','c','k','u'].includes(key)) { e.preventDefault(); handleViolation('DevTools shortcut detected'); return; }
+
+    // Allow Ctrl+A, Ctrl+Z in code editor only
     if (ctrl && ['c','v','x','s','p'].includes(key) && !isCodeEditor) {
-      e.preventDefault(); showToast('⛔ Keyboard shortcuts are disabled.'); logViolation(`Ctrl+${key.toUpperCase()} blocked`); return;
+      e.preventDefault();
+      showToast('⛔ Keyboard shortcuts are disabled.');
+      logViolation(`Ctrl+${key.toUpperCase()} blocked`);
+      return;
     }
+
     if (e.key === 'PrintScreen') { e.preventDefault(); handleViolation('Screenshot attempt (PrintScreen)'); return; }
-    if (e.key === 'Escape' && !isCodeEditor) e.preventDefault();
+    if (e.key === 'Escape' && !isCodeEditor) { e.preventDefault(); }
   });
 
-  document.addEventListener('visibilitychange', () => { if (!testActive) return; if (document.hidden) handleViolation('Tab switched or window minimized'); });
-  window.addEventListener('blur', () => { if (!testActive) return; handleViolation('Window lost focus (possible alt-tab or external app)'); });
+  document.addEventListener('visibilitychange', () => {
+    if (!testActive) return;
+    if (document.hidden) handleViolation('Tab switched or window minimized');
+  });
+
+  window.addEventListener('blur', () => {
+    if (!testActive) return;
+    handleViolation('Window lost focus (possible alt-tab or external app)');
+  });
 
   document.addEventListener('fullscreenchange', () => {
     if (!testActive) return;
-    if (!document.fullscreenElement) { handleViolation('Fullscreen mode exited'); document.getElementById('fsPrompt').classList.remove('hidden'); }
+    if (!document.fullscreenElement) {
+      handleViolation('Fullscreen mode exited');
+      document.getElementById('fsPrompt').classList.remove('hidden');
+    }
   });
 
   devtoolsCheckInt = setInterval(() => {
     if (!testActive) return;
     const threshold = 160;
-    if (window.outerWidth - window.innerWidth > threshold || window.outerHeight - window.innerHeight > threshold)
+    const wDiff = window.outerWidth - window.innerWidth;
+    const hDiff = window.outerHeight - window.innerHeight;
+    if (wDiff > threshold || hDiff > threshold) {
       handleViolation('DevTools panel likely opened (window size anomaly)');
+    }
   }, 2000);
 
-  document.addEventListener('dragstart', e => { if (testActive) e.preventDefault(); });
+  document.addEventListener('dragstart', e => {
+    if (testActive) e.preventDefault();
+  });
+
   document.addEventListener('selectstart', e => {
-    if (testActive && !(e.target && e.target.classList && (e.target.classList.contains('code-editor') || e.target.classList.contains('stdin-input')))) e.preventDefault();
+    if (testActive && !(e.target && e.target.classList && e.target.classList.contains('code-editor'))) {
+      e.preventDefault();
+    }
   });
 }
 
 function requestFullscreen() {
   const el = document.documentElement;
   const req = el.requestFullscreen || el.webkitRequestFullscreen || el.mozRequestFullScreen || el.msRequestFullscreen;
-  if (req) req.call(el).then(() => document.getElementById('fsPrompt').classList.add('hidden')).catch(() => document.getElementById('fsPrompt').classList.add('hidden'));
-  else document.getElementById('fsPrompt').classList.add('hidden');
+  if (req) {
+    req.call(el).then(() => {
+      document.getElementById('fsPrompt').classList.add('hidden');
+    }).catch(() => {
+      document.getElementById('fsPrompt').classList.add('hidden');
+    });
+  } else {
+    document.getElementById('fsPrompt').classList.add('hidden');
+  }
 }
 
 function handleViolation(reason) {
@@ -2496,10 +2138,17 @@ function handleViolation(reason) {
   strikes++;
   logViolation(reason);
   updateStrikePips();
-  if (strikes >= MAX_STRIKES) { showAutoSubmitWarning(); return; }
-  showWarning('Violation Detected',
-    `<strong style="color:var(--text)">${reason}</strong><br><br>This incident has been logged and will be reviewed by our team.`,
-    `Strike ${strikes} of ${MAX_STRIKES} — ${MAX_STRIKES - strikes} more will auto-submit your test.`);
+
+  if (strikes >= MAX_STRIKES) {
+    showAutoSubmitWarning();
+    return;
+  }
+
+  showWarning(
+    'Violation Detected',
+    `<strong style="color:var(--text)">${reason}</strong><br><br>This incident has been logged and will be reviewed by our team. Repeated violations will result in automatic test termination.`,
+    `Strike ${strikes} of ${MAX_STRIKES} — ${MAX_STRIKES - strikes} more will auto-submit your test.`
+  );
 }
 
 function logViolation(reason) {
@@ -2534,7 +2183,9 @@ function showWarning(title, msg, strikeText) {
 function closeWarning() {
   warningOpen = false;
   document.getElementById('warningOverlay').classList.add('hidden');
-  if (!document.fullscreenElement && testActive) document.getElementById('fsPrompt').classList.remove('hidden');
+  if (!document.fullscreenElement && testActive) {
+    document.getElementById('fsPrompt').classList.remove('hidden');
+  }
 }
 
 function showAutoSubmitWarning() {
@@ -2545,8 +2196,12 @@ function showAutoSubmitWarning() {
   document.getElementById('warningOverlay').classList.remove('hidden');
   const btn = document.querySelector('.btn-warning-ok');
   btn.textContent = 'View Submission';
-  btn.onclick = () => { document.getElementById('warningOverlay').classList.add('hidden'); finalSubmit(); };
-  clearInterval(timerInt); clearInterval(devtoolsCheckInt);
+  btn.onclick = () => {
+    document.getElementById('warningOverlay').classList.add('hidden');
+    finalSubmit();
+  };
+  clearInterval(timerInt);
+  clearInterval(devtoolsCheckInt);
   if (camStream) camStream.getTracks().forEach(t => t.stop());
 }
 
@@ -2556,7 +2211,10 @@ function showToast(msg) {
   toast.className = 'toast';
   toast.textContent = msg;
   container.appendChild(toast);
-  setTimeout(() => { toast.classList.add('fadeout'); setTimeout(() => toast.remove(), 500); }, 2500);
+  setTimeout(() => {
+    toast.classList.add('fadeout');
+    setTimeout(() => toast.remove(), 500);
+  }, 2500);
 }
 </script>
 </body>

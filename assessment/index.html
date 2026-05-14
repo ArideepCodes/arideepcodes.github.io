@@ -322,6 +322,21 @@
       box-shadow: 0 0 6px rgba(244,63,94,0.5);
     }
 
+    /* marks badge in topbar */
+    .marks-box {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(0,220,180,0.07);
+      border: 1px solid rgba(0,220,180,0.25);
+      border-radius: 8px;
+      padding: 8px 14px;
+      font-family: 'Space Mono', monospace;
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--accent);
+    }
+
     /* Calculator toggle button in topbar */
     .calc-toggle-btn {
       display: flex;
@@ -391,6 +406,19 @@
     .q-category { font-size: 12px; color: var(--muted); }
     .q-number { font-size: 13px; font-weight: 700; color: var(--muted); font-family: 'Space Mono', monospace; }
 
+    /* marks per question badge */
+    .q-marks {
+      margin-left: auto;
+      font-size: 12px;
+      font-weight: 700;
+      font-family: 'Space Mono', monospace;
+      background: rgba(245,158,11,0.12);
+      color: var(--warn);
+      border: 1px solid rgba(245,158,11,0.3);
+      border-radius: 6px;
+      padding: 4px 10px;
+    }
+
     .question-text {
       font-size: 18px;
       font-weight: 600;
@@ -398,64 +426,6 @@
       margin-bottom: 20px;
       color: #f1f5f9;
       pointer-events: none;
-    }
-
-    /* ===================== MCQ OPTIONS ===================== */
-    .options-grid {
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-      margin-bottom: 28px;
-    }
-
-    .option-btn {
-      display: flex;
-      align-items: flex-start;
-      gap: 14px;
-      padding: 16px 18px;
-      background: var(--bg);
-      border: 1px solid rgba(255,255,255,0.08);
-      border-radius: 12px;
-      cursor: pointer;
-      text-align: left;
-      transition: all 0.18s;
-      color: var(--text);
-      font-family: 'Syne', sans-serif;
-      font-size: 14px;
-      line-height: 1.5;
-      width: 100%;
-    }
-
-    .option-btn:hover {
-      border-color: rgba(0,220,180,0.3);
-      background: rgba(0,220,180,0.05);
-    }
-
-    .option-btn.selected {
-      border-color: var(--accent);
-      background: rgba(0,220,180,0.1);
-      box-shadow: 0 0 0 1px rgba(0,220,180,0.3);
-    }
-
-    .option-key {
-      width: 28px; height: 28px;
-      min-width: 28px;
-      border-radius: 7px;
-      border: 1px solid rgba(255,255,255,0.12);
-      background: var(--surface2);
-      display: flex; align-items: center; justify-content: center;
-      font-size: 12px;
-      font-weight: 700;
-      font-family: 'Space Mono', monospace;
-      color: var(--muted);
-      margin-top: 1px;
-      transition: all 0.18s;
-    }
-
-    .option-btn.selected .option-key {
-      background: var(--accent);
-      border-color: var(--accent);
-      color: #05070f;
     }
 
     /* ===================== CODING QUESTION UI ===================== */
@@ -606,7 +576,7 @@
 
     .code-editor {
       width: 100%;
-      min-height: 220px;
+      min-height: 280px;
       padding: 16px;
       background: transparent;
       border: none;
@@ -770,8 +740,8 @@
 
     .qmap-grid {
       display: grid;
-      grid-template-columns: repeat(7, 1fr);
-      gap: 5px;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 6px;
     }
 
     .qmap-btn {
@@ -780,7 +750,7 @@
       border: 1px solid rgba(255,255,255,0.08);
       background: var(--bg);
       color: var(--muted);
-      font-size: 10px;
+      font-size: 11px;
       font-weight: 700;
       font-family: 'Space Mono', monospace;
       cursor: pointer;
@@ -789,22 +759,44 @@
     }
 
     .qmap-btn:hover { border-color: var(--accent); color: var(--accent); }
-    .qmap-btn.answered { background: rgba(0,220,180,0.15); border-color: rgba(0,220,180,0.4); color: var(--accent); }
     .qmap-btn.coding-answered { background: rgba(124,58,237,0.15); border-color: rgba(124,58,237,0.4); color: #a78bfa; }
     .qmap-btn.active { background: var(--accent); border-color: var(--accent); color: #05070f; }
     .qmap-btn.coding-q { border-color: rgba(124,58,237,0.3); }
 
-    .qmap-legend {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      margin-top: 12px;
-      font-size: 11px;
-      color: var(--muted);
+    /* score summary card */
+    .score-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 16px;
     }
 
-    .legend-item { display: flex; align-items: center; gap: 5px; }
-    .legend-dot { width: 8px; height: 8px; border-radius: 3px; }
+    .score-card-title {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--muted);
+      margin-bottom: 12px;
+    }
+
+    .score-rows {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .score-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 12px;
+      font-family: 'Space Mono', monospace;
+    }
+
+    .score-row-lbl { color: var(--muted); }
+    .score-row-val { color: var(--accent); font-weight: 700; }
+    .score-total-val { color: #f1f5f9; font-size: 18px; font-weight: 800; }
 
     .violation-card {
       background: var(--surface);
@@ -1257,7 +1249,7 @@
       font-family: 'Space Mono', monospace;
     }
 
-    /* scrollbar styling for code editor and violation log */
+    /* scrollbar styling */
     ::-webkit-scrollbar { width: 4px; }
     ::-webkit-scrollbar-track { background: transparent; }
     ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 99px; }
@@ -1307,7 +1299,7 @@
     <button class="btn-primary" onclick="doLogin()">Start Assessment →</button>
 
     <div class="login-note">
-      <span></span>40 questions &nbsp;·&nbsp; 45 minutes &nbsp;·&nbsp; Anti-cheat monitoring active
+      <span></span>5 coding problems &nbsp;·&nbsp; 90 minutes &nbsp;·&nbsp; 20 marks each &nbsp;·&nbsp; Anti-cheat active
     </div>
   </div>
 </div>
@@ -1318,13 +1310,14 @@
     <div class="topbar-brand">⚡ Codivora</div>
     <div class="progress-wrap">
       <div class="progress-label">
-        <span id="progressLabel">Question 1 of 40</span>
+        <span id="progressLabel">Question 1 of 5</span>
         <span id="progressPct">0%</span>
       </div>
       <div class="progress-bar-bg">
         <div class="progress-bar-fill" id="progressBar"></div>
       </div>
     </div>
+    <div class="marks-box">🏆 100 Marks Total</div>
     <div class="strike-box">
       <span style="font-size:11px;letter-spacing:1px;text-transform:uppercase;">Strikes</span>
       <div class="strike-pips">
@@ -1338,16 +1331,17 @@
     </button>
     <div class="timer-box" id="timerBox">
       <div class="timer-dot"></div>
-      <span id="timerDisplay">45:00</span>
+      <span id="timerDisplay">90:00</span>
     </div>
   </div>
 
   <div class="test-layout">
     <div class="question-card">
       <div class="q-meta">
-        <div class="q-badge" id="qBadge">SDE — Intern</div>
+        <div class="q-badge coding-badge" id="qBadge">💻 Coding</div>
         <div class="q-category" id="qCat">—</div>
-        <div class="q-number" id="qNum">01/40</div>
+        <div class="q-number" id="qNum">01/05</div>
+        <div class="q-marks">20 Marks</div>
       </div>
       <div class="question-text" id="questionText">Loading...</div>
       <div id="questionBody"></div>
@@ -1371,17 +1365,11 @@
       <div class="qmap-card">
         <div class="qmap-title">Question Navigator</div>
         <div class="qmap-grid" id="qmapGrid"></div>
-        <div class="qmap-legend">
-          <div class="legend-item">
-            <div class="legend-dot" style="background:var(--accent);"></div> MCQ
-          </div>
-          <div class="legend-item">
-            <div class="legend-dot" style="background:#a78bfa;"></div> Coding
-          </div>
-          <div class="legend-item">
-            <div class="legend-dot" style="background:var(--surface2); border:1px solid rgba(255,255,255,0.1)"></div> Skipped
-          </div>
-        </div>
+      </div>
+
+      <div class="score-card">
+        <div class="score-card-title">📊 Score Breakdown</div>
+        <div class="score-rows" id="scoreRows"></div>
       </div>
 
       <div class="violation-card">
@@ -1407,27 +1395,22 @@
     <div class="calc-display" id="calcDisplay">0</div>
   </div>
   <div class="calc-grid">
-    <!-- Row 1 -->
     <button class="c-btn c-clear" onclick="calcClear()">AC</button>
     <button class="c-btn c-fn" onclick="calcFn('sign')">+/−</button>
     <button class="c-btn c-fn" onclick="calcFn('pct')">%</button>
     <button class="c-btn c-op" onclick="calcOp('/')">÷</button>
-    <!-- Row 2 -->
     <button class="c-btn c-num" onclick="calcNum('7')">7</button>
     <button class="c-btn c-num" onclick="calcNum('8')">8</button>
     <button class="c-btn c-num" onclick="calcNum('9')">9</button>
     <button class="c-btn c-op" onclick="calcOp('*')">×</button>
-    <!-- Row 3 -->
     <button class="c-btn c-num" onclick="calcNum('4')">4</button>
     <button class="c-btn c-num" onclick="calcNum('5')">5</button>
     <button class="c-btn c-num" onclick="calcNum('6')">6</button>
     <button class="c-btn c-op" onclick="calcOp('-')">−</button>
-    <!-- Row 4 -->
     <button class="c-btn c-num" onclick="calcNum('1')">1</button>
     <button class="c-btn c-num" onclick="calcNum('2')">2</button>
     <button class="c-btn c-num" onclick="calcNum('3')">3</button>
     <button class="c-btn c-op" onclick="calcOp('+')">+</button>
-    <!-- Row 5 -->
     <button class="c-btn c-num c-zero" onclick="calcNum('0')">0</button>
     <button class="c-btn c-num" onclick="calcDot()">.</button>
     <button class="c-btn c-eq" onclick="calcEq()">=</button>
@@ -1443,19 +1426,19 @@
   <div class="modal-box">
     <div class="modal-icon">📋</div>
     <div class="modal-title">Submit Assessment?</div>
-    <div class="modal-sub">Once submitted, you cannot go back. Review your answers before confirming.</div>
+    <div class="modal-sub">Once submitted, you cannot go back. Review your solutions before confirming.</div>
     <div class="modal-stats">
       <div class="stat-box">
-        <div class="stat-val" id="mAnswered">0</div>
-        <div class="stat-lbl">MCQ Done</div>
-      </div>
-      <div class="stat-box">
         <div class="stat-val" id="mCoding">0</div>
-        <div class="stat-lbl">Code Done</div>
+        <div class="stat-lbl">Attempted</div>
       </div>
       <div class="stat-box">
-        <div class="stat-val" id="mSkipped">40</div>
+        <div class="stat-val" id="mSkipped">5</div>
         <div class="stat-lbl">Skipped</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-val" id="mTotal">100</div>
+        <div class="stat-lbl">Max Marks</div>
       </div>
     </div>
     <div class="modal-btns">
@@ -1478,153 +1461,279 @@ const USERS = [
   { id: "CODIVORA", pass: "12345" }
 ];
 
-// MCQ questions
-const MCQ_QUESTIONS = [
-  { type:'mcq', cat: "Data Structures", q: "What is the time complexity of searching for an element in a balanced Binary Search Tree (BST)?", o: ["O(n)", "O(log n)", "O(n log n)", "O(1)"], a: 1 },
-  { type:'mcq', cat: "Algorithms", q: "Which sorting algorithm has the best average-case time complexity among the following?", o: ["Bubble Sort", "Selection Sort", "Merge Sort", "Insertion Sort"], a: 2 },
-  { type:'mcq', cat: "Data Structures", q: "Which data structure uses LIFO (Last In First Out) ordering?", o: ["Queue", "Stack", "Linked List", "Heap"], a: 1 },
-  { type:'mcq', cat: "OOP Concepts", q: "Which OOP principle allows a subclass to provide a specific implementation of a method already defined in its parent class?", o: ["Encapsulation", "Abstraction", "Overloading", "Overriding"], a: 3 },
-  { type:'mcq', cat: "Operating Systems", q: "What is a deadlock in operating systems?", o: ["A process that runs indefinitely", "Two or more processes waiting for each other to release resources", "A process with memory overflow", "A CPU scheduling issue"], a: 1 },
-  { type:'mcq', cat: "Databases", q: "Which SQL clause is used to filter records after grouping?", o: ["WHERE", "HAVING", "FILTER", "GROUP FILTER"], a: 1 },
-  { type:'mcq', cat: "Networking", q: "What does HTTP stand for?", o: ["HyperText Transfer Protocol", "HyperText Transmission Protocol", "High Transfer Text Protocol", "Hosted Text Transport Protocol"], a: 0 },
-  { type:'mcq', cat: "Algorithms", q: "What is the space complexity of a recursive Fibonacci function without memoization?", o: ["O(1)", "O(log n)", "O(n)", "O(2^n)"], a: 2 },
-  { type:'mcq', cat: "Data Structures", q: "Which traversal of a Binary Search Tree gives elements in sorted order?", o: ["Pre-order", "Post-order", "In-order", "Level-order"], a: 2 },
-  { type:'mcq', cat: "OOP Concepts", q: "In Java, which keyword prevents a class from being subclassed?", o: ["static", "abstract", "final", "sealed"], a: 2 },
-  { type:'mcq', cat: "Algorithms", q: "What algorithmic technique does Dynamic Programming primarily use to avoid redundant computations?", o: ["Divide and Conquer", "Memoization / Tabulation", "Greedy selection", "Backtracking"], a: 1 },
-  { type:'mcq', cat: "Data Structures", q: "What is the worst-case time complexity of QuickSort?", o: ["O(n log n)", "O(n²)", "O(n)", "O(log n)"], a: 1 },
-  { type:'mcq', cat: "Databases", q: "Which normal form eliminates transitive dependencies?", o: ["1NF", "2NF", "3NF", "BCNF"], a: 2 },
-  { type:'mcq', cat: "Operating Systems", q: "Which scheduling algorithm is most suitable for a time-sharing system?", o: ["FCFS", "SJF", "Round Robin", "Priority Scheduling"], a: 2 },
-  { type:'mcq', cat: "Networking", q: "Which layer of the OSI model is responsible for end-to-end communication and error detection?", o: ["Network Layer", "Transport Layer", "Data Link Layer", "Session Layer"], a: 1 },
-  { type:'mcq', cat: "Data Structures", q: "An array has O(1) access by index. What is the time complexity of inserting at the beginning of a dynamic array?", o: ["O(1)", "O(log n)", "O(n)", "O(n²)"], a: 2 },
-  { type:'mcq', cat: "Algorithms", q: "Which of the following is NOT a greedy algorithm?", o: ["Kruskal's MST", "Dijkstra's Shortest Path", "0/1 Knapsack", "Activity Selection"], a: 2 },
-  { type:'mcq', cat: "OOP Concepts", q: "What is the difference between an abstract class and an interface in modern languages like Java/C#?", o: ["Abstract classes can have method bodies; interfaces (traditionally) cannot", "Interfaces support multiple inheritance; abstract classes do not allow it", "Both A and B", "There is no difference"], a: 2 },
-  { type:'mcq', cat: "System Design", q: "Which caching strategy writes data to cache and the database simultaneously?", o: ["Cache-Aside", "Write-Through", "Write-Back", "Read-Through"], a: 1 },
-  { type:'mcq', cat: "Version Control", q: "What does `git rebase` do compared to `git merge`?", o: ["Creates a merge commit", "Re-applies commits on top of another branch, producing a linear history", "Deletes the source branch", "Reverses the last commit"], a: 1 },
-  { type:'mcq', cat: "Data Structures", q: "What data structure is most efficient for implementing a priority queue?", o: ["Array", "Linked List", "Binary Heap", "Hash Table"], a: 2 },
-  { type:'mcq', cat: "Algorithms", q: "What is the time complexity of binary search on a sorted array of n elements?", o: ["O(n)", "O(n²)", "O(log n)", "O(1)"], a: 2 },
-  { type:'mcq', cat: "Databases", q: "What is an index in a database?", o: ["A copy of a table", "A data structure that speeds up data retrieval", "A foreign key constraint", "A stored procedure"], a: 1 },
-  { type:'mcq', cat: "Operating Systems", q: "Which memory management technique allows a process to execute even if it is not completely in memory?", o: ["Paging", "Segmentation", "Virtual Memory", "Swapping"], a: 2 },
-  { type:'mcq', cat: "Networking", q: "What is the purpose of the ARP (Address Resolution Protocol)?", o: ["Assigns IP addresses dynamically", "Resolves IP addresses to MAC addresses", "Routes packets between networks", "Encrypts data in transit"], a: 1 },
-  { type:'mcq', cat: "Data Structures", q: "What is the amortized time complexity of push and pop operations in a dynamic array (like ArrayList)?", o: ["O(n)", "O(log n)", "O(1) amortized", "O(n log n)"], a: 2 },
-  { type:'mcq', cat: "System Design", q: "What is the CAP theorem in distributed systems?", o: ["A system can guarantee Consistency, Availability, and Partition Tolerance simultaneously", "A distributed system can guarantee at most two of: Consistency, Availability, Partition Tolerance", "CAP refers to CPU, Architecture, and Performance", "A theorem about cache invalidation"], a: 1 },
-  { type:'mcq', cat: "OOP Concepts", q: "Which design pattern ensures only one instance of a class exists throughout the application?", o: ["Factory", "Observer", "Singleton", "Decorator"], a: 2 },
-  { type:'mcq', cat: "Algorithms", q: "In graph algorithms, BFS is preferred over DFS for finding the shortest path in an unweighted graph because:", o: ["BFS uses less memory", "BFS visits nodes level by level, guaranteeing shortest path", "DFS cannot handle cycles", "BFS has lower time complexity"], a: 1 },
-  { type:'mcq', cat: "Data Structures", q: "What is a hash collision and how can it be resolved?", o: ["When two keys have the same value; resolved by deleting one", "When two different keys produce the same hash; resolved by chaining or open addressing", "When a hash table is full; resolved by resizing only", "Hash collisions cannot occur in practice"], a: 1 },
-  { type:'mcq', cat: "Version Control", q: "What is the purpose of a `.gitignore` file?", o: ["It ignores all git commands", "It specifies files and directories Git should not track", "It stores the commit history", "It merges branches automatically"], a: 1 },
-  { type:'mcq', cat: "System Design", q: "Which HTTP method is idempotent and should be used for updating a resource?", o: ["POST", "GET", "PUT", "DELETE"], a: 2 },
-  { type:'mcq', cat: "Algorithms", q: "What is the time complexity of inserting an element into a Hash Table on average?", o: ["O(n)", "O(log n)", "O(1)", "O(n²)"], a: 2 },
-  { type:'mcq', cat: "Operating Systems", q: "What is the difference between a process and a thread?", o: ["Threads have their own memory space; processes share memory", "Processes have their own memory space; threads share memory within a process", "They are identical concepts", "Processes are faster than threads"], a: 1 },
-  { type:'mcq', cat: "Databases", q: "What does ACID stand for in database transactions?", o: ["Atomicity, Consistency, Isolation, Durability", "Accuracy, Concurrency, Integrity, Distribution", "Atomicity, Concurrency, Isolation, Distribution", "Availability, Consistency, Integrity, Durability"], a: 0 }
-];
+const MARKS_PER_Q = 20;
+const TOTAL_MARKS = 100;
 
-// Coding questions
-const CODING_QUESTIONS = [
+const QUESTIONS = [
   {
     type: 'coding',
-    cat: 'Coding Challenge',
-    difficulty: 'easy',
-    lang: 'Python / Java / C++',
-    q: 'Reverse a String',
-    problem: 'Write a function that takes a string as input and returns the string reversed. Do not use any built-in reverse functions.',
-    examples: [
-      { input: '"hello"', output: '"olleh"' },
-      { input: '"Codivora"', output: '"arovidor"' }
-    ],
-    constraints: '1 ≤ len(s) ≤ 10⁵ | String contains only printable ASCII characters',
-    placeholder: `# Write your solution here\ndef reverse_string(s):\n    # TODO: implement\n    pass\n\n# Example usage\nprint(reverse_string("hello"))  # Expected: "olleh"`
-  },
-  {
-    type: 'coding',
-    cat: 'Coding Challenge',
-    difficulty: 'easy',
-    lang: 'Python / Java / C++',
-    q: 'Two Sum',
-    problem: 'Given an array of integers nums and an integer target, return the indices of the two numbers such that they add up to target. You may assume that each input would have exactly one solution, and you may not use the same element twice.',
-    examples: [
-      { input: 'nums = [2,7,11,15], target = 9', output: '[0, 1]' },
-      { input: 'nums = [3,2,4], target = 6', output: '[1, 2]' }
-    ],
-    constraints: '2 ≤ nums.length ≤ 10⁴ | Only one valid answer exists | −10⁹ ≤ nums[i] ≤ 10⁹',
-    placeholder: `# Write your solution here\ndef two_sum(nums, target):\n    # TODO: implement using O(n) approach\n    pass\n\n# Example usage\nprint(two_sum([2,7,11,15], 9))  # Expected: [0, 1]`
-  },
-  {
-    type: 'coding',
-    cat: 'Coding Challenge',
-    difficulty: 'medium',
-    lang: 'Python / Java / C++',
-    q: 'Valid Parentheses',
-    problem: 'Given a string s containing only the characters \'(\', \')\', \'{\', \'}\', \'[\' and \']\', determine if the input string is valid. A string is valid if: open brackets are closed by the same type of brackets, and open brackets are closed in the correct order.',
-    examples: [
-      { input: 's = "([]{})"', output: 'True' },
-      { input: 's = "([)]"', output: 'False' }
-    ],
-    constraints: '1 ≤ s.length ≤ 10⁴ | s consists of brackets only',
-    placeholder: `# Write your solution here\ndef is_valid(s):\n    # Hint: Think about using a Stack\n    pass\n\n# Example usage\nprint(is_valid("()[]{}"))  # Expected: True\nprint(is_valid("([)]"))    # Expected: False`
-  },
-  {
-    type: 'coding',
-    cat: 'Coding Challenge',
-    difficulty: 'medium',
-    lang: 'Python / Java / C++',
-    q: 'Find the Duplicate Number',
-    problem: 'Given an array nums containing n + 1 integers where each integer is in the range [1, n] inclusive, there is exactly one repeated number. Find and return that number. You must solve it without modifying the array and using only O(1) extra space.',
-    examples: [
-      { input: 'nums = [1,3,4,2,2]', output: '2' },
-      { input: 'nums = [3,1,3,4,2]', output: '3' }
-    ],
-    constraints: '1 ≤ n ≤ 10⁵ | nums.length == n + 1 | 1 ≤ nums[i] ≤ n | Only one duplicate exists | O(1) extra space required',
-    placeholder: `# Write your solution here\n# Hint: Consider Floyd's Tortoise and Hare cycle detection\ndef find_duplicate(nums):\n    # TODO: implement\n    pass\n\n# Example usage\nprint(find_duplicate([1,3,4,2,2]))  # Expected: 2`
-  },
-  {
-    type: 'coding',
-    cat: 'Coding Challenge',
+    cat: 'Advanced Graphs',
     difficulty: 'hard',
     lang: 'Python / Java / C++',
-    q: 'Longest Substring Without Repeating Characters',
-    problem: 'Given a string s, find the length of the longest substring without repeating characters. A substring is a contiguous non-empty sequence of characters within a string.',
+    q: 'Minimum Cost to Connect All Cities (Steiner Tree Variant)',
+    problem: `You are given n cities (1-indexed) and a list of bidirectional roads, each with a cost. Additionally, you have a list of k "special" cities that must all be interconnected. Find the minimum cost subgraph (not necessarily a spanning tree of all n cities) such that all k special cities are reachable from one another. Return -1 if it is impossible.
+
+This is a Steiner Tree problem. Use bitmask DP over subsets of special cities combined with shortest-path precomputation (Floyd-Warshall or Dijkstra per node) to solve this optimally.
+
+Formally: dp[S][v] = minimum cost to connect the subset S of special cities, with v as the "root" of that subtree.`,
     examples: [
-      { input: 's = "abcabcbb"', output: '3   (substring: "abc")' },
-      { input: 's = "pwwkew"', output: '3   (substring: "wke")' }
+      { input: 'n=5, edges=[[1,2,3],[2,3,1],[3,4,6],[4,5,2],[1,5,9]], specials=[1,3,5]', output: '12' },
+      { input: 'n=4, edges=[[1,2,1],[2,3,1],[3,4,1]], specials=[1,4]', output: '3' }
     ],
-    constraints: '0 ≤ s.length ≤ 5 × 10⁴ | s consists of English letters, digits, symbols and spaces | Expected time complexity: O(n)',
-    placeholder: `# Write your solution here\n# Hint: Use a sliding window with a HashSet\ndef length_of_longest_substring(s):\n    # TODO: implement\n    pass\n\n# Example usage\nprint(length_of_longest_substring("abcabcbb"))  # Expected: 3\nprint(length_of_longest_substring("bbbbb"))     # Expected: 1`
+    constraints: `1 ≤ n ≤ 200 | 1 ≤ edges ≤ 2000 | 1 ≤ k ≤ 10 (special cities) | Edge costs: 1 ≤ w ≤ 10⁵ | Time: O(3^k · n + 2^k · n² + n³)`,
+    placeholder: `# Steiner Tree with Bitmask DP
+# dp[mask][v] = min cost to interconnect cities in 'mask', rooted at v
+
+import heapq
+from math import inf
+
+def steiner_tree(n, edges, specials):
+    k = len(specials)
+    # Build adjacency list
+    graph = [[] for _ in range(n + 1)]
+    for u, v, w in edges:
+        graph[u].append((v, w))
+        graph[v].append((u, w))
+    
+    # TODO: Initialize dp table
+    # dp[mask][v] for mask in range(1 << k), v in range(1, n+1)
+    
+    # TODO: Base case — single special city subsets
+    
+    # TODO: Dijkstra relaxation for each mask
+    
+    # TODO: Combine two disjoint subsets
+    
+    # TODO: Return min over all nodes for full mask (1<<k)-1
+    pass
+
+# Example usage
+print(steiner_tree(5, [[1,2,3],[2,3,1],[3,4,6],[4,5,2],[1,5,9]], [1,3,5]))  # 12`
+  },
+  {
+    type: 'coding',
+    cat: 'Dynamic Programming',
+    difficulty: 'hard',
+    lang: 'Python / Java / C++',
+    q: 'Palindrome Partitioning IV — Minimum Cuts with At Most K Distinct Characters Per Part',
+    problem: `Given a string s of length n, partition it into exactly p parts such that:
+1. Each part is a palindrome, AND
+2. Each part contains at most k distinct characters.
+
+Return the minimum number of cuts needed to achieve such a partition, or -1 if impossible.
+
+You must combine palindrome-interval DP (O(n²) Manacher-style precomputation of isPalin[i][j]) with a knapsack-style partition DP that tracks distinct character counts per segment. Naive O(n³) solutions will TLE for n > 2000.`,
+    examples: [
+      { input: 's="aabbc", p=3, k=2', output: '2  (cuts: "aa"|"bb"|"c" — all palindromes, ≤2 distinct each)' },
+      { input: 's="abcba", p=2, k=3', output: '1  (cuts: "abcba" is palindrome with 3 distinct — valid as 1 part, but p=2 requires exactly 2 parts — answer: 1 cut into "a"|"bcb" both palindromes ≤3 distinct)' }
+    ],
+    constraints: `1 ≤ n ≤ 3000 | 1 ≤ p ≤ n | 1 ≤ k ≤ 26 | s consists of lowercase English letters | Expected: O(n² · p) time`,
+    placeholder: `# Palindrome Partitioning IV
+# Step 1: Precompute isPalin[i][j] using DP or Manacher expansion — O(n²)
+# Step 2: Precompute distinctCount[i][j] using prefix frequency arrays — O(n²)
+# Step 3: DP: dp[i][t] = min cuts to partition s[0..i-1] into exactly t valid parts
+
+def min_cuts_palindrome_k_distinct(s, p, k):
+    n = len(s)
+    INF = float('inf')
+    
+    # TODO: Precompute isPalin[i][j]
+    
+    # TODO: Precompute distinct[i][j] = number of distinct chars in s[i..j]
+    
+    # TODO: dp[i][t] = min cuts for s[0..i] using exactly t parts
+    # Transition: dp[j][t] = min(dp[i][t-1] + 1) for all i < j
+    #             where isPalin[i+1][j] and distinct[i+1][j] <= k
+    
+    # TODO: Return dp[n-1][p] or -1 if INF
+    pass
+
+print(min_cuts_palindrome_k_distinct("aabbc", 3, 2))  # 2`
+  },
+  {
+    type: 'coding',
+    cat: 'Data Structures',
+    difficulty: 'hard',
+    lang: 'Python / Java / C++',
+    q: 'Persistent Segment Tree — Range Sum with Point Updates on Historical Versions',
+    problem: `Implement a Persistent Segment Tree that supports:
+- update(version, idx, val): Creates a new version of the tree from 'version' with index idx set to val. Returns the new version ID.
+- query(version, l, r): Returns the sum of elements in range [l, r] in the given version.
+- rollback(version): Makes the given historical version the "current" working version.
+
+All versions are immutable — each update creates a new root, sharing unchanged nodes with the previous version (path copying). The tree must handle up to 10⁵ updates and 10⁵ queries over an array of size up to 10⁵ in O(log n) per operation and O(n + Q log n) total space.`,
+    examples: [
+      { input: 'n=6, ops: update(0,2,5), update(1,4,3), query(1,1,4), query(2,1,4)', output: 'query(1,1,4)=5 | query(2,1,4)=8' },
+      { input: 'rollback to v1 then query(1,1,6)', output: '5  (v2 changes not visible)' }
+    ],
+    constraints: `1 ≤ n ≤ 10⁵ | 1 ≤ Q ≤ 10⁵ | 0 ≤ val ≤ 10⁹ | Each update: O(log n) new nodes | Total space: O(n + Q log n)`,
+    placeholder: `# Persistent Segment Tree Implementation
+
+class Node:
+    def __init__(self, left=None, right=None, val=0):
+        self.left = left
+        self.right = right
+        self.val = val
+
+class PersistentSegTree:
+    def __init__(self, n):
+        self.n = n
+        self.versions = []
+        # Build initial version (all zeros)
+        self.versions.append(self._build(0, n - 1))
+    
+    def _build(self, l, r):
+        # TODO: Build zero-initialized tree, return root node
+        pass
+    
+    def update(self, version, idx, val):
+        # TODO: Path-copy from versions[version], update idx, append new root
+        # Return new version id
+        pass
+    
+    def _update(self, node, l, r, idx, val):
+        # TODO: Recursive path-copy update
+        pass
+    
+    def query(self, version, l, r):
+        # TODO: Query sum in [l, r] on versions[version]
+        pass
+    
+    def _query(self, node, l, r, ql, qr):
+        # TODO: Recursive range sum query
+        pass
+    
+    def rollback(self, version):
+        # TODO: Push versions[version] as the new "current" working version
+        pass
+
+# Example usage
+pst = PersistentSegTree(6)
+v1 = pst.update(0, 2, 5)
+v2 = pst.update(v1, 4, 3)
+print(pst.query(v1, 1, 4))  # 5
+print(pst.query(v2, 1, 4))  # 8`
+  },
+  {
+    type: 'coding',
+    cat: 'String Algorithms',
+    difficulty: 'hard',
+    lang: 'Python / Java / C++',
+    q: 'Aho-Corasick Automaton — Multi-Pattern Matching with Wildcard Support',
+    problem: `Build an Aho-Corasick automaton over a dictionary of p pattern strings. Then, given a text string T of length n, find all starting positions in T where any pattern occurs, where patterns may contain the wildcard character '?' which matches any single character.
+
+Your implementation must:
+1. Build the trie and compute failure links — O(total pattern length · alphabet size).
+2. Extend goto transitions to handle '?' wildcards during trie construction (a '?' node branches to all 26 children simultaneously).
+3. Process text T in O(n · 26) worst case to output all (pattern_id, start_position) matches.
+
+Return a sorted list of (start_index, pattern_index) pairs (0-indexed).`,
+    examples: [
+      { input: 'patterns=["a?c","bc"], text="abcbcd"', output: '[(0,0),(1,1),(3,1)]  — "a?c" matches at 0 ("abc"), "bc" matches at 1 and 3' },
+      { input: 'patterns=["?b","ab"], text="ababab"', output: '[(0,0),(0,1),(2,0),(2,1),(4,0),(4,1)]' }
+    ],
+    constraints: `1 ≤ p ≤ 500 | 1 ≤ |pattern| ≤ 100 | 1 ≤ n ≤ 10⁵ | Patterns contain lowercase letters and '?' | Text contains only lowercase letters`,
+    placeholder: `# Aho-Corasick with Wildcard '?' support
+from collections import deque
+
+class AhoCorasick:
+    def __init__(self):
+        # goto[node][char] = next node (-1 = not set)
+        self.goto = [{}]
+        self.fail = [0]
+        self.output = [[]]  # pattern ids ending at this node
+    
+    def insert(self, pattern, pid):
+        # TODO: Insert pattern into trie
+        # '?' during construction: create a meta-node that links to all 26 chars
+        pass
+    
+    def build(self):
+        # TODO: BFS to compute failure links
+        # Also propagate output sets through failure links
+        pass
+    
+    def search(self, text):
+        # TODO: Process text char-by-char through automaton
+        # Collect all (start_pos, pattern_id) matches
+        pass
+
+def multi_pattern_wildcard(patterns, text):
+    ac = AhoCorasick()
+    for i, p in enumerate(patterns):
+        ac.insert(p, i)
+    ac.build()
+    return sorted(ac.search(text))
+
+# Example usage
+print(multi_pattern_wildcard(["a?c","bc"], "abcbcd"))
+# Expected: [(0,0),(1,1),(3,1)]`
+  },
+  {
+    type: 'coding',
+    cat: 'Competitive Programming',
+    difficulty: 'hard',
+    lang: 'Python / Java / C++',
+    q: 'Online Convex Hull Trick — Minimum Cost DP with Line Container',
+    problem: `You are given an array of n tasks. Task i has a processing_time[i] and a deadline[i]. If you schedule tasks in a contiguous batch from index i to j, the cost of that batch is:
+
+  cost(i, j) = (sum of processing_time[i..j])² + C
+
+where C is a fixed setup cost. Find the minimum total cost to partition all n tasks into contiguous batches, using the Convex Hull Trick (CHT) / Li Chao tree to achieve O(n log n) instead of O(n²).
+
+This is a classic "slope trick" DP: dp[j] = min over i<j of { dp[i] + (prefix[j] - prefix[i])² + C }. Expanding: dp[j] = dp[i] + prefix[j]² - 2·prefix[j]·prefix[i] + prefix[i]² + C. This fits the CHT form y = m·x + b where lines are parameterized by i and queries by j.`,
+    examples: [
+      { input: 'processing_time=[3,1,4,1,5,9,2,6], C=10', output: '131  (optimal batching minimizes squared sums + setup costs)' },
+      { input: 'processing_time=[1,1,1,1], C=5', output: '21  (four batches of 1: 4×(1²+5)=24 vs two batches of 2: 2×(4+5)=18 vs one batch: 16+5=21 → 21)' }
+    ],
+    constraints: `1 ≤ n ≤ 10⁶ | 1 ≤ processing_time[i] ≤ 10⁴ | 0 ≤ C ≤ 10⁹ | Prefix sums ≤ 10¹⁰ — use 64-bit integers | Expected: O(n log n) with Li Chao tree or O(n) with monotone CHT`,
+    placeholder: `# Convex Hull Trick DP — O(n log n) with Li Chao Tree
+# OR O(n) with monotone deque CHT (since queries are monotonically increasing)
+
+import sys
+from math import inf
+
+def min_batch_cost(proc_times, C):
+    n = len(proc_times)
+    prefix = [0] * (n + 1)
+    for i in range(n):
+        prefix[i+1] = prefix[i] + proc_times[i]
+    
+    # dp[j] = min cost to schedule first j tasks
+    dp = [inf] * (n + 1)
+    dp[0] = 0
+    
+    # CHT Line: for each i, line has slope m = -2*prefix[i]
+    # and intercept b = dp[i] + prefix[i]^2 + C
+    # Query at x = prefix[j]: dp[j] = min(m*x + b) + prefix[j]^2
+    
+    # TODO: Implement Li Chao Tree or monotone deque CHT
+    # Li Chao Tree supports arbitrary query order (O(n log n))
+    # Monotone deque works here since prefix is non-decreasing (O(n))
+    
+    class Line:
+        def __init__(self, m, b):
+            self.m = m
+            self.b = b
+        def eval(self, x):
+            return self.m * x + self.b
+    
+    # TODO: Add lines and query minimum
+    
+    return dp[n]
+
+# Example usage
+print(min_batch_cost([3,1,4,1,5,9,2,6], 10))   # 131
+print(min_batch_cost([1,1,1,1], 5))              # 21`
   }
 ];
 
-// Interleave coding questions into MCQ list
-// Insert coding Qs at positions 7, 15, 22, 29, 36 (0-indexed)
-const QUESTIONS = [];
-let mcqIdx = 0;
-let codingIdx = 0;
-const codingInsertAfter = new Set([6, 13, 20, 27, 34]); // insert coding after these MCQ-relative indices
-
-let tempMcq = [...MCQ_QUESTIONS];
-let tempCoding = [...CODING_QUESTIONS];
-
-// Build interleaved: after every ~7 MCQs, insert a coding question
-const insertPattern = [7, 7, 7, 7, 7]; // insert coding after every 7 mcqs
-let mPos = 0;
-let cPos = 0;
-insertPattern.forEach((count, segment) => {
-  for (let i = 0; i < count && mPos < tempMcq.length; i++) {
-    QUESTIONS.push(tempMcq[mPos++]);
-  }
-  if (cPos < tempCoding.length) {
-    QUESTIONS.push(tempCoding[cPos++]);
-  }
-});
-// Add remaining MCQs
-while (mPos < tempMcq.length) QUESTIONS.push(tempMcq[mPos++]);
-
 const TOTAL = QUESTIONS.length;
-const KEYS = ['A','B','C','D'];
 let current = 0;
-let answers = new Array(TOTAL).fill(null);
 let codeAnswers = new Array(TOTAL).fill('');
-let totalTime = 45 * 60;
+let totalTime = 90 * 60;
 let timerInt = null;
 let camStream = null;
-
 let strikes = 0;
 const MAX_STRIKES = 3;
 let violationLog = [];
@@ -1645,6 +1754,7 @@ function doLogin() {
   testActive = true;
   startCam();
   buildQMap();
+  buildScoreRows();
   renderQ();
   startTimer();
   requestFullscreen();
@@ -1674,8 +1784,8 @@ function startTimer() {
       String(m).padStart(2,'0') + ':' + String(s).padStart(2,'0');
     const box = document.getElementById('timerBox');
     box.className = 'timer-box';
-    if (totalTime <= 300) box.classList.add('warn');
-    if (totalTime <= 60) box.classList.add('danger');
+    if (totalTime <= 600) box.classList.add('warn');
+    if (totalTime <= 120) box.classList.add('danger');
     if (totalTime <= 0) { clearInterval(timerInt); finalSubmit(); }
   }, 1000);
 }
@@ -1686,7 +1796,7 @@ function buildQMap() {
   grid.innerHTML = '';
   QUESTIONS.forEach((q, i) => {
     const btn = document.createElement('button');
-    btn.className = 'qmap-btn' + (i === 0 ? ' active' : '') + (q.type === 'coding' ? ' coding-q' : '');
+    btn.className = 'qmap-btn coding-q' + (i === 0 ? ' active' : '');
     btn.textContent = i + 1;
     btn.id = 'qm' + i;
     btn.onclick = () => { current = i; renderQ(); };
@@ -1694,29 +1804,54 @@ function buildQMap() {
   });
 }
 
+function buildScoreRows() {
+  const container = document.getElementById('scoreRows');
+  container.innerHTML = '';
+  QUESTIONS.forEach((q, i) => {
+    const row = document.createElement('div');
+    row.className = 'score-row';
+    row.innerHTML = `<span class="score-row-lbl">Q${i+1}: ${q.q.length > 22 ? q.q.substring(0,22)+'…' : q.q}</span><span class="score-row-val" id="scoreQ${i}">—/20</span>`;
+    container.appendChild(row);
+  });
+  const divider = document.createElement('div');
+  divider.style.cssText = 'border-top:1px solid rgba(255,255,255,0.07);margin:8px 0';
+  container.appendChild(divider);
+  const total = document.createElement('div');
+  total.className = 'score-row';
+  total.innerHTML = `<span class="score-row-lbl" style="font-weight:700;color:var(--text)">Total</span><span class="score-row-val score-total-val" id="scoreTotalDisp">0/100</span>`;
+  container.appendChild(total);
+}
+
 function updateQMap() {
   QUESTIONS.forEach((q, i) => {
     const btn = document.getElementById('qm' + i);
-    btn.className = 'qmap-btn' + (q.type === 'coding' ? ' coding-q' : '');
-    if (q.type === 'coding') {
-      if (codeAnswers[i] && codeAnswers[i].trim().length > 10) btn.classList.add('coding-answered');
-    } else {
-      if (answers[i] !== null) btn.classList.add('answered');
-    }
+    btn.className = 'qmap-btn coding-q';
+    if (codeAnswers[i] && codeAnswers[i].trim().length > 10) btn.classList.add('coding-answered');
     if (i === current) btn.classList.add('active');
   });
+  updateScoreRows();
+}
+
+function updateScoreRows() {
+  let totalAttempted = 0;
+  QUESTIONS.forEach((q, i) => {
+    const el = document.getElementById('scoreQ' + i);
+    if (el) {
+      const attempted = codeAnswers[i] && codeAnswers[i].trim().length > 10;
+      el.textContent = attempted ? '?/20' : '—/20';
+      el.style.color = attempted ? 'var(--warn)' : 'var(--muted)';
+      if (attempted) totalAttempted++;
+    }
+  });
+  const tot = document.getElementById('scoreTotalDisp');
+  if (tot) {
+    tot.textContent = totalAttempted + ' attempted / 100 max';
+  }
 }
 
 // ===================== RENDER QUESTION =====================
 function renderQ() {
   const qd = QUESTIONS[current];
-  const isCoding = qd.type === 'coding';
-
-  // Badge
-  const badge = document.getElementById('qBadge');
-  badge.textContent = isCoding ? '💻 Coding' : 'SDE — Intern';
-  badge.className = isCoding ? 'q-badge coding-badge' : 'q-badge';
-
   document.getElementById('qCat').textContent = qd.cat;
   document.getElementById('qNum').textContent =
     String(current + 1).padStart(2,'0') + '/' + TOTAL;
@@ -1728,31 +1863,12 @@ function renderQ() {
   document.getElementById('progressBar').style.width = pct + '%';
 
   const body = document.getElementById('questionBody');
-
-  if (isCoding) {
-    renderCodingQ(qd, body, current);
-  } else {
-    renderMCQ(qd, body);
-  }
+  renderCodingQ(qd, body, current);
 
   document.getElementById('btnNext').classList.toggle('hidden', current === TOTAL - 1);
   document.getElementById('btnSubmit').classList.toggle('hidden', current !== TOTAL - 1);
 
   updateQMap();
-}
-
-function renderMCQ(qd, container) {
-  container.innerHTML = '';
-  const grid = document.createElement('div');
-  grid.className = 'options-grid';
-  qd.o.forEach((opt, i) => {
-    const btn = document.createElement('button');
-    btn.className = 'option-btn' + (answers[current] === i ? ' selected' : '');
-    btn.innerHTML = `<div class="option-key">${KEYS[i]}</div><div>${opt}</div>`;
-    btn.onclick = () => selectAnswer(i);
-    grid.appendChild(btn);
-  });
-  container.appendChild(grid);
 }
 
 function renderCodingQ(qd, container, idx) {
@@ -1800,7 +1916,6 @@ function renderCodingQ(qd, container, idx) {
     </div>
   `;
 
-  // Attach listeners — allow typing in code editor
   const editor = document.getElementById('codeEditor_' + idx);
   if (editor) {
     editor.addEventListener('input', () => {
@@ -1812,7 +1927,6 @@ function renderCodingQ(qd, container, idx) {
       updateQMap();
     });
 
-    // Allow Tab key in editor
     editor.addEventListener('keydown', e => {
       if (e.key === 'Tab') {
         e.preventDefault();
@@ -1836,11 +1950,6 @@ function clearCode(idx) {
   updateQMap();
 }
 
-function selectAnswer(i) {
-  answers[current] = i;
-  renderQ();
-}
-
 function goPrev() {
   if (current > 0) { current--; renderQ(); }
 }
@@ -1851,12 +1960,11 @@ function goNext() {
 
 // ===================== SUBMIT =====================
 function openModal() {
-  const mcqAns = answers.filter((a, i) => QUESTIONS[i].type === 'mcq' && a !== null).length;
-  const codingAns = codeAnswers.filter((c, i) => QUESTIONS[i].type === 'coding' && c && c.trim().length > 10).length;
-  const skipped = TOTAL - mcqAns - codingAns;
-  document.getElementById('mAnswered').textContent = mcqAns;
-  document.getElementById('mCoding').textContent = codingAns;
+  const attempted = codeAnswers.filter(c => c && c.trim().length > 10).length;
+  const skipped = TOTAL - attempted;
+  document.getElementById('mCoding').textContent = attempted;
   document.getElementById('mSkipped').textContent = skipped;
+  document.getElementById('mTotal').textContent = '100';
   document.getElementById('submitModal').classList.remove('hidden');
 }
 
@@ -1880,59 +1988,40 @@ function finalSubmit() {
 
 // ===================== CALCULATOR =====================
 let calcState = {
-  display: '0',
-  expr: '',
-  prevVal: null,
-  pendingOp: null,
-  waitingForOperand: false,
-  history: []
+  display: '0', expr: '', prevVal: null, pendingOp: null,
+  waitingForOperand: false, history: []
 };
 
 function toggleCalculator() {
-  const panel = document.getElementById('calcPanel');
-  panel.classList.toggle('hidden');
+  document.getElementById('calcPanel').classList.toggle('hidden');
 }
 
 function updateCalcDisplay() {
-  const d = document.getElementById('calcDisplay');
-  d.textContent = calcState.display;
-  d.className = 'calc-display';
+  document.getElementById('calcDisplay').textContent = calcState.display;
   document.getElementById('calcExpr').textContent = calcState.expr;
 }
 
 function calcNum(n) {
-  if (calcState.waitingForOperand) {
-    calcState.display = n;
-    calcState.waitingForOperand = false;
-  } else {
-    calcState.display = calcState.display === '0' ? n : calcState.display + n;
-  }
+  if (calcState.waitingForOperand) { calcState.display = n; calcState.waitingForOperand = false; }
+  else { calcState.display = calcState.display === '0' ? n : calcState.display + n; }
   if (calcState.display.length > 12) calcState.display = calcState.display.slice(0, 12);
   updateCalcDisplay();
 }
 
 function calcDot() {
-  if (calcState.waitingForOperand) {
-    calcState.display = '0.';
-    calcState.waitingForOperand = false;
-  } else if (!calcState.display.includes('.')) {
-    calcState.display += '.';
-  }
+  if (calcState.waitingForOperand) { calcState.display = '0.'; calcState.waitingForOperand = false; }
+  else if (!calcState.display.includes('.')) { calcState.display += '.'; }
   updateCalcDisplay();
 }
 
 function calcOp(op) {
   const val = parseFloat(calcState.display);
   const opSymbols = { '+': '+', '-': '−', '*': '×', '/': '÷' };
-
   if (calcState.prevVal !== null && !calcState.waitingForOperand) {
     const result = compute(calcState.prevVal, val, calcState.pendingOp);
     calcState.display = formatResult(result);
     calcState.prevVal = result;
-  } else {
-    calcState.prevVal = val;
-  }
-
+  } else { calcState.prevVal = val; }
   calcState.expr = calcState.display + ' ' + opSymbols[op];
   calcState.pendingOp = op;
   calcState.waitingForOperand = true;
@@ -1947,12 +2036,9 @@ function calcEq() {
   const histEntry = `${calcState.prevVal} ${opSymbols[calcState.pendingOp]} ${val} = ${formatResult(result)}`;
   calcState.history.unshift(histEntry);
   if (calcState.history.length > 5) calcState.history.pop();
-
   calcState.expr = histEntry;
   calcState.display = formatResult(result);
-  calcState.prevVal = null;
-  calcState.pendingOp = null;
-  calcState.waitingForOperand = true;
+  calcState.prevVal = null; calcState.pendingOp = null; calcState.waitingForOperand = true;
   updateCalcDisplay();
   renderCalcHistory();
 }
@@ -1974,11 +2060,8 @@ function formatResult(r) {
 }
 
 function calcClear() {
-  calcState.display = '0';
-  calcState.expr = '';
-  calcState.prevVal = null;
-  calcState.pendingOp = null;
-  calcState.waitingForOperand = false;
+  calcState.display = '0'; calcState.expr = ''; calcState.prevVal = null;
+  calcState.pendingOp = null; calcState.waitingForOperand = false;
   updateCalcDisplay();
 }
 
@@ -1998,60 +2081,40 @@ function renderCalcHistory() {
   }).join('');
 }
 
-// Make calculator draggable
+// Draggable calculator
 (function() {
-  let isDragging = false;
-  let startX, startY, initLeft, initTop;
-
+  let isDragging = false, startX, startY, initLeft, initTop;
   document.addEventListener('DOMContentLoaded', () => {
     const header = document.getElementById('calcHeader');
     const panel = document.getElementById('calcPanel');
-
     header.addEventListener('mousedown', e => {
-      isDragging = true;
-      panel.classList.add('dragging');
+      isDragging = true; panel.classList.add('dragging');
       const rect = panel.getBoundingClientRect();
-      startX = e.clientX;
-      startY = e.clientY;
-      initLeft = rect.left;
-      initTop = rect.top;
-      panel.style.bottom = 'auto';
-      panel.style.right = 'auto';
-      panel.style.left = initLeft + 'px';
-      panel.style.top = initTop + 'px';
+      startX = e.clientX; startY = e.clientY;
+      initLeft = rect.left; initTop = rect.top;
+      panel.style.bottom = 'auto'; panel.style.right = 'auto';
+      panel.style.left = initLeft + 'px'; panel.style.top = initTop + 'px';
       e.preventDefault();
     });
-
     document.addEventListener('mousemove', e => {
       if (!isDragging) return;
-      const dx = e.clientX - startX;
-      const dy = e.clientY - startY;
-      panel.style.left = (initLeft + dx) + 'px';
-      panel.style.top = (initTop + dy) + 'px';
+      panel.style.left = (initLeft + e.clientX - startX) + 'px';
+      panel.style.top = (initTop + e.clientY - startY) + 'px';
     });
-
-    document.addEventListener('mouseup', () => {
-      isDragging = false;
-      panel.classList.remove('dragging');
-    });
+    document.addEventListener('mouseup', () => { isDragging = false; panel.classList.remove('dragging'); });
   });
 })();
 
 // ===================== ANTI-CHEAT ENGINE =====================
 function initAntiCheat() {
   document.addEventListener('contextmenu', e => {
-    if (testActive) {
-      e.preventDefault();
-      showToast('⛔ Right-click is disabled during the assessment.');
-      logViolation('Right-click attempt');
-    }
+    if (testActive) { e.preventDefault(); showToast('⛔ Right-click is disabled during the assessment.'); logViolation('Right-click attempt'); }
   });
 
   ['copy', 'cut', 'paste'].forEach(evt => {
     document.addEventListener(evt, e => {
       if (!testActive) return;
       const target = e.target;
-      // Allow paste into code editor
       if (target && target.classList && target.classList.contains('code-editor')) return;
       e.preventDefault();
       showToast(`⛔ ${evt.charAt(0).toUpperCase() + evt.slice(1)} is not allowed.`);
@@ -2067,15 +2130,9 @@ function initAntiCheat() {
 
     if (e.key === 'F12') { e.preventDefault(); handleViolation('DevTools key (F12) pressed'); return; }
     if (ctrl && e.shiftKey && ['i','j','c','k','u'].includes(key)) { e.preventDefault(); handleViolation('DevTools shortcut detected'); return; }
-
-    // Allow Ctrl+A, Ctrl+Z in code editor only
     if (ctrl && ['c','v','x','s','p'].includes(key) && !isCodeEditor) {
-      e.preventDefault();
-      showToast('⛔ Keyboard shortcuts are disabled.');
-      logViolation(`Ctrl+${key.toUpperCase()} blocked`);
-      return;
+      e.preventDefault(); showToast('⛔ Keyboard shortcuts are disabled.'); logViolation(`Ctrl+${key.toUpperCase()} blocked`); return;
     }
-
     if (e.key === 'PrintScreen') { e.preventDefault(); handleViolation('Screenshot attempt (PrintScreen)'); return; }
     if (e.key === 'Escape' && !isCodeEditor) { e.preventDefault(); }
   });
@@ -2101,21 +2158,14 @@ function initAntiCheat() {
   devtoolsCheckInt = setInterval(() => {
     if (!testActive) return;
     const threshold = 160;
-    const wDiff = window.outerWidth - window.innerWidth;
-    const hDiff = window.outerHeight - window.innerHeight;
-    if (wDiff > threshold || hDiff > threshold) {
+    if (window.outerWidth - window.innerWidth > threshold || window.outerHeight - window.innerHeight > threshold) {
       handleViolation('DevTools panel likely opened (window size anomaly)');
     }
   }, 2000);
 
-  document.addEventListener('dragstart', e => {
-    if (testActive) e.preventDefault();
-  });
-
+  document.addEventListener('dragstart', e => { if (testActive) e.preventDefault(); });
   document.addEventListener('selectstart', e => {
-    if (testActive && !(e.target && e.target.classList && e.target.classList.contains('code-editor'))) {
-      e.preventDefault();
-    }
+    if (testActive && !(e.target && e.target.classList && e.target.classList.contains('code-editor'))) e.preventDefault();
   });
 }
 
@@ -2123,14 +2173,8 @@ function requestFullscreen() {
   const el = document.documentElement;
   const req = el.requestFullscreen || el.webkitRequestFullscreen || el.mozRequestFullScreen || el.msRequestFullscreen;
   if (req) {
-    req.call(el).then(() => {
-      document.getElementById('fsPrompt').classList.add('hidden');
-    }).catch(() => {
-      document.getElementById('fsPrompt').classList.add('hidden');
-    });
-  } else {
-    document.getElementById('fsPrompt').classList.add('hidden');
-  }
+    req.call(el).then(() => { document.getElementById('fsPrompt').classList.add('hidden'); }).catch(() => { document.getElementById('fsPrompt').classList.add('hidden'); });
+  } else { document.getElementById('fsPrompt').classList.add('hidden'); }
 }
 
 function handleViolation(reason) {
@@ -2138,17 +2182,10 @@ function handleViolation(reason) {
   strikes++;
   logViolation(reason);
   updateStrikePips();
-
-  if (strikes >= MAX_STRIKES) {
-    showAutoSubmitWarning();
-    return;
-  }
-
-  showWarning(
-    'Violation Detected',
+  if (strikes >= MAX_STRIKES) { showAutoSubmitWarning(); return; }
+  showWarning('Violation Detected',
     `<strong style="color:var(--text)">${reason}</strong><br><br>This incident has been logged and will be reviewed by our team. Repeated violations will result in automatic test termination.`,
-    `Strike ${strikes} of ${MAX_STRIKES} — ${MAX_STRIKES - strikes} more will auto-submit your test.`
-  );
+    `Strike ${strikes} of ${MAX_STRIKES} — ${MAX_STRIKES - strikes} more will auto-submit your test.`);
 }
 
 function logViolation(reason) {
@@ -2183,9 +2220,7 @@ function showWarning(title, msg, strikeText) {
 function closeWarning() {
   warningOpen = false;
   document.getElementById('warningOverlay').classList.add('hidden');
-  if (!document.fullscreenElement && testActive) {
-    document.getElementById('fsPrompt').classList.remove('hidden');
-  }
+  if (!document.fullscreenElement && testActive) document.getElementById('fsPrompt').classList.remove('hidden');
 }
 
 function showAutoSubmitWarning() {
@@ -2196,10 +2231,7 @@ function showAutoSubmitWarning() {
   document.getElementById('warningOverlay').classList.remove('hidden');
   const btn = document.querySelector('.btn-warning-ok');
   btn.textContent = 'View Submission';
-  btn.onclick = () => {
-    document.getElementById('warningOverlay').classList.add('hidden');
-    finalSubmit();
-  };
+  btn.onclick = () => { document.getElementById('warningOverlay').classList.add('hidden'); finalSubmit(); };
   clearInterval(timerInt);
   clearInterval(devtoolsCheckInt);
   if (camStream) camStream.getTracks().forEach(t => t.stop());
@@ -2211,10 +2243,7 @@ function showToast(msg) {
   toast.className = 'toast';
   toast.textContent = msg;
   container.appendChild(toast);
-  setTimeout(() => {
-    toast.classList.add('fadeout');
-    setTimeout(() => toast.remove(), 500);
-  }, 2500);
+  setTimeout(() => { toast.classList.add('fadeout'); setTimeout(() => toast.remove(), 500); }, 2500);
 }
 </script>
 </body>

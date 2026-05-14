@@ -4,24 +4,27 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Codivora ✡ Assessment Portal</title>
-  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;600;700;800&family=JetBrains+Mono:wght@400;500;700&family=Rajdhani:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     :root {
-      --bg: #05070f;
-      --surface: #0c1120;
-      --surface2: #111827;
-      --surface3: #1a2235;
-      --border: rgba(0,220,180,0.18);
-      --accent: #00dcb4;
-      --accent2: #7c3aed;
+      --bg: #03050d;
+      --surface: #080d1a;
+      --surface2: #0d1526;
+      --surface3: #121d30;
+      --border: rgba(0,220,180,0.14);
+      --accent: #00f5c8;
+      --accent2: #8b5cf6;
+      --accent3: #06b6d4;
       --text: #e2e8f0;
-      --muted: #64748b;
-      --danger: #f43f5e;
+      --muted: #4e6080;
+      --danger: #ff3860;
       --warn: #f59e0b;
       --radius: 14px;
-      --code-bg: #0a0f1e;
+      --code-bg: #060b18;
+      --glow: rgba(0,245,200,0.06);
+      --glow2: rgba(139,92,246,0.07);
     }
 
     body {
@@ -34,14 +37,33 @@
       -webkit-user-select: none;
     }
 
+    /* Animated scanline overlay */
     body::before {
       content: '';
       position: fixed;
       inset: 0;
       background-image:
-        linear-gradient(rgba(0,220,180,0.04) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(0,220,180,0.04) 1px, transparent 1px);
-      background-size: 40px 40px;
+        repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,0.08) 2px, rgba(0,0,0,0.08) 4px),
+        linear-gradient(rgba(0,245,200,0.025) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0,245,200,0.025) 1px, transparent 1px);
+      background-size: 100% 4px, 48px 48px, 48px 48px;
+      pointer-events: none;
+      z-index: 0;
+      animation: scanmove 8s linear infinite;
+    }
+
+    @keyframes scanmove {
+      0% { background-position: 0 0, 0 0, 0 0; }
+      100% { background-position: 0 100px, 0 0, 0 0; }
+    }
+
+    /* Corner decorations on body */
+    body::after {
+      content: '';
+      position: fixed;
+      top: 0; left: 0;
+      width: 200px; height: 200px;
+      background: radial-gradient(ellipse at 0% 0%, rgba(0,245,200,0.07) 0%, transparent 70%);
       pointer-events: none;
       z-index: 0;
     }
@@ -59,81 +81,170 @@
       padding: 20px;
     }
 
-    .login-box {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 20px;
-      padding: 48px 40px;
-      width: 100%;
-      max-width: 440px;
-      box-shadow: 0 0 60px rgba(0,220,180,0.08), 0 0 0 1px rgba(0,220,180,0.06);
-      position: relative;
-      overflow: hidden;
+    /* Animated orbs behind login */
+    .login-orb1 {
+      position: fixed;
+      width: 600px; height: 600px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(139,92,246,0.08) 0%, transparent 65%);
+      top: -200px; right: -200px;
+      pointer-events: none;
+      z-index: 0;
+      animation: orb1float 12s ease-in-out infinite alternate;
     }
 
+    .login-orb2 {
+      position: fixed;
+      width: 400px; height: 400px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(0,245,200,0.07) 0%, transparent 65%);
+      bottom: -100px; left: -100px;
+      pointer-events: none;
+      z-index: 0;
+      animation: orb2float 15s ease-in-out infinite alternate;
+    }
+
+    @keyframes orb1float {
+      from { transform: translate(0,0) scale(1); }
+      to { transform: translate(-40px,30px) scale(1.1); }
+    }
+
+    @keyframes orb2float {
+      from { transform: translate(0,0) scale(1); }
+      to { transform: translate(30px,-40px) scale(0.9); }
+    }
+
+    .login-box {
+      background: var(--surface);
+      border: 1px solid rgba(0,245,200,0.15);
+      border-radius: 24px;
+      padding: 48px 44px;
+      width: 100%;
+      max-width: 460px;
+      box-shadow:
+        0 0 0 1px rgba(0,245,200,0.04),
+        0 0 80px rgba(0,0,0,0.6),
+        inset 0 1px 0 rgba(255,255,255,0.04);
+      position: relative;
+      overflow: hidden;
+      z-index: 1;
+      animation: loginReveal 0.7s cubic-bezier(0.22,1,0.36,1) forwards;
+    }
+
+    @keyframes loginReveal {
+      from { opacity: 0; transform: translateY(24px) scale(0.97); }
+      to { opacity: 1; transform: translateY(0) scale(1); }
+    }
+
+    /* Animated corner brackets on login box */
     .login-box::before {
       content: '';
       position: absolute;
-      top: -80px; right: -80px;
-      width: 240px; height: 240px;
-      background: radial-gradient(circle, rgba(124,58,237,0.18) 0%, transparent 70%);
+      top: -1px; left: -1px;
+      width: 60px; height: 60px;
+      border-top: 2px solid var(--accent);
+      border-left: 2px solid var(--accent);
+      border-radius: 24px 0 0 0;
+      opacity: 0.5;
+    }
+
+    .login-box::after {
+      content: '';
+      position: absolute;
+      bottom: -1px; right: -1px;
+      width: 60px; height: 60px;
+      border-bottom: 2px solid var(--accent2);
+      border-right: 2px solid var(--accent2);
+      border-radius: 0 0 24px 0;
+      opacity: 0.5;
+    }
+
+    /* Login interior glow */
+    .login-inner-glow {
+      position: absolute;
+      top: -120px; right: -120px;
+      width: 320px; height: 320px;
+      background: radial-gradient(circle, rgba(139,92,246,0.12) 0%, transparent 70%);
       pointer-events: none;
     }
 
     .brand {
       display: flex;
       align-items: center;
-      gap: 10px;
-      margin-bottom: 32px;
+      gap: 12px;
+      margin-bottom: 36px;
     }
 
     .brand-icon {
-      width: 40px; height: 40px;
+      width: 44px; height: 44px;
       background: linear-gradient(135deg, var(--accent), var(--accent2));
-      border-radius: 10px;
+      border-radius: 12px;
       display: flex; align-items: center; justify-content: center;
-      font-size: 18px;
+      font-size: 20px;
+      box-shadow: 0 0 20px rgba(0,245,200,0.25);
+      position: relative;
+    }
+
+    .brand-icon::after {
+      content: '';
+      position: absolute;
+      inset: -2px;
+      border-radius: 14px;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      opacity: 0.2;
+      z-index: -1;
+      filter: blur(6px);
     }
 
     .brand-name {
-      font-size: 22px;
-      font-weight: 800;
-      letter-spacing: -0.5px;
+      font-family: 'Rajdhani', sans-serif;
+      font-size: 26px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      text-transform: uppercase;
     }
 
     .brand-name span { color: var(--accent); }
 
     .login-title {
-      font-size: 28px;
-      font-weight: 800;
-      margin-bottom: 6px;
-      letter-spacing: -0.5px;
+      font-family: 'Rajdhani', sans-serif;
+      font-size: 32px;
+      font-weight: 700;
+      margin-bottom: 8px;
+      letter-spacing: 0.5px;
+      background: linear-gradient(135deg, #fff 30%, var(--accent) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
     }
 
     .login-sub {
-      font-size: 14px;
+      font-size: 13.5px;
       color: var(--muted);
-      margin-bottom: 32px;
+      margin-bottom: 36px;
+      line-height: 1.6;
     }
 
     label {
       display: block;
-      font-size: 12px;
+      font-family: 'Space Mono', monospace;
+      font-size: 10px;
       font-weight: 700;
-      letter-spacing: 1px;
+      letter-spacing: 2px;
       text-transform: uppercase;
-      color: var(--muted);
+      color: var(--accent);
       margin-bottom: 8px;
+      opacity: 0.8;
     }
 
     input[type="text"], input[type="password"] {
       width: 100%;
-      background: var(--bg);
-      border: 1px solid rgba(255,255,255,0.1);
+      background: var(--code-bg);
+      border: 1px solid rgba(255,255,255,0.07);
       border-radius: 10px;
       padding: 14px 16px;
       color: var(--text);
-      font-family: 'Space Mono', monospace;
+      font-family: 'JetBrains Mono', monospace;
       font-size: 14px;
       outline: none;
       transition: border-color 0.2s, box-shadow 0.2s;
@@ -141,48 +252,65 @@
     }
 
     input[type="text"]:focus, input[type="password"]:focus {
-      border-color: var(--accent);
-      box-shadow: 0 0 0 3px rgba(0,220,180,0.12);
+      border-color: rgba(0,245,200,0.4);
+      box-shadow: 0 0 0 3px rgba(0,245,200,0.08), inset 0 0 20px rgba(0,245,200,0.03);
     }
 
     .btn-primary {
       width: 100%;
       padding: 15px;
-      background: linear-gradient(135deg, var(--accent), #00b896);
-      border: none;
+      background: transparent;
+      border: 1px solid var(--accent);
       border-radius: 10px;
-      color: #05070f;
-      font-family: 'Syne', sans-serif;
-      font-size: 15px;
-      font-weight: 800;
+      color: var(--accent);
+      font-family: 'Rajdhani', sans-serif;
+      font-size: 17px;
+      font-weight: 700;
       cursor: pointer;
-      letter-spacing: 0.5px;
-      transition: opacity 0.2s, transform 0.1s;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      transition: all 0.2s;
+      position: relative;
+      overflow: hidden;
     }
 
-    .btn-primary:hover { opacity: 0.9; transform: translateY(-1px); }
-    .btn-primary:active { transform: translateY(0); }
+    .btn-primary::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: var(--accent);
+      transform: translateX(-100%);
+      transition: transform 0.3s cubic-bezier(0.22,1,0.36,1);
+    }
+
+    .btn-primary:hover::before { transform: translateX(0); }
+    .btn-primary:hover { color: #03050d; }
+    .btn-primary span { position: relative; z-index: 1; }
+    .btn-primary:active { transform: scale(0.98); }
 
     .login-note {
       text-align: center;
-      margin-top: 20px;
-      font-size: 12px;
+      margin-top: 22px;
+      font-family: 'Space Mono', monospace;
+      font-size: 10px;
       color: var(--muted);
+      letter-spacing: 0.5px;
     }
 
     .login-note span {
       display: inline-block;
-      width: 6px; height: 6px;
+      width: 5px; height: 5px;
       background: var(--accent);
       border-radius: 50%;
       margin-right: 6px;
       vertical-align: middle;
       animation: blink 1.4s infinite;
+      box-shadow: 0 0 6px var(--accent);
     }
 
     @keyframes blink {
       0%, 100% { opacity: 1; }
-      50% { opacity: 0.2; }
+      50% { opacity: 0.15; }
     }
 
     @keyframes shake {
@@ -205,10 +333,78 @@
 
     #loginErr {
       color: var(--danger);
-      font-size: 13px;
-      margin-top: -12px;
+      font-family: 'Space Mono', monospace;
+      font-size: 12px;
+      margin-top: -14px;
       margin-bottom: 16px;
       display: none;
+      letter-spacing: 0.5px;
+    }
+
+    /* ===================== CANDIDATE WELCOME BANNER ===================== */
+    .candidate-banner {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      background: linear-gradient(90deg, rgba(0,245,200,0.06) 0%, rgba(139,92,246,0.06) 100%);
+      border: 1px solid rgba(0,245,200,0.15);
+      border-radius: 12px;
+      padding: 14px 18px;
+      margin-bottom: 36px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .candidate-banner::before {
+      content: '';
+      position: absolute;
+      left: 0; top: 0; bottom: 0;
+      width: 3px;
+      background: linear-gradient(180deg, var(--accent), var(--accent2));
+      border-radius: 3px 0 0 3px;
+    }
+
+    .candidate-avatar {
+      width: 42px; height: 42px;
+      border-radius: 10px;
+      background: linear-gradient(135deg, rgba(0,245,200,0.2), rgba(139,92,246,0.2));
+      border: 1px solid rgba(0,245,200,0.25);
+      display: flex; align-items: center; justify-content: center;
+      font-family: 'Rajdhani', sans-serif;
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--accent);
+      flex-shrink: 0;
+    }
+
+    .candidate-info { flex: 1; min-width: 0; }
+
+    .candidate-welcome {
+      font-family: 'Space Mono', monospace;
+      font-size: 10px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 3px;
+    }
+
+    .candidate-name {
+      font-family: 'Rajdhani', sans-serif;
+      font-size: 18px;
+      font-weight: 700;
+      color: #fff;
+      letter-spacing: 0.5px;
+    }
+
+    .candidate-id-badge {
+      font-family: 'Space Mono', monospace;
+      font-size: 10px;
+      color: var(--accent);
+      background: rgba(0,245,200,0.08);
+      border: 1px solid rgba(0,245,200,0.2);
+      border-radius: 6px;
+      padding: 4px 10px;
+      flex-shrink: 0;
     }
 
     /* ===================== TEST SCREEN ===================== */
@@ -223,20 +419,60 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 14px 20px;
+      padding: 12px 18px;
       background: var(--surface);
       border: 1px solid var(--border);
       border-radius: var(--radius);
       margin-bottom: 20px;
       gap: 16px;
       flex-wrap: wrap;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .topbar::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--accent), var(--accent2), transparent);
+      opacity: 0.4;
+    }
+
+    /* Candidate topbar badge */
+    .topbar-candidate {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-family: 'Space Mono', monospace;
+      font-size: 11px;
+    }
+
+    .topbar-candidate-dot {
+      width: 28px; height: 28px;
+      border-radius: 7px;
+      background: linear-gradient(135deg, rgba(0,245,200,0.15), rgba(139,92,246,0.15));
+      border: 1px solid rgba(0,245,200,0.2);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--accent);
+      font-family: 'Rajdhani', sans-serif;
+    }
+
+    .topbar-candidate-name {
+      color: var(--text);
+      font-size: 12px;
+      font-weight: 700;
     }
 
     .topbar-brand {
-      font-size: 16px;
-      font-weight: 800;
+      font-family: 'Rajdhani', sans-serif;
+      font-size: 18px;
+      font-weight: 700;
       color: var(--accent);
-      letter-spacing: -0.3px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
     }
 
     .progress-wrap {
@@ -247,14 +483,16 @@
     .progress-label {
       display: flex;
       justify-content: space-between;
-      font-size: 12px;
+      font-family: 'Space Mono', monospace;
+      font-size: 10px;
       color: var(--muted);
       margin-bottom: 6px;
+      letter-spacing: 0.5px;
     }
 
     .progress-bar-bg {
-      height: 6px;
-      background: rgba(255,255,255,0.07);
+      height: 4px;
+      background: rgba(255,255,255,0.05);
       border-radius: 99px;
       overflow: hidden;
     }
@@ -265,6 +503,7 @@
       border-radius: 99px;
       transition: width 0.4s ease;
       width: 0%;
+      box-shadow: 0 0 8px rgba(0,245,200,0.4);
     }
 
     .timer-box {
@@ -272,7 +511,7 @@
       align-items: center;
       gap: 8px;
       background: var(--bg);
-      border: 1px solid var(--border);
+      border: 1px solid rgba(0,245,200,0.15);
       border-radius: 8px;
       padding: 8px 14px;
       font-family: 'Space Mono', monospace;
@@ -281,29 +520,32 @@
     }
 
     .timer-dot {
-      width: 8px; height: 8px;
+      width: 7px; height: 7px;
       background: var(--accent);
       border-radius: 50%;
       animation: blink 1s infinite;
+      box-shadow: 0 0 6px var(--accent);
     }
 
-    .timer-box.warn { border-color: var(--warn); color: var(--warn); }
-    .timer-box.warn .timer-dot { background: var(--warn); }
-    .timer-box.danger { border-color: var(--danger); color: var(--danger); }
-    .timer-box.danger .timer-dot { background: var(--danger); }
+    .timer-box.warn { border-color: rgba(245,158,11,0.4); color: var(--warn); }
+    .timer-box.warn .timer-dot { background: var(--warn); box-shadow: 0 0 6px var(--warn); }
+    .timer-box.danger { border-color: rgba(255,56,96,0.4); color: var(--danger); }
+    .timer-box.danger .timer-dot { background: var(--danger); box-shadow: 0 0 6px var(--danger); }
 
     .strike-box {
       display: flex;
       align-items: center;
       gap: 8px;
       background: var(--bg);
-      border: 1px solid rgba(244,63,94,0.3);
+      border: 1px solid rgba(255,56,96,0.2);
       border-radius: 8px;
       padding: 8px 14px;
       font-family: 'Space Mono', monospace;
-      font-size: 13px;
+      font-size: 10px;
       font-weight: 700;
       color: var(--muted);
+      letter-spacing: 1px;
+      text-transform: uppercase;
     }
 
     .strike-pips { display: flex; gap: 4px; }
@@ -311,43 +553,41 @@
     .strike-pip {
       width: 10px; height: 10px;
       border-radius: 3px;
-      border: 1px solid rgba(244,63,94,0.4);
+      border: 1px solid rgba(255,56,96,0.3);
       background: transparent;
-      transition: background 0.3s;
+      transition: all 0.3s;
     }
 
     .strike-pip.active {
       background: var(--danger);
       border-color: var(--danger);
-      box-shadow: 0 0 6px rgba(244,63,94,0.5);
+      box-shadow: 0 0 8px rgba(255,56,96,0.5);
     }
 
-    /* marks badge in topbar */
     .marks-box {
       display: flex;
       align-items: center;
       gap: 8px;
-      background: rgba(0,220,180,0.07);
-      border: 1px solid rgba(0,220,180,0.25);
+      background: rgba(0,245,200,0.05);
+      border: 1px solid rgba(0,245,200,0.2);
       border-radius: 8px;
       padding: 8px 14px;
       font-family: 'Space Mono', monospace;
-      font-size: 13px;
+      font-size: 12px;
       font-weight: 700;
       color: var(--accent);
     }
 
-    /* Calculator toggle button in topbar */
     .calc-toggle-btn {
       display: flex;
       align-items: center;
       gap: 6px;
       background: var(--bg);
-      border: 1px solid rgba(0,220,180,0.25);
+      border: 1px solid rgba(0,245,200,0.2);
       border-radius: 8px;
       padding: 8px 14px;
       font-family: 'Space Mono', monospace;
-      font-size: 12px;
+      font-size: 11px;
       font-weight: 700;
       color: var(--accent);
       cursor: pointer;
@@ -356,8 +596,9 @@
     }
 
     .calc-toggle-btn:hover {
-      background: rgba(0,220,180,0.08);
+      background: rgba(0,245,200,0.07);
       border-color: var(--accent);
+      box-shadow: 0 0 12px rgba(0,245,200,0.1);
     }
 
     .test-layout {
@@ -376,62 +617,93 @@
       border: 1px solid var(--border);
       border-radius: 18px;
       padding: 32px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .question-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 1px;
+      background: linear-gradient(90deg, transparent 0%, var(--accent2) 30%, var(--accent) 70%, transparent 100%);
+      opacity: 0.3;
+    }
+
+    /* Corner bracket decoration on question card */
+    .question-card::after {
+      content: '';
+      position: absolute;
+      bottom: 16px; right: 16px;
+      width: 32px; height: 32px;
+      border-bottom: 1px solid rgba(139,92,246,0.25);
+      border-right: 1px solid rgba(139,92,246,0.25);
     }
 
     .q-meta {
       display: flex;
       align-items: center;
       gap: 10px;
-      margin-bottom: 20px;
+      margin-bottom: 22px;
     }
 
     .q-badge {
-      font-size: 11px;
+      font-family: 'Space Mono', monospace;
+      font-size: 10px;
       font-weight: 700;
-      letter-spacing: 1px;
+      letter-spacing: 1.5px;
       text-transform: uppercase;
-      background: rgba(0,220,180,0.12);
+      background: rgba(0,245,200,0.08);
       color: var(--accent);
-      border: 1px solid rgba(0,220,180,0.25);
-      border-radius: 6px;
+      border: 1px solid rgba(0,245,200,0.2);
+      border-radius: 5px;
       padding: 4px 10px;
     }
 
     .q-badge.coding-badge {
-      background: rgba(124,58,237,0.15);
+      background: rgba(139,92,246,0.1);
       color: #a78bfa;
-      border-color: rgba(124,58,237,0.35);
+      border-color: rgba(139,92,246,0.3);
     }
 
-    .q-category { font-size: 12px; color: var(--muted); }
-    .q-number { font-size: 13px; font-weight: 700; color: var(--muted); font-family: 'Space Mono', monospace; }
+    .q-category {
+      font-family: 'Space Mono', monospace;
+      font-size: 11px;
+      color: var(--muted);
+    }
 
-    /* marks per question badge */
-    .q-marks {
-      margin-left: auto;
+    .q-number {
       font-size: 12px;
       font-weight: 700;
+      color: var(--muted);
       font-family: 'Space Mono', monospace;
-      background: rgba(245,158,11,0.12);
+    }
+
+    .q-marks {
+      margin-left: auto;
+      font-size: 11px;
+      font-weight: 700;
+      font-family: 'Space Mono', monospace;
+      background: rgba(245,158,11,0.08);
       color: var(--warn);
-      border: 1px solid rgba(245,158,11,0.3);
-      border-radius: 6px;
+      border: 1px solid rgba(245,158,11,0.25);
+      border-radius: 5px;
       padding: 4px 10px;
     }
 
     .question-text {
-      font-size: 18px;
+      font-family: 'Rajdhani', sans-serif;
+      font-size: 20px;
       font-weight: 600;
-      line-height: 1.6;
-      margin-bottom: 20px;
+      line-height: 1.5;
+      margin-bottom: 22px;
       color: #f1f5f9;
       pointer-events: none;
+      letter-spacing: 0.3px;
     }
 
     /* ===================== CODING QUESTION UI ===================== */
-    .coding-section {
-      margin-bottom: 28px;
-    }
+    .coding-section { margin-bottom: 28px; }
 
     .coding-meta-row {
       display: flex;
@@ -441,43 +713,53 @@
     }
 
     .lang-badge {
-      font-size: 11px;
+      font-size: 10px;
       font-weight: 700;
-      letter-spacing: 1px;
+      letter-spacing: 1.5px;
       text-transform: uppercase;
-      background: rgba(124,58,237,0.12);
+      background: rgba(139,92,246,0.1);
       color: #a78bfa;
-      border: 1px solid rgba(124,58,237,0.3);
-      border-radius: 6px;
+      border: 1px solid rgba(139,92,246,0.25);
+      border-radius: 5px;
       padding: 4px 10px;
       font-family: 'Space Mono', monospace;
     }
 
     .diff-badge {
-      font-size: 11px;
+      font-size: 10px;
       font-weight: 700;
-      letter-spacing: 0.5px;
-      border-radius: 6px;
+      letter-spacing: 1px;
+      border-radius: 5px;
       padding: 4px 10px;
       font-family: 'Space Mono', monospace;
     }
 
-    .diff-easy { background: rgba(0,220,180,0.1); color: var(--accent); border: 1px solid rgba(0,220,180,0.25); }
-    .diff-medium { background: rgba(245,158,11,0.1); color: var(--warn); border: 1px solid rgba(245,158,11,0.3); }
-    .diff-hard { background: rgba(244,63,94,0.1); color: var(--danger); border: 1px solid rgba(244,63,94,0.3); }
+    .diff-easy { background: rgba(0,245,200,0.08); color: var(--accent); border: 1px solid rgba(0,245,200,0.2); }
+    .diff-medium { background: rgba(245,158,11,0.08); color: var(--warn); border: 1px solid rgba(245,158,11,0.25); }
+    .diff-hard { background: rgba(255,56,96,0.08); color: var(--danger); border: 1px solid rgba(255,56,96,0.25); }
 
     .problem-statement {
       background: var(--code-bg);
-      border: 1px solid rgba(124,58,237,0.2);
+      border: 1px solid rgba(139,92,246,0.15);
       border-radius: 12px;
       padding: 18px 20px;
       margin-bottom: 16px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .problem-statement::before {
+      content: '';
+      position: absolute;
+      left: 0; top: 0; bottom: 0;
+      width: 2px;
+      background: linear-gradient(180deg, var(--accent2), transparent);
     }
 
     .problem-statement p {
       font-size: 13.5px;
-      color: #cbd5e1;
-      line-height: 1.7;
+      color: #94a3b8;
+      line-height: 1.8;
       pointer-events: none;
     }
 
@@ -485,20 +767,21 @@
       display: grid;
       grid-template-columns: 1fr 1fr;
       gap: 12px;
-      margin-top: 14px;
+      margin-top: 16px;
     }
 
     .io-box {
       background: var(--surface2);
-      border: 1px solid rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.05);
       border-radius: 8px;
       padding: 12px 14px;
     }
 
     .io-label {
-      font-size: 10px;
+      font-family: 'Space Mono', monospace;
+      font-size: 9px;
       font-weight: 700;
-      letter-spacing: 1.5px;
+      letter-spacing: 2px;
       text-transform: uppercase;
       color: var(--muted);
       margin-bottom: 6px;
@@ -506,29 +789,30 @@
 
     .io-val {
       font-family: 'JetBrains Mono', monospace;
-      font-size: 13px;
+      font-size: 12.5px;
       color: var(--accent);
       pointer-events: none;
     }
 
     .constraints-box {
-      background: rgba(245,158,11,0.06);
-      border: 1px solid rgba(245,158,11,0.2);
+      background: rgba(245,158,11,0.04);
+      border: 1px solid rgba(245,158,11,0.15);
       border-radius: 8px;
       padding: 10px 14px;
       margin-top: 12px;
-      font-size: 12px;
+      font-size: 11.5px;
       color: #fbbf24;
-      font-family: 'Space Mono', monospace;
+      font-family: 'JetBrains Mono', monospace;
       pointer-events: none;
     }
 
     /* Code Editor */
     .editor-wrap {
       background: var(--code-bg);
-      border: 1px solid rgba(124,58,237,0.25);
+      border: 1px solid rgba(139,92,246,0.2);
       border-radius: 12px;
       overflow: hidden;
+      box-shadow: inset 0 0 40px rgba(0,0,0,0.3);
     }
 
     .editor-topbar {
@@ -536,14 +820,11 @@
       align-items: center;
       justify-content: space-between;
       padding: 10px 16px;
-      background: rgba(255,255,255,0.03);
-      border-bottom: 1px solid rgba(255,255,255,0.06);
+      background: rgba(255,255,255,0.02);
+      border-bottom: 1px solid rgba(255,255,255,0.04);
     }
 
-    .editor-dots {
-      display: flex;
-      gap: 6px;
-    }
+    .editor-dots { display: flex; gap: 6px; }
 
     .editor-dot {
       width: 10px; height: 10px;
@@ -555,14 +836,15 @@
     .dot-green { background: #28c840; }
 
     .editor-filename {
-      font-family: 'Space Mono', monospace;
+      font-family: 'JetBrains Mono', monospace;
       font-size: 11px;
       color: var(--muted);
+      letter-spacing: 0.5px;
     }
 
     .editor-clear {
       font-family: 'Space Mono', monospace;
-      font-size: 11px;
+      font-size: 10px;
       color: var(--muted);
       background: none;
       border: none;
@@ -570,6 +852,7 @@
       padding: 2px 8px;
       border-radius: 4px;
       transition: 0.15s;
+      letter-spacing: 1px;
     }
 
     .editor-clear:hover { color: var(--danger); }
@@ -581,10 +864,10 @@
       background: transparent;
       border: none;
       outline: none;
-      color: #e2e8f0;
+      color: #c4d0e4;
       font-family: 'JetBrains Mono', monospace;
-      font-size: 13.5px;
-      line-height: 1.7;
+      font-size: 13px;
+      line-height: 1.75;
       resize: vertical;
       tab-size: 4;
       -moz-tab-size: 4;
@@ -592,29 +875,31 @@
       -webkit-user-select: text;
     }
 
-    .code-editor::placeholder { color: #2d3748; }
+    .code-editor::placeholder { color: #1e2d40; }
 
     .editor-footer {
       display: flex;
       align-items: center;
       justify-content: space-between;
       padding: 8px 16px;
-      background: rgba(255,255,255,0.02);
-      border-top: 1px solid rgba(255,255,255,0.05);
+      background: rgba(255,255,255,0.015);
+      border-top: 1px solid rgba(255,255,255,0.04);
     }
 
     .char-count {
       font-family: 'Space Mono', monospace;
-      font-size: 11px;
+      font-size: 10px;
       color: var(--muted);
+      letter-spacing: 0.5px;
     }
 
     .code-saved-indicator {
       font-family: 'Space Mono', monospace;
-      font-size: 11px;
+      font-size: 10px;
       color: var(--accent);
       opacity: 0;
       transition: opacity 0.3s;
+      letter-spacing: 1px;
     }
 
     .code-saved-indicator.show { opacity: 1; }
@@ -624,69 +909,105 @@
       display: flex;
       gap: 12px;
       justify-content: space-between;
+      margin-top: 8px;
     }
 
     .btn-nav {
       padding: 12px 24px;
       border-radius: 10px;
-      font-family: 'Syne', sans-serif;
-      font-size: 14px;
+      font-family: 'Rajdhani', sans-serif;
+      font-size: 15px;
       font-weight: 700;
       cursor: pointer;
       transition: all 0.18s;
       border: none;
+      letter-spacing: 1px;
+      text-transform: uppercase;
     }
 
     .btn-prev {
-      background: var(--surface2);
+      background: transparent;
       color: var(--muted);
-      border: 1px solid rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.07);
     }
 
-    .btn-prev:hover { color: var(--text); border-color: rgba(255,255,255,0.2); }
+    .btn-prev:hover { color: var(--text); border-color: rgba(255,255,255,0.15); }
 
     .btn-next {
-      background: linear-gradient(135deg, var(--accent), #00b896);
-      color: #05070f;
+      background: transparent;
+      border: 1px solid var(--accent);
+      color: var(--accent);
       margin-left: auto;
+      position: relative;
+      overflow: hidden;
     }
 
-    .btn-next:hover { opacity: 0.9; transform: translateY(-1px); }
+    .btn-next::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: var(--accent);
+      transform: translateX(-100%);
+      transition: transform 0.25s ease;
+    }
+
+    .btn-next:hover::before { transform: translateX(0); }
+    .btn-next:hover { color: #03050d; }
+    .btn-next span { position: relative; z-index: 1; }
 
     .btn-submit {
-      background: linear-gradient(135deg, var(--accent2), #9d50f7);
-      color: white;
+      background: transparent;
+      border: 1px solid var(--accent2);
+      color: #a78bfa;
+      margin-left: auto;
+      position: relative;
+      overflow: hidden;
+      letter-spacing: 1px;
     }
 
-    .btn-submit:hover { opacity: 0.9; transform: translateY(-1px); }
+    .btn-submit::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: var(--accent2);
+      transform: translateX(-100%);
+      transition: transform 0.25s ease;
+    }
+
+    .btn-submit:hover::before { transform: translateX(0); }
+    .btn-submit:hover { color: white; }
+    .btn-submit span { position: relative; z-index: 1; }
 
     /* ===================== SIDEBAR ===================== */
     .sidebar {
       display: flex;
       flex-direction: column;
-      gap: 16px;
+      gap: 14px;
     }
 
-    .cam-card {
+    /* Sidebar card base */
+    .sidebar > * {
       background: var(--surface);
       border: 1px solid var(--border);
       border-radius: var(--radius);
-      overflow: hidden;
     }
+
+    .cam-card { overflow: hidden; }
 
     .cam-header {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 12px 14px;
+      padding: 10px 14px;
       border-bottom: 1px solid var(--border);
     }
 
     .cam-label {
-      font-size: 11px;
+      font-family: 'Space Mono', monospace;
+      font-size: 9px;
       font-weight: 700;
       text-transform: uppercase;
-      letter-spacing: 1px;
+      letter-spacing: 2px;
       color: var(--muted);
     }
 
@@ -694,10 +1015,11 @@
       display: flex;
       align-items: center;
       gap: 5px;
-      font-size: 11px;
+      font-family: 'Space Mono', monospace;
+      font-size: 10px;
       color: var(--danger);
       font-weight: 700;
-      font-family: 'Space Mono', monospace;
+      letter-spacing: 1px;
     }
 
     .rec-dot {
@@ -705,6 +1027,7 @@
       background: var(--danger);
       border-radius: 50%;
       animation: blink 1s infinite;
+      box-shadow: 0 0 6px var(--danger);
     }
 
     #cam {
@@ -713,27 +1036,26 @@
       aspect-ratio: 4/3;
       object-fit: cover;
       background: #000;
+      filter: contrast(1.05) saturate(0.9);
     }
 
     .cam-footer {
       padding: 8px 14px;
-      font-size: 11px;
+      font-family: 'Space Mono', monospace;
+      font-size: 9px;
       color: var(--muted);
       text-align: center;
+      letter-spacing: 0.5px;
     }
 
-    .qmap-card {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      padding: 16px;
-    }
+    .qmap-card { padding: 16px; }
 
     .qmap-title {
-      font-size: 11px;
+      font-family: 'Space Mono', monospace;
+      font-size: 9px;
       font-weight: 700;
       text-transform: uppercase;
-      letter-spacing: 1px;
+      letter-spacing: 2px;
       color: var(--muted);
       margin-bottom: 12px;
     }
@@ -746,70 +1068,57 @@
 
     .qmap-btn {
       aspect-ratio: 1;
-      border-radius: 6px;
-      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 7px;
+      border: 1px solid rgba(255,255,255,0.06);
       background: var(--bg);
       color: var(--muted);
+      font-family: 'Space Mono', monospace;
       font-size: 11px;
       font-weight: 700;
-      font-family: 'Space Mono', monospace;
       cursor: pointer;
       transition: all 0.15s;
       display: flex; align-items: center; justify-content: center;
     }
 
-    .qmap-btn:hover { border-color: var(--accent); color: var(--accent); }
-    .qmap-btn.coding-answered { background: rgba(124,58,237,0.15); border-color: rgba(124,58,237,0.4); color: #a78bfa; }
-    .qmap-btn.active { background: var(--accent); border-color: var(--accent); color: #05070f; }
-    .qmap-btn.coding-q { border-color: rgba(124,58,237,0.3); }
+    .qmap-btn:hover { border-color: var(--accent); color: var(--accent); box-shadow: 0 0 8px rgba(0,245,200,0.1); }
+    .qmap-btn.coding-answered { background: rgba(139,92,246,0.12); border-color: rgba(139,92,246,0.3); color: #a78bfa; }
+    .qmap-btn.active { background: rgba(0,245,200,0.12); border-color: var(--accent); color: var(--accent); box-shadow: 0 0 10px rgba(0,245,200,0.15); }
+    .qmap-btn.coding-q { border-color: rgba(139,92,246,0.2); }
 
-    /* score summary card */
-    .score-card {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      padding: 16px;
-    }
+    .score-card { padding: 16px; }
 
     .score-card-title {
-      font-size: 11px;
+      font-family: 'Space Mono', monospace;
+      font-size: 9px;
       font-weight: 700;
       text-transform: uppercase;
-      letter-spacing: 1px;
+      letter-spacing: 2px;
       color: var(--muted);
       margin-bottom: 12px;
     }
 
-    .score-rows {
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-    }
+    .score-rows { display: flex; flex-direction: column; gap: 8px; }
 
     .score-row {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      font-size: 12px;
       font-family: 'Space Mono', monospace;
+      font-size: 11px;
     }
 
     .score-row-lbl { color: var(--muted); }
     .score-row-val { color: var(--accent); font-weight: 700; }
-    .score-total-val { color: #f1f5f9; font-size: 18px; font-weight: 800; }
+    .score-total-val { color: #f1f5f9; font-size: 16px; font-weight: 800; }
 
-    .violation-card {
-      background: var(--surface);
-      border: 1px solid rgba(244,63,94,0.2);
-      border-radius: var(--radius);
-      padding: 14px 16px;
-    }
+    .violation-card { padding: 14px 16px; border-color: rgba(255,56,96,0.15) !important; }
 
     .violation-card-title {
-      font-size: 11px;
+      font-family: 'Space Mono', monospace;
+      font-size: 9px;
       font-weight: 700;
       text-transform: uppercase;
-      letter-spacing: 1px;
+      letter-spacing: 2px;
       color: var(--danger);
       margin-bottom: 10px;
       display: flex;
@@ -826,20 +1135,20 @@
     }
 
     .vlog-item {
-      font-size: 11px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10px;
       color: var(--muted);
-      font-family: 'Space Mono', monospace;
       padding: 4px 8px;
-      background: rgba(244,63,94,0.06);
-      border-radius: 5px;
-      border-left: 2px solid rgba(244,63,94,0.4);
+      background: rgba(255,56,96,0.04);
+      border-radius: 4px;
+      border-left: 2px solid rgba(255,56,96,0.3);
     }
 
     .vlog-empty {
-      font-size: 11px;
-      color: var(--muted);
       font-family: 'Space Mono', monospace;
-      opacity: 0.5;
+      font-size: 10px;
+      color: var(--muted);
+      opacity: 0.4;
     }
 
     /* ===================== FLOATING CALCULATOR ===================== */
@@ -849,9 +1158,12 @@
       right: 28px;
       width: 300px;
       background: var(--surface);
-      border: 1px solid rgba(0,220,180,0.3);
+      border: 1px solid rgba(0,245,200,0.2);
       border-radius: 20px;
-      box-shadow: 0 20px 60px rgba(0,0,0,0.6), 0 0 40px rgba(0,220,180,0.07);
+      box-shadow:
+        0 20px 60px rgba(0,0,0,0.7),
+        0 0 0 1px rgba(0,245,200,0.04),
+        inset 0 1px 0 rgba(255,255,255,0.04);
       z-index: 500;
       overflow: hidden;
       user-select: none;
@@ -859,8 +1171,17 @@
       transition: box-shadow 0.2s;
     }
 
+    #calcPanel::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--accent), transparent);
+      opacity: 0.3;
+    }
+
     #calcPanel.dragging {
-      box-shadow: 0 30px 80px rgba(0,0,0,0.8), 0 0 60px rgba(0,220,180,0.15);
+      box-shadow: 0 30px 80px rgba(0,0,0,0.9), 0 0 40px rgba(0,245,200,0.08);
     }
 
     .calc-header {
@@ -868,15 +1189,16 @@
       align-items: center;
       justify-content: space-between;
       padding: 12px 16px;
-      background: rgba(0,220,180,0.07);
-      border-bottom: 1px solid rgba(0,220,180,0.15);
+      background: rgba(0,245,200,0.04);
+      border-bottom: 1px solid rgba(0,245,200,0.1);
       cursor: move;
     }
 
     .calc-title {
-      font-size: 12px;
+      font-family: 'Space Mono', monospace;
+      font-size: 11px;
       font-weight: 700;
-      letter-spacing: 1px;
+      letter-spacing: 1.5px;
       text-transform: uppercase;
       color: var(--accent);
       display: flex;
@@ -889,24 +1211,22 @@
     .calc-close {
       width: 22px; height: 22px;
       border-radius: 50%;
-      background: rgba(244,63,94,0.15);
-      border: 1px solid rgba(244,63,94,0.3);
+      background: rgba(255,56,96,0.1);
+      border: 1px solid rgba(255,56,96,0.25);
       color: var(--danger);
-      font-size: 14px;
+      font-size: 12px;
       display: flex; align-items: center; justify-content: center;
       cursor: pointer;
       transition: 0.15s;
       line-height: 1;
     }
 
-    .calc-close:hover { background: rgba(244,63,94,0.3); }
+    .calc-close:hover { background: rgba(255,56,96,0.25); }
 
-    .calc-display-wrap {
-      padding: 14px 14px 10px;
-    }
+    .calc-display-wrap { padding: 14px 14px 10px; }
 
     .calc-expr {
-      font-family: 'Space Mono', monospace;
+      font-family: 'JetBrains Mono', monospace;
       font-size: 11px;
       color: var(--muted);
       text-align: right;
@@ -948,75 +1268,76 @@
       font-size: 14px;
       font-weight: 700;
       cursor: pointer;
-      transition: all 0.12s;
+      transition: all 0.1s;
       display: flex; align-items: center; justify-content: center;
       user-select: none;
     }
 
-    .c-btn:active { transform: scale(0.93); }
+    .c-btn:active { transform: scale(0.92); }
 
     .c-num {
       background: var(--surface3);
       color: var(--text);
-      border: 1px solid rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.05);
     }
 
-    .c-num:hover { background: #1e2d45; border-color: rgba(255,255,255,0.12); }
+    .c-num:hover { background: #1a2540; }
 
     .c-op {
-      background: rgba(0,220,180,0.12);
+      background: rgba(0,245,200,0.08);
       color: var(--accent);
-      border: 1px solid rgba(0,220,180,0.25);
+      border: 1px solid rgba(0,245,200,0.2);
     }
 
-    .c-op:hover { background: rgba(0,220,180,0.22); }
+    .c-op:hover { background: rgba(0,245,200,0.16); }
 
     .c-fn {
-      background: rgba(124,58,237,0.12);
+      background: rgba(139,92,246,0.1);
       color: #a78bfa;
-      border: 1px solid rgba(124,58,237,0.25);
+      border: 1px solid rgba(139,92,246,0.2);
       font-size: 12px;
     }
 
-    .c-fn:hover { background: rgba(124,58,237,0.22); }
+    .c-fn:hover { background: rgba(139,92,246,0.2); }
 
     .c-eq {
-      background: linear-gradient(135deg, var(--accent), #00b896);
-      color: #05070f;
-      border: none;
+      background: rgba(0,245,200,0.12);
+      border: 1px solid rgba(0,245,200,0.3);
+      color: var(--accent);
       font-size: 18px;
     }
 
-    .c-eq:hover { opacity: 0.9; }
+    .c-eq:hover { background: rgba(0,245,200,0.22); box-shadow: 0 0 12px rgba(0,245,200,0.15); }
 
     .c-clear {
-      background: rgba(244,63,94,0.12);
+      background: rgba(255,56,96,0.08);
       color: var(--danger);
-      border: 1px solid rgba(244,63,94,0.25);
+      border: 1px solid rgba(255,56,96,0.2);
     }
 
-    .c-clear:hover { background: rgba(244,63,94,0.22); }
+    .c-clear:hover { background: rgba(255,56,96,0.18); }
 
     .c-zero { grid-column: span 2; }
 
     .calc-history {
-      border-top: 1px solid rgba(255,255,255,0.05);
+      border-top: 1px solid rgba(255,255,255,0.04);
       padding: 8px 14px;
       max-height: 80px;
       overflow-y: auto;
     }
 
     .calc-hist-title {
-      font-size: 10px;
+      font-family: 'Space Mono', monospace;
+      font-size: 9px;
       font-weight: 700;
-      letter-spacing: 1px;
+      letter-spacing: 2px;
       text-transform: uppercase;
       color: var(--muted);
       margin-bottom: 4px;
     }
 
     .calc-hist-item {
-      font-family: 'Space Mono', monospace;
+      font-family: 'JetBrains Mono', monospace;
       font-size: 11px;
       color: var(--muted);
       padding: 2px 0;
@@ -1032,51 +1353,82 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      background: rgba(5,7,15,0.92);
-      backdrop-filter: blur(8px);
+      background: rgba(3,5,13,0.94);
+      backdrop-filter: blur(10px);
     }
 
     .warning-box {
       background: var(--surface);
-      border: 2px solid var(--danger);
+      border: 1px solid rgba(255,56,96,0.3);
       border-radius: 20px;
       padding: 40px;
       max-width: 460px;
       width: 90%;
       text-align: center;
-      box-shadow: 0 0 60px rgba(244,63,94,0.2);
+      box-shadow: 0 0 80px rgba(255,56,96,0.1), inset 0 1px 0 rgba(255,255,255,0.04);
       animation: shake 0.5s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .warning-box::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--danger), transparent);
+      opacity: 0.5;
     }
 
     .warning-icon { font-size: 52px; margin-bottom: 16px; }
-    .warning-title { font-size: 22px; font-weight: 800; color: var(--danger); margin-bottom: 10px; }
-    .warning-msg { font-size: 14px; color: var(--muted); line-height: 1.7; margin-bottom: 20px; }
+    .warning-title {
+      font-family: 'Rajdhani', sans-serif;
+      font-size: 26px;
+      font-weight: 700;
+      color: var(--danger);
+      margin-bottom: 12px;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+    }
+
+    .warning-msg {
+      font-size: 14px;
+      color: var(--muted);
+      line-height: 1.7;
+      margin-bottom: 20px;
+    }
 
     .warning-strike {
-      font-size: 13px;
       font-family: 'Space Mono', monospace;
+      font-size: 12px;
       color: var(--warn);
-      background: rgba(245,158,11,0.1);
-      border: 1px solid rgba(245,158,11,0.3);
+      background: rgba(245,158,11,0.06);
+      border: 1px solid rgba(245,158,11,0.2);
       border-radius: 8px;
       padding: 10px 16px;
       margin-bottom: 24px;
+      letter-spacing: 0.5px;
     }
 
     .btn-warning-ok {
       padding: 13px 36px;
       border-radius: 10px;
-      background: linear-gradient(135deg, var(--danger), #c0224b);
-      border: none;
-      color: white;
-      font-family: 'Syne', sans-serif;
-      font-size: 14px;
-      font-weight: 800;
+      background: transparent;
+      border: 1px solid var(--danger);
+      color: var(--danger);
+      font-family: 'Rajdhani', sans-serif;
+      font-size: 15px;
+      font-weight: 700;
       cursor: pointer;
       transition: 0.18s;
+      letter-spacing: 1px;
+      text-transform: uppercase;
     }
 
-    .btn-warning-ok:hover { opacity: 0.9; }
+    .btn-warning-ok:hover {
+      background: var(--danger);
+      color: white;
+    }
 
     #fsPrompt {
       position: fixed;
@@ -1085,8 +1437,8 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      background: rgba(5,7,15,0.97);
-      backdrop-filter: blur(10px);
+      background: rgba(3,5,13,0.98);
+      backdrop-filter: blur(14px);
     }
 
     .fs-box {
@@ -1097,11 +1449,30 @@
       max-width: 440px;
       width: 90%;
       text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .fs-box::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--accent), transparent);
+      opacity: 0.4;
     }
 
     .fs-icon { font-size: 52px; margin-bottom: 16px; }
-    .fs-title { font-size: 22px; font-weight: 800; margin-bottom: 10px; }
-    .fs-sub { font-size: 14px; color: var(--muted); line-height: 1.6; margin-bottom: 28px; }
+
+    .fs-title {
+      font-family: 'Rajdhani', sans-serif;
+      font-size: 26px;
+      font-weight: 700;
+      margin-bottom: 10px;
+      letter-spacing: 0.5px;
+    }
+
+    .fs-sub { font-size: 14px; color: var(--muted); line-height: 1.7; margin-bottom: 28px; }
 
     #toastContainer {
       position: fixed;
@@ -1117,15 +1488,17 @@
 
     .toast {
       background: var(--surface);
-      border: 1px solid rgba(244,63,94,0.5);
+      border: 1px solid rgba(255,56,96,0.4);
       border-radius: 10px;
       padding: 10px 20px;
-      font-size: 13px;
+      font-family: 'Space Mono', monospace;
+      font-size: 12px;
       font-weight: 700;
       color: var(--danger);
-      font-family: 'Space Mono', monospace;
       animation: slideDown 0.3s ease forwards;
       white-space: nowrap;
+      letter-spacing: 0.5px;
+      box-shadow: 0 0 30px rgba(255,56,96,0.1);
     }
 
     .toast.fadeout { animation: fadeOut 0.5s ease forwards; }
@@ -1137,8 +1510,8 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      background: rgba(5,7,15,0.85);
-      backdrop-filter: blur(6px);
+      background: rgba(3,5,13,0.88);
+      backdrop-filter: blur(8px);
     }
 
     .modal-box {
@@ -1149,68 +1522,98 @@
       max-width: 400px;
       width: 90%;
       text-align: center;
-      box-shadow: 0 0 80px rgba(0,220,180,0.1);
+      box-shadow: 0 0 80px rgba(0,245,200,0.06), inset 0 1px 0 rgba(255,255,255,0.04);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .modal-box::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--accent2), var(--accent), transparent);
+      opacity: 0.4;
     }
 
     .modal-icon { font-size: 48px; margin-bottom: 16px; }
-    .modal-title { font-size: 24px; font-weight: 800; margin-bottom: 8px; }
+
+    .modal-title {
+      font-family: 'Rajdhani', sans-serif;
+      font-size: 26px;
+      font-weight: 700;
+      margin-bottom: 8px;
+      letter-spacing: 0.5px;
+    }
+
     .modal-sub { font-size: 14px; color: var(--muted); margin-bottom: 28px; line-height: 1.6; }
 
     .modal-stats {
       display: grid;
       grid-template-columns: 1fr 1fr 1fr;
-      gap: 12px;
+      gap: 10px;
       margin-bottom: 28px;
     }
 
     .stat-box {
       background: var(--bg);
-      border: 1px solid var(--border);
+      border: 1px solid rgba(255,255,255,0.05);
       border-radius: 10px;
       padding: 14px;
     }
 
     .stat-val {
-      font-size: 24px;
-      font-weight: 800;
-      color: var(--accent);
       font-family: 'Space Mono', monospace;
+      font-size: 22px;
+      font-weight: 700;
+      color: var(--accent);
     }
 
-    .stat-lbl { font-size: 11px; color: var(--muted); margin-top: 4px; }
+    .stat-lbl {
+      font-family: 'Space Mono', monospace;
+      font-size: 10px;
+      color: var(--muted);
+      margin-top: 4px;
+      letter-spacing: 0.5px;
+    }
+
     .modal-btns { display: flex; gap: 10px; }
 
     .btn-cancel {
       flex: 1;
       padding: 13px;
       border-radius: 10px;
-      background: var(--surface2);
-      border: 1px solid rgba(255,255,255,0.08);
+      background: transparent;
+      border: 1px solid rgba(255,255,255,0.07);
       color: var(--muted);
-      font-family: 'Syne', sans-serif;
-      font-size: 14px;
+      font-family: 'Rajdhani', sans-serif;
+      font-size: 15px;
       font-weight: 700;
       cursor: pointer;
       transition: 0.18s;
+      letter-spacing: 1px;
+      text-transform: uppercase;
     }
 
-    .btn-cancel:hover { color: var(--text); }
+    .btn-cancel:hover { color: var(--text); border-color: rgba(255,255,255,0.15); }
 
     .btn-confirm {
       flex: 1;
       padding: 13px;
       border-radius: 10px;
-      background: linear-gradient(135deg, var(--accent2), #9d50f7);
-      border: none;
-      color: white;
-      font-family: 'Syne', sans-serif;
-      font-size: 14px;
+      background: transparent;
+      border: 1px solid var(--accent2);
+      color: #a78bfa;
+      font-family: 'Rajdhani', sans-serif;
+      font-size: 15px;
       font-weight: 700;
       cursor: pointer;
       transition: 0.18s;
+      letter-spacing: 1px;
+      text-transform: uppercase;
     }
 
-    .btn-confirm:hover { opacity: 0.9; }
+    .btn-confirm:hover { background: var(--accent2); color: white; }
 
     #doneScreen {
       position: fixed;
@@ -1227,36 +1630,59 @@
 
     .done-glow {
       width: 120px; height: 120px;
-      background: radial-gradient(circle, rgba(0,220,180,0.3), transparent 70%);
+      background: radial-gradient(circle, rgba(0,245,200,0.15), transparent 70%);
       border-radius: 50%;
+      border: 1px solid rgba(0,245,200,0.2);
       display: flex; align-items: center; justify-content: center;
-      font-size: 56px;
+      font-size: 52px;
       margin: 0 auto 32px;
     }
 
-    .done-title { font-size: 36px; font-weight: 800; letter-spacing: -1px; margin-bottom: 10px; }
+    .done-title {
+      font-family: 'Rajdhani', sans-serif;
+      font-size: 40px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      margin-bottom: 12px;
+      background: linear-gradient(135deg, #fff 30%, var(--accent) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
     .done-sub { font-size: 16px; color: var(--muted); max-width: 400px; line-height: 1.6; margin-bottom: 32px; }
 
     .done-badge {
       display: inline-block;
-      background: rgba(0,220,180,0.1);
-      border: 1px solid rgba(0,220,180,0.3);
+      background: rgba(0,245,200,0.06);
+      border: 1px solid rgba(0,245,200,0.2);
       color: var(--accent);
       border-radius: 99px;
-      padding: 8px 20px;
+      padding: 10px 24px;
+      font-family: 'Space Mono', monospace;
       font-size: 13px;
       font-weight: 700;
-      font-family: 'Space Mono', monospace;
+      letter-spacing: 2px;
     }
 
-    /* scrollbar styling */
     ::-webkit-scrollbar { width: 4px; }
     ::-webkit-scrollbar-track { background: transparent; }
-    ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 99px; }
+    ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.07); border-radius: 99px; }
+
+    /* Pulse ring animation for live badge */
+    @keyframes pulseRing {
+      0% { box-shadow: 0 0 0 0 rgba(255,56,96,0.4); }
+      70% { box-shadow: 0 0 0 6px rgba(255,56,96,0); }
+      100% { box-shadow: 0 0 0 0 rgba(255,56,96,0); }
+    }
+
+    .rec-dot { animation: blink 1s infinite, pulseRing 2s infinite; }
   </style>
 </head>
 <body>
 
+<div class="login-orb1"></div>
+<div class="login-orb2"></div>
 <div id="toastContainer"></div>
 
 <div id="fsPrompt" class="hidden">
@@ -1264,7 +1690,7 @@
     <div class="fs-icon">⛶</div>
     <div class="fs-title">Fullscreen Required</div>
     <div class="fs-sub">This assessment must be taken in fullscreen mode. Please click the button below to continue. Exiting fullscreen will be flagged as a violation.</div>
-    <button class="btn-primary" onclick="requestFullscreen()">Enter Fullscreen →</button>
+    <button class="btn-primary" onclick="requestFullscreen()"><span>Enter Fullscreen →</span></button>
   </div>
 </div>
 
@@ -1274,17 +1700,29 @@
     <div class="warning-title" id="warnTitle">Violation Detected</div>
     <div class="warning-msg" id="warnMsg">Suspicious activity has been detected and logged.</div>
     <div class="warning-strike" id="warnStrike">Strike 1 of 3 — 2 more will auto-submit your test.</div>
-    <button class="btn-warning-ok" onclick="closeWarning()">I Understand — Resume Test</button>
+    <button class="btn-warning-ok" onclick="closeWarning()">I Understand — Resume</button>
   </div>
 </div>
 
 <!-- ============ LOGIN ============ -->
 <div id="loginScreen">
   <div class="login-box">
+    <div class="login-inner-glow"></div>
     <div class="brand">
       <div class="brand-icon">⚡</div>
       <div class="brand-name">Codi<span>vora</span></div>
     </div>
+
+    <!-- CANDIDATE WELCOME BANNER -->
+    <div class="candidate-banner">
+      <div class="candidate-avatar">MB</div>
+      <div class="candidate-info">
+        <div class="candidate-welcome">Welcome back</div>
+        <div class="candidate-name">Moumi Byapari</div>
+      </div>
+      <div class="candidate-id-badge">CODIVORA</div>
+    </div>
+
     <div class="login-title">Assessment Portal</div>
     <div class="login-sub">Enter your credentials to begin the SDE Internship evaluation.</div>
 
@@ -1294,9 +1732,9 @@
     <label for="candidatePass">Password</label>
     <input type="password" id="candidatePass" placeholder="••••••••••••"/>
 
-    <div id="loginErr">Invalid credentials. Please try again.</div>
+    <div id="loginErr">⚠ Invalid credentials. Please try again.</div>
 
-    <button class="btn-primary" onclick="doLogin()">Start Assessment →</button>
+    <button class="btn-primary" onclick="doLogin()"><span>Start Assessment →</span></button>
 
     <div class="login-note">
       <span></span>5 coding problems &nbsp;·&nbsp; 90 minutes &nbsp;·&nbsp; 20 marks each &nbsp;·&nbsp; Anti-cheat active
@@ -1308,6 +1746,13 @@
 <div id="testScreen" class="hidden">
   <div class="topbar">
     <div class="topbar-brand">⚡ Codivora</div>
+
+    <!-- Candidate name in topbar -->
+    <div class="topbar-candidate">
+      <div class="topbar-candidate-dot">MB</div>
+      <div class="topbar-candidate-name">Moumi Byapari</div>
+    </div>
+
     <div class="progress-wrap">
       <div class="progress-label">
         <span id="progressLabel">Question 1 of 5</span>
@@ -1319,7 +1764,7 @@
     </div>
     <div class="marks-box">🏆 100 Marks Total</div>
     <div class="strike-box">
-      <span style="font-size:11px;letter-spacing:1px;text-transform:uppercase;">Strikes</span>
+      <span style="font-size:9px;letter-spacing:2px;text-transform:uppercase;">Strikes</span>
       <div class="strike-pips">
         <div class="strike-pip" id="pip0"></div>
         <div class="strike-pip" id="pip1"></div>
@@ -1347,8 +1792,8 @@
       <div id="questionBody"></div>
       <div class="nav-btns">
         <button class="btn-nav btn-prev" onclick="goPrev()">← Prev</button>
-        <button class="btn-nav btn-next" id="btnNext" onclick="goNext()">Next →</button>
-        <button class="btn-nav btn-submit hidden" id="btnSubmit" onclick="openModal()">Submit Test</button>
+        <button class="btn-nav btn-next" id="btnNext" onclick="goNext()"><span>Next →</span></button>
+        <button class="btn-nav btn-submit hidden" id="btnSubmit" onclick="openModal()"><span>Submit Test</span></button>
       </div>
     </div>
 
@@ -1451,12 +1896,11 @@
 <div id="doneScreen" class="hidden">
   <div class="done-glow">✅</div>
   <div class="done-title">Assessment Submitted</div>
-  <div class="done-sub">Your responses have been recorded. Our team will evaluate your submission and reach out via email within 2–3 business days.</div>
+  <div class="done-sub">Your responses have been recorded, Moumi. Our team will evaluate your submission and reach out via email within 2–3 business days.</div>
   <div class="done-badge">REF: CODI-<span id="refCode"></span></div>
 </div>
 
 <script>
-// ===================== DATA =====================
 const USERS = [
   { id: "CODIVORA", pass: "12345" }
 ];
@@ -1481,34 +1925,7 @@ Formally: dp[S][v] = minimum cost to connect the subset S of special cities, wit
       { input: 'n=4, edges=[[1,2,1],[2,3,1],[3,4,1]], specials=[1,4]', output: '3' }
     ],
     constraints: `1 ≤ n ≤ 200 | 1 ≤ edges ≤ 2000 | 1 ≤ k ≤ 10 (special cities) | Edge costs: 1 ≤ w ≤ 10⁵ | Time: O(3^k · n + 2^k · n² + n³)`,
-    placeholder: `# Steiner Tree with Bitmask DP
-# dp[mask][v] = min cost to interconnect cities in 'mask', rooted at v
-
-import heapq
-from math import inf
-
-def steiner_tree(n, edges, specials):
-    k = len(specials)
-    # Build adjacency list
-    graph = [[] for _ in range(n + 1)]
-    for u, v, w in edges:
-        graph[u].append((v, w))
-        graph[v].append((u, w))
-    
-    # TODO: Initialize dp table
-    # dp[mask][v] for mask in range(1 << k), v in range(1, n+1)
-    
-    # TODO: Base case — single special city subsets
-    
-    # TODO: Dijkstra relaxation for each mask
-    
-    # TODO: Combine two disjoint subsets
-    
-    # TODO: Return min over all nodes for full mask (1<<k)-1
-    pass
-
-# Example usage
-print(steiner_tree(5, [[1,2,3],[2,3,1],[3,4,6],[4,5,2],[1,5,9]], [1,3,5]))  # 12`
+    placeholder: `# Steiner Tree with Bitmask DP\n# dp[mask][v] = min cost to interconnect cities in 'mask', rooted at v\n\nimport heapq\nfrom math import inf\n\ndef steiner_tree(n, edges, specials):\n    k = len(specials)\n    # Build adjacency list\n    graph = [[] for _ in range(n + 1)]\n    for u, v, w in edges:\n        graph[u].append((v, w))\n        graph[v].append((u, w))\n    \n    # TODO: Initialize dp table\n    # dp[mask][v] for mask in range(1 << k), v in range(1, n+1)\n    \n    # TODO: Base case — single special city subsets\n    \n    # TODO: Dijkstra relaxation for each mask\n    \n    # TODO: Combine two disjoint subsets\n    \n    # TODO: Return min over all nodes for full mask (1<<k)-1\n    pass\n\n# Example usage\nprint(steiner_tree(5, [[1,2,3],[2,3,1],[3,4,6],[4,5,2],[1,5,9]], [1,3,5]))  # 12`
   },
   {
     type: 'coding',
@@ -1516,39 +1933,13 @@ print(steiner_tree(5, [[1,2,3],[2,3,1],[3,4,6],[4,5,2],[1,5,9]], [1,3,5]))  # 12
     difficulty: 'hard',
     lang: 'Python / Java / C++',
     q: 'Palindrome Partitioning IV — Minimum Cuts with At Most K Distinct Characters Per Part',
-    problem: `Given a string s of length n, partition it into exactly p parts such that:
-1. Each part is a palindrome, AND
-2. Each part contains at most k distinct characters.
-
-Return the minimum number of cuts needed to achieve such a partition, or -1 if impossible.
-
-You must combine palindrome-interval DP (O(n²) Manacher-style precomputation of isPalin[i][j]) with a knapsack-style partition DP that tracks distinct character counts per segment. Naive O(n³) solutions will TLE for n > 2000.`,
+    problem: `Given a string s of length n, partition it into exactly p parts such that:\n1. Each part is a palindrome, AND\n2. Each part contains at most k distinct characters.\n\nReturn the minimum number of cuts needed to achieve such a partition, or -1 if impossible.\n\nYou must combine palindrome-interval DP (O(n²) Manacher-style precomputation of isPalin[i][j]) with a knapsack-style partition DP that tracks distinct character counts per segment. Naive O(n³) solutions will TLE for n > 2000.`,
     examples: [
       { input: 's="aabbc", p=3, k=2', output: '2  (cuts: "aa"|"bb"|"c" — all palindromes, ≤2 distinct each)' },
       { input: 's="abcba", p=2, k=3', output: '1  (cuts: "abcba" is palindrome with 3 distinct — valid as 1 part, but p=2 requires exactly 2 parts — answer: 1 cut into "a"|"bcb" both palindromes ≤3 distinct)' }
     ],
     constraints: `1 ≤ n ≤ 3000 | 1 ≤ p ≤ n | 1 ≤ k ≤ 26 | s consists of lowercase English letters | Expected: O(n² · p) time`,
-    placeholder: `# Palindrome Partitioning IV
-# Step 1: Precompute isPalin[i][j] using DP or Manacher expansion — O(n²)
-# Step 2: Precompute distinctCount[i][j] using prefix frequency arrays — O(n²)
-# Step 3: DP: dp[i][t] = min cuts to partition s[0..i-1] into exactly t valid parts
-
-def min_cuts_palindrome_k_distinct(s, p, k):
-    n = len(s)
-    INF = float('inf')
-    
-    # TODO: Precompute isPalin[i][j]
-    
-    # TODO: Precompute distinct[i][j] = number of distinct chars in s[i..j]
-    
-    # TODO: dp[i][t] = min cuts for s[0..i] using exactly t parts
-    # Transition: dp[j][t] = min(dp[i][t-1] + 1) for all i < j
-    #             where isPalin[i+1][j] and distinct[i+1][j] <= k
-    
-    # TODO: Return dp[n-1][p] or -1 if INF
-    pass
-
-print(min_cuts_palindrome_k_distinct("aabbc", 3, 2))  # 2`
+    placeholder: `# Palindrome Partitioning IV\n# Step 1: Precompute isPalin[i][j] using DP or Manacher expansion — O(n²)\n# Step 2: Precompute distinctCount[i][j] using prefix frequency arrays — O(n²)\n# Step 3: DP: dp[i][t] = min cuts to partition s[0..i-1] into exactly t valid parts\n\ndef min_cuts_palindrome_k_distinct(s, p, k):\n    n = len(s)\n    INF = float('inf')\n    \n    # TODO: Precompute isPalin[i][j]\n    \n    # TODO: Precompute distinct[i][j] = number of distinct chars in s[i..j]\n    \n    # TODO: dp[i][t] = min cuts for s[0..i] using exactly t parts\n    # Transition: dp[j][t] = min(dp[i][t-1] + 1) for all i < j\n    #             where isPalin[i+1][j] and distinct[i+1][j] <= k\n    \n    # TODO: Return dp[n-1][p] or -1 if INF\n    pass\n\nprint(min_cuts_palindrome_k_distinct("aabbc", 3, 2))  # 2`
   },
   {
     type: 'coding',
@@ -1556,63 +1947,13 @@ print(min_cuts_palindrome_k_distinct("aabbc", 3, 2))  # 2`
     difficulty: 'hard',
     lang: 'Python / Java / C++',
     q: 'Persistent Segment Tree — Range Sum with Point Updates on Historical Versions',
-    problem: `Implement a Persistent Segment Tree that supports:
-- update(version, idx, val): Creates a new version of the tree from 'version' with index idx set to val. Returns the new version ID.
-- query(version, l, r): Returns the sum of elements in range [l, r] in the given version.
-- rollback(version): Makes the given historical version the "current" working version.
-
-All versions are immutable — each update creates a new root, sharing unchanged nodes with the previous version (path copying). The tree must handle up to 10⁵ updates and 10⁵ queries over an array of size up to 10⁵ in O(log n) per operation and O(n + Q log n) total space.`,
+    problem: `Implement a Persistent Segment Tree that supports:\n- update(version, idx, val): Creates a new version of the tree from 'version' with index idx set to val. Returns the new version ID.\n- query(version, l, r): Returns the sum of elements in range [l, r] in the given version.\n- rollback(version): Makes the given historical version the "current" working version.\n\nAll versions are immutable — each update creates a new root, sharing unchanged nodes with the previous version (path copying). The tree must handle up to 10⁵ updates and 10⁵ queries over an array of size up to 10⁵ in O(log n) per operation and O(n + Q log n) total space.`,
     examples: [
       { input: 'n=6, ops: update(0,2,5), update(1,4,3), query(1,1,4), query(2,1,4)', output: 'query(1,1,4)=5 | query(2,1,4)=8' },
       { input: 'rollback to v1 then query(1,1,6)', output: '5  (v2 changes not visible)' }
     ],
     constraints: `1 ≤ n ≤ 10⁵ | 1 ≤ Q ≤ 10⁵ | 0 ≤ val ≤ 10⁹ | Each update: O(log n) new nodes | Total space: O(n + Q log n)`,
-    placeholder: `# Persistent Segment Tree Implementation
-
-class Node:
-    def __init__(self, left=None, right=None, val=0):
-        self.left = left
-        self.right = right
-        self.val = val
-
-class PersistentSegTree:
-    def __init__(self, n):
-        self.n = n
-        self.versions = []
-        # Build initial version (all zeros)
-        self.versions.append(self._build(0, n - 1))
-    
-    def _build(self, l, r):
-        # TODO: Build zero-initialized tree, return root node
-        pass
-    
-    def update(self, version, idx, val):
-        # TODO: Path-copy from versions[version], update idx, append new root
-        # Return new version id
-        pass
-    
-    def _update(self, node, l, r, idx, val):
-        # TODO: Recursive path-copy update
-        pass
-    
-    def query(self, version, l, r):
-        # TODO: Query sum in [l, r] on versions[version]
-        pass
-    
-    def _query(self, node, l, r, ql, qr):
-        # TODO: Recursive range sum query
-        pass
-    
-    def rollback(self, version):
-        # TODO: Push versions[version] as the new "current" working version
-        pass
-
-# Example usage
-pst = PersistentSegTree(6)
-v1 = pst.update(0, 2, 5)
-v2 = pst.update(v1, 4, 3)
-print(pst.query(v1, 1, 4))  # 5
-print(pst.query(v2, 1, 4))  # 8`
+    placeholder: `# Persistent Segment Tree Implementation\n\nclass Node:\n    def __init__(self, left=None, right=None, val=0):\n        self.left = left\n        self.right = right\n        self.val = val\n\nclass PersistentSegTree:\n    def __init__(self, n):\n        self.n = n\n        self.versions = []\n        self.versions.append(self._build(0, n - 1))\n    \n    def _build(self, l, r):\n        pass\n    \n    def update(self, version, idx, val):\n        pass\n    \n    def _update(self, node, l, r, idx, val):\n        pass\n    \n    def query(self, version, l, r):\n        pass\n    \n    def _query(self, node, l, r, ql, qr):\n        pass\n    \n    def rollback(self, version):\n        pass\n\npst = PersistentSegTree(6)\nv1 = pst.update(0, 2, 5)\nv2 = pst.update(v1, 4, 3)\nprint(pst.query(v1, 1, 4))  # 5\nprint(pst.query(v2, 1, 4))  # 8`
   },
   {
     type: 'coding',
@@ -1620,54 +1961,13 @@ print(pst.query(v2, 1, 4))  # 8`
     difficulty: 'hard',
     lang: 'Python / Java / C++',
     q: 'Aho-Corasick Automaton — Multi-Pattern Matching with Wildcard Support',
-    problem: `Build an Aho-Corasick automaton over a dictionary of p pattern strings. Then, given a text string T of length n, find all starting positions in T where any pattern occurs, where patterns may contain the wildcard character '?' which matches any single character.
-
-Your implementation must:
-1. Build the trie and compute failure links — O(total pattern length · alphabet size).
-2. Extend goto transitions to handle '?' wildcards during trie construction (a '?' node branches to all 26 children simultaneously).
-3. Process text T in O(n · 26) worst case to output all (pattern_id, start_position) matches.
-
-Return a sorted list of (start_index, pattern_index) pairs (0-indexed).`,
+    problem: `Build an Aho-Corasick automaton over a dictionary of p pattern strings. Then, given a text string T of length n, find all starting positions in T where any pattern occurs, where patterns may contain the wildcard character '?' which matches any single character.\n\nYour implementation must:\n1. Build the trie and compute failure links — O(total pattern length · alphabet size).\n2. Extend goto transitions to handle '?' wildcards during trie construction.\n3. Process text T in O(n · 26) worst case to output all (pattern_id, start_position) matches.\n\nReturn a sorted list of (start_index, pattern_index) pairs (0-indexed).`,
     examples: [
       { input: 'patterns=["a?c","bc"], text="abcbcd"', output: '[(0,0),(1,1),(3,1)]  — "a?c" matches at 0 ("abc"), "bc" matches at 1 and 3' },
       { input: 'patterns=["?b","ab"], text="ababab"', output: '[(0,0),(0,1),(2,0),(2,1),(4,0),(4,1)]' }
     ],
     constraints: `1 ≤ p ≤ 500 | 1 ≤ |pattern| ≤ 100 | 1 ≤ n ≤ 10⁵ | Patterns contain lowercase letters and '?' | Text contains only lowercase letters`,
-    placeholder: `# Aho-Corasick with Wildcard '?' support
-from collections import deque
-
-class AhoCorasick:
-    def __init__(self):
-        # goto[node][char] = next node (-1 = not set)
-        self.goto = [{}]
-        self.fail = [0]
-        self.output = [[]]  # pattern ids ending at this node
-    
-    def insert(self, pattern, pid):
-        # TODO: Insert pattern into trie
-        # '?' during construction: create a meta-node that links to all 26 chars
-        pass
-    
-    def build(self):
-        # TODO: BFS to compute failure links
-        # Also propagate output sets through failure links
-        pass
-    
-    def search(self, text):
-        # TODO: Process text char-by-char through automaton
-        # Collect all (start_pos, pattern_id) matches
-        pass
-
-def multi_pattern_wildcard(patterns, text):
-    ac = AhoCorasick()
-    for i, p in enumerate(patterns):
-        ac.insert(p, i)
-    ac.build()
-    return sorted(ac.search(text))
-
-# Example usage
-print(multi_pattern_wildcard(["a?c","bc"], "abcbcd"))
-# Expected: [(0,0),(1,1),(3,1)]`
+    placeholder: `# Aho-Corasick with Wildcard '?' support\nfrom collections import deque\n\nclass AhoCorasick:\n    def __init__(self):\n        self.goto = [{}]\n        self.fail = [0]\n        self.output = [[]]\n    \n    def insert(self, pattern, pid):\n        pass\n    \n    def build(self):\n        pass\n    \n    def search(self, text):\n        pass\n\ndef multi_pattern_wildcard(patterns, text):\n    ac = AhoCorasick()\n    for i, p in enumerate(patterns):\n        ac.insert(p, i)\n    ac.build()\n    return sorted(ac.search(text))\n\nprint(multi_pattern_wildcard(["a?c","bc"], "abcbcd"))\n# Expected: [(0,0),(1,1),(3,1)]`
   },
   {
     type: 'coding',
@@ -1675,56 +1975,13 @@ print(multi_pattern_wildcard(["a?c","bc"], "abcbcd"))
     difficulty: 'hard',
     lang: 'Python / Java / C++',
     q: 'Online Convex Hull Trick — Minimum Cost DP with Line Container',
-    problem: `You are given an array of n tasks. Task i has a processing_time[i] and a deadline[i]. If you schedule tasks in a contiguous batch from index i to j, the cost of that batch is:
-
-  cost(i, j) = (sum of processing_time[i..j])² + C
-
-where C is a fixed setup cost. Find the minimum total cost to partition all n tasks into contiguous batches, using the Convex Hull Trick (CHT) / Li Chao tree to achieve O(n log n) instead of O(n²).
-
-This is a classic "slope trick" DP: dp[j] = min over i<j of { dp[i] + (prefix[j] - prefix[i])² + C }. Expanding: dp[j] = dp[i] + prefix[j]² - 2·prefix[j]·prefix[i] + prefix[i]² + C. This fits the CHT form y = m·x + b where lines are parameterized by i and queries by j.`,
+    problem: `You are given an array of n tasks. Task i has a processing_time[i] and a deadline[i]. If you schedule tasks in a contiguous batch from index i to j, the cost of that batch is:\n\n  cost(i, j) = (sum of processing_time[i..j])² + C\n\nwhere C is a fixed setup cost. Find the minimum total cost to partition all n tasks into contiguous batches, using the Convex Hull Trick (CHT) / Li Chao tree to achieve O(n log n) instead of O(n²).\n\nThis is a classic "slope trick" DP: dp[j] = min over i<j of { dp[i] + (prefix[j] - prefix[i])² + C }. Expanding fits the CHT form y = m·x + b where lines are parameterized by i and queries by j.`,
     examples: [
-      { input: 'processing_time=[3,1,4,1,5,9,2,6], C=10', output: '131  (optimal batching minimizes squared sums + setup costs)' },
-      { input: 'processing_time=[1,1,1,1], C=5', output: '21  (four batches of 1: 4×(1²+5)=24 vs two batches of 2: 2×(4+5)=18 vs one batch: 16+5=21 → 21)' }
+      { input: 'processing_time=[3,1,4,1,5,9,2,6], C=10', output: '131' },
+      { input: 'processing_time=[1,1,1,1], C=5', output: '21' }
     ],
     constraints: `1 ≤ n ≤ 10⁶ | 1 ≤ processing_time[i] ≤ 10⁴ | 0 ≤ C ≤ 10⁹ | Prefix sums ≤ 10¹⁰ — use 64-bit integers | Expected: O(n log n) with Li Chao tree or O(n) with monotone CHT`,
-    placeholder: `# Convex Hull Trick DP — O(n log n) with Li Chao Tree
-# OR O(n) with monotone deque CHT (since queries are monotonically increasing)
-
-import sys
-from math import inf
-
-def min_batch_cost(proc_times, C):
-    n = len(proc_times)
-    prefix = [0] * (n + 1)
-    for i in range(n):
-        prefix[i+1] = prefix[i] + proc_times[i]
-    
-    # dp[j] = min cost to schedule first j tasks
-    dp = [inf] * (n + 1)
-    dp[0] = 0
-    
-    # CHT Line: for each i, line has slope m = -2*prefix[i]
-    # and intercept b = dp[i] + prefix[i]^2 + C
-    # Query at x = prefix[j]: dp[j] = min(m*x + b) + prefix[j]^2
-    
-    # TODO: Implement Li Chao Tree or monotone deque CHT
-    # Li Chao Tree supports arbitrary query order (O(n log n))
-    # Monotone deque works here since prefix is non-decreasing (O(n))
-    
-    class Line:
-        def __init__(self, m, b):
-            self.m = m
-            self.b = b
-        def eval(self, x):
-            return self.m * x + self.b
-    
-    # TODO: Add lines and query minimum
-    
-    return dp[n]
-
-# Example usage
-print(min_batch_cost([3,1,4,1,5,9,2,6], 10))   # 131
-print(min_batch_cost([1,1,1,1], 5))              # 21`
+    placeholder: `# Convex Hull Trick DP — O(n log n) with Li Chao Tree\nimport sys\nfrom math import inf\n\ndef min_batch_cost(proc_times, C):\n    n = len(proc_times)\n    prefix = [0] * (n + 1)\n    for i in range(n):\n        prefix[i+1] = prefix[i] + proc_times[i]\n    \n    dp = [inf] * (n + 1)\n    dp[0] = 0\n    \n    class Line:\n        def __init__(self, m, b):\n            self.m = m\n            self.b = b\n        def eval(self, x):\n            return self.m * x + self.b\n    \n    # TODO: Add lines and query minimum\n    \n    return dp[n]\n\nprint(min_batch_cost([3,1,4,1,5,9,2,6], 10))   # 131\nprint(min_batch_cost([1,1,1,1], 5))              # 21`
   }
 ];
 
@@ -1741,7 +1998,6 @@ let testActive = false;
 let warningOpen = false;
 let devtoolsCheckInt = null;
 
-// ===================== LOGIN =====================
 function doLogin() {
   const id = document.getElementById('candidateId').value.trim();
   const pass = document.getElementById('candidatePass').value;
@@ -1761,7 +2017,6 @@ function doLogin() {
   initAntiCheat();
 }
 
-// ===================== CAMERA =====================
 function startCam() {
   navigator.mediaDevices.getUserMedia({ video: true, audio: false })
     .then(stream => {
@@ -1774,7 +2029,6 @@ function startCam() {
     });
 }
 
-// ===================== TIMER =====================
 function startTimer() {
   timerInt = setInterval(() => {
     totalTime--;
@@ -1790,7 +2044,6 @@ function startTimer() {
   }, 1000);
 }
 
-// ===================== Q MAP =====================
 function buildQMap() {
   const grid = document.getElementById('qmapGrid');
   grid.innerHTML = '';
@@ -1814,7 +2067,7 @@ function buildScoreRows() {
     container.appendChild(row);
   });
   const divider = document.createElement('div');
-  divider.style.cssText = 'border-top:1px solid rgba(255,255,255,0.07);margin:8px 0';
+  divider.style.cssText = 'border-top:1px solid rgba(255,255,255,0.06);margin:8px 0';
   container.appendChild(divider);
   const total = document.createElement('div');
   total.className = 'score-row';
@@ -1844,17 +2097,13 @@ function updateScoreRows() {
     }
   });
   const tot = document.getElementById('scoreTotalDisp');
-  if (tot) {
-    tot.textContent = totalAttempted + ' attempted / 100 max';
-  }
+  if (tot) tot.textContent = totalAttempted + ' attempted / 100 max';
 }
 
-// ===================== RENDER QUESTION =====================
 function renderQ() {
   const qd = QUESTIONS[current];
   document.getElementById('qCat').textContent = qd.cat;
-  document.getElementById('qNum').textContent =
-    String(current + 1).padStart(2,'0') + '/' + TOTAL;
+  document.getElementById('qNum').textContent = String(current + 1).padStart(2,'0') + '/' + TOTAL;
   document.getElementById('questionText').textContent = (current + 1) + '. ' + qd.q;
 
   const pct = Math.round((current / (TOTAL - 1)) * 100);
@@ -1905,12 +2154,12 @@ function renderCodingQ(qd, container, idx) {
             <div class="editor-dot dot-green"></div>
           </div>
           <div class="editor-filename">lang: Python / Java / C++</div>
-          <button class="editor-clear" onclick="clearCode(${idx})">Clear</button>
+          <button class="editor-clear" onclick="clearCode(${idx})">CLEAR</button>
         </div>
         <textarea class="code-editor" id="codeEditor_${idx}" placeholder="${qd.placeholder}" spellcheck="false" autocorrect="off" autocapitalize="off">${savedCode}</textarea>
         <div class="editor-footer">
           <div class="char-count" id="charCount_${idx}">${savedCode.length} chars</div>
-          <div class="code-saved-indicator" id="savedInd_${idx}">✓ Saved</div>
+          <div class="code-saved-indicator" id="savedInd_${idx}">✓ SAVED</div>
         </div>
       </div>
     </div>
@@ -1958,7 +2207,6 @@ function goNext() {
   if (current < TOTAL - 1) { current++; renderQ(); }
 }
 
-// ===================== SUBMIT =====================
 function openModal() {
   const attempted = codeAnswers.filter(c => c && c.trim().length > 10).length;
   const skipped = TOTAL - attempted;
@@ -1982,8 +2230,7 @@ function finalSubmit() {
   document.getElementById('testScreen').classList.add('hidden');
   document.getElementById('calcPanel').classList.add('hidden');
   document.getElementById('doneScreen').classList.remove('hidden');
-  document.getElementById('refCode').textContent =
-    Math.random().toString(36).substring(2,8).toUpperCase();
+  document.getElementById('refCode').textContent = Math.random().toString(36).substring(2,8).toUpperCase();
 }
 
 // ===================== CALCULATOR =====================
@@ -2081,7 +2328,6 @@ function renderCalcHistory() {
   }).join('');
 }
 
-// Draggable calculator
 (function() {
   let isDragging = false, startX, startY, initLeft, initTop;
   document.addEventListener('DOMContentLoaded', () => {

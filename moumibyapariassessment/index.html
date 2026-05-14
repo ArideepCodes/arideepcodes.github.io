@@ -1,1 +1,2496 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Codivora ✡ Assessment Portal</title>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;600;700;800&family=JetBrains+Mono:wght@400;500;700&family=Rajdhani:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
+    :root {
+      --bg: #03050d;
+      --surface: #080d1a;
+      --surface2: #0d1526;
+      --surface3: #121d30;
+      --border: rgba(0,220,180,0.14);
+      --accent: #00f5c8;
+      --accent2: #8b5cf6;
+      --accent3: #06b6d4;
+      --text: #e2e8f0;
+      --muted: #4e6080;
+      --danger: #ff3860;
+      --warn: #f59e0b;
+      --radius: 14px;
+      --code-bg: #060b18;
+      --glow: rgba(0,245,200,0.06);
+      --glow2: rgba(139,92,246,0.07);
+    }
+
+    body {
+      font-family: 'Syne', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      overflow-x: hidden;
+      user-select: none;
+      -webkit-user-select: none;
+    }
+
+    /* Animated scanline overlay */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image:
+        repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,0.08) 2px, rgba(0,0,0,0.08) 4px),
+        linear-gradient(rgba(0,245,200,0.025) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0,245,200,0.025) 1px, transparent 1px);
+      background-size: 100% 4px, 48px 48px, 48px 48px;
+      pointer-events: none;
+      z-index: 0;
+      animation: scanmove 8s linear infinite;
+    }
+
+    @keyframes scanmove {
+      0% { background-position: 0 0, 0 0, 0 0; }
+      100% { background-position: 0 100px, 0 0, 0 0; }
+    }
+
+    /* Corner decorations on body */
+    body::after {
+      content: '';
+      position: fixed;
+      top: 0; left: 0;
+      width: 200px; height: 200px;
+      background: radial-gradient(ellipse at 0% 0%, rgba(0,245,200,0.07) 0%, transparent 70%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .hidden { display: none !important; }
+
+    /* ===================== LOGIN ===================== */
+    #loginScreen {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      padding: 20px;
+    }
+
+    /* Animated orbs behind login */
+    .login-orb1 {
+      position: fixed;
+      width: 600px; height: 600px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(139,92,246,0.08) 0%, transparent 65%);
+      top: -200px; right: -200px;
+      pointer-events: none;
+      z-index: 0;
+      animation: orb1float 12s ease-in-out infinite alternate;
+    }
+
+    .login-orb2 {
+      position: fixed;
+      width: 400px; height: 400px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(0,245,200,0.07) 0%, transparent 65%);
+      bottom: -100px; left: -100px;
+      pointer-events: none;
+      z-index: 0;
+      animation: orb2float 15s ease-in-out infinite alternate;
+    }
+
+    @keyframes orb1float {
+      from { transform: translate(0,0) scale(1); }
+      to { transform: translate(-40px,30px) scale(1.1); }
+    }
+
+    @keyframes orb2float {
+      from { transform: translate(0,0) scale(1); }
+      to { transform: translate(30px,-40px) scale(0.9); }
+    }
+
+    .login-box {
+      background: var(--surface);
+      border: 1px solid rgba(0,245,200,0.15);
+      border-radius: 24px;
+      padding: 48px 44px;
+      width: 100%;
+      max-width: 460px;
+      box-shadow:
+        0 0 0 1px rgba(0,245,200,0.04),
+        0 0 80px rgba(0,0,0,0.6),
+        inset 0 1px 0 rgba(255,255,255,0.04);
+      position: relative;
+      overflow: hidden;
+      z-index: 1;
+      animation: loginReveal 0.7s cubic-bezier(0.22,1,0.36,1) forwards;
+    }
+
+    @keyframes loginReveal {
+      from { opacity: 0; transform: translateY(24px) scale(0.97); }
+      to { opacity: 1; transform: translateY(0) scale(1); }
+    }
+
+    /* Animated corner brackets on login box */
+    .login-box::before {
+      content: '';
+      position: absolute;
+      top: -1px; left: -1px;
+      width: 60px; height: 60px;
+      border-top: 2px solid var(--accent);
+      border-left: 2px solid var(--accent);
+      border-radius: 24px 0 0 0;
+      opacity: 0.5;
+    }
+
+    .login-box::after {
+      content: '';
+      position: absolute;
+      bottom: -1px; right: -1px;
+      width: 60px; height: 60px;
+      border-bottom: 2px solid var(--accent2);
+      border-right: 2px solid var(--accent2);
+      border-radius: 0 0 24px 0;
+      opacity: 0.5;
+    }
+
+    /* Login interior glow */
+    .login-inner-glow {
+      position: absolute;
+      top: -120px; right: -120px;
+      width: 320px; height: 320px;
+      background: radial-gradient(circle, rgba(139,92,246,0.12) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 36px;
+    }
+
+    .brand-icon {
+      width: 44px; height: 44px;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      border-radius: 12px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 20px;
+      box-shadow: 0 0 20px rgba(0,245,200,0.25);
+      position: relative;
+    }
+
+    .brand-icon::after {
+      content: '';
+      position: absolute;
+      inset: -2px;
+      border-radius: 14px;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      opacity: 0.2;
+      z-index: -1;
+      filter: blur(6px);
+    }
+
+    .brand-name {
+      font-family: 'Rajdhani', sans-serif;
+      font-size: 26px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+    }
+
+    .brand-name span { color: var(--accent); }
+
+    .login-title {
+      font-family: 'Rajdhani', sans-serif;
+      font-size: 32px;
+      font-weight: 700;
+      margin-bottom: 8px;
+      letter-spacing: 0.5px;
+      background: linear-gradient(135deg, #fff 30%, var(--accent) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .login-sub {
+      font-size: 13.5px;
+      color: var(--muted);
+      margin-bottom: 36px;
+      line-height: 1.6;
+    }
+
+    label {
+      display: block;
+      font-family: 'Space Mono', monospace;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 8px;
+      opacity: 0.8;
+    }
+
+    input[type="text"], input[type="password"] {
+      width: 100%;
+      background: var(--code-bg);
+      border: 1px solid rgba(255,255,255,0.07);
+      border-radius: 10px;
+      padding: 14px 16px;
+      color: var(--text);
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 14px;
+      outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
+      margin-bottom: 20px;
+    }
+
+    input[type="text"]:focus, input[type="password"]:focus {
+      border-color: rgba(0,245,200,0.4);
+      box-shadow: 0 0 0 3px rgba(0,245,200,0.08), inset 0 0 20px rgba(0,245,200,0.03);
+    }
+
+    .btn-primary {
+      width: 100%;
+      padding: 15px;
+      background: transparent;
+      border: 1px solid var(--accent);
+      border-radius: 10px;
+      color: var(--accent);
+      font-family: 'Rajdhani', sans-serif;
+      font-size: 17px;
+      font-weight: 700;
+      cursor: pointer;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      transition: all 0.2s;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .btn-primary::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: var(--accent);
+      transform: translateX(-100%);
+      transition: transform 0.3s cubic-bezier(0.22,1,0.36,1);
+    }
+
+    .btn-primary:hover::before { transform: translateX(0); }
+    .btn-primary:hover { color: #03050d; }
+    .btn-primary span { position: relative; z-index: 1; }
+    .btn-primary:active { transform: scale(0.98); }
+
+    .login-note {
+      text-align: center;
+      margin-top: 22px;
+      font-family: 'Space Mono', monospace;
+      font-size: 10px;
+      color: var(--muted);
+      letter-spacing: 0.5px;
+    }
+
+    .login-note span {
+      display: inline-block;
+      width: 5px; height: 5px;
+      background: var(--accent);
+      border-radius: 50%;
+      margin-right: 6px;
+      vertical-align: middle;
+      animation: blink 1.4s infinite;
+      box-shadow: 0 0 6px var(--accent);
+    }
+
+    @keyframes blink {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.15; }
+    }
+
+    @keyframes shake {
+      0%,100% { transform: translateX(0); }
+      20% { transform: translateX(-10px); }
+      40% { transform: translateX(10px); }
+      60% { transform: translateX(-8px); }
+      80% { transform: translateX(8px); }
+    }
+
+    @keyframes slideDown {
+      from { transform: translateY(-100%); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+
+    @keyframes fadeOut {
+      from { opacity: 1; }
+      to { opacity: 0; }
+    }
+
+    #loginErr {
+      color: var(--danger);
+      font-family: 'Space Mono', monospace;
+      font-size: 12px;
+      margin-top: -14px;
+      margin-bottom: 16px;
+      display: none;
+      letter-spacing: 0.5px;
+    }
+
+    /* ===================== CANDIDATE WELCOME BANNER ===================== */
+    .candidate-banner {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      background: linear-gradient(90deg, rgba(0,245,200,0.06) 0%, rgba(139,92,246,0.06) 100%);
+      border: 1px solid rgba(0,245,200,0.15);
+      border-radius: 12px;
+      padding: 14px 18px;
+      margin-bottom: 36px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .candidate-banner::before {
+      content: '';
+      position: absolute;
+      left: 0; top: 0; bottom: 0;
+      width: 3px;
+      background: linear-gradient(180deg, var(--accent), var(--accent2));
+      border-radius: 3px 0 0 3px;
+    }
+
+    .candidate-avatar {
+      width: 42px; height: 42px;
+      border-radius: 10px;
+      background: linear-gradient(135deg, rgba(0,245,200,0.2), rgba(139,92,246,0.2));
+      border: 1px solid rgba(0,245,200,0.25);
+      display: flex; align-items: center; justify-content: center;
+      font-family: 'Rajdhani', sans-serif;
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--accent);
+      flex-shrink: 0;
+    }
+
+    .candidate-info { flex: 1; min-width: 0; }
+
+    .candidate-welcome {
+      font-family: 'Space Mono', monospace;
+      font-size: 10px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 3px;
+    }
+
+    .candidate-name {
+      font-family: 'Rajdhani', sans-serif;
+      font-size: 18px;
+      font-weight: 700;
+      color: #fff;
+      letter-spacing: 0.5px;
+    }
+
+    .candidate-id-badge {
+      font-family: 'Space Mono', monospace;
+      font-size: 10px;
+      color: var(--accent);
+      background: rgba(0,245,200,0.08);
+      border: 1px solid rgba(0,245,200,0.2);
+      border-radius: 6px;
+      padding: 4px 10px;
+      flex-shrink: 0;
+    }
+
+    /* ===================== TEST SCREEN ===================== */
+    #testScreen {
+      position: relative;
+      z-index: 1;
+      min-height: 100vh;
+      padding: 20px;
+    }
+
+    .topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 12px 18px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      margin-bottom: 20px;
+      gap: 16px;
+      flex-wrap: wrap;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .topbar::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--accent), var(--accent2), transparent);
+      opacity: 0.4;
+    }
+
+    /* Candidate topbar badge */
+    .topbar-candidate {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-family: 'Space Mono', monospace;
+      font-size: 11px;
+    }
+
+    .topbar-candidate-dot {
+      width: 28px; height: 28px;
+      border-radius: 7px;
+      background: linear-gradient(135deg, rgba(0,245,200,0.15), rgba(139,92,246,0.15));
+      border: 1px solid rgba(0,245,200,0.2);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--accent);
+      font-family: 'Rajdhani', sans-serif;
+    }
+
+    .topbar-candidate-name {
+      color: var(--text);
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .topbar-brand {
+      font-family: 'Rajdhani', sans-serif;
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--accent);
+      letter-spacing: 2px;
+      text-transform: uppercase;
+    }
+
+    .progress-wrap {
+      flex: 1;
+      min-width: 160px;
+    }
+
+    .progress-label {
+      display: flex;
+      justify-content: space-between;
+      font-family: 'Space Mono', monospace;
+      font-size: 10px;
+      color: var(--muted);
+      margin-bottom: 6px;
+      letter-spacing: 0.5px;
+    }
+
+    .progress-bar-bg {
+      height: 4px;
+      background: rgba(255,255,255,0.05);
+      border-radius: 99px;
+      overflow: hidden;
+    }
+
+    .progress-bar-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--accent), var(--accent2));
+      border-radius: 99px;
+      transition: width 0.4s ease;
+      width: 0%;
+      box-shadow: 0 0 8px rgba(0,245,200,0.4);
+    }
+
+    .timer-box {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--bg);
+      border: 1px solid rgba(0,245,200,0.15);
+      border-radius: 8px;
+      padding: 8px 14px;
+      font-family: 'Space Mono', monospace;
+      font-size: 16px;
+      font-weight: 700;
+    }
+
+    .timer-dot {
+      width: 7px; height: 7px;
+      background: var(--accent);
+      border-radius: 50%;
+      animation: blink 1s infinite;
+      box-shadow: 0 0 6px var(--accent);
+    }
+
+    .timer-box.warn { border-color: rgba(245,158,11,0.4); color: var(--warn); }
+    .timer-box.warn .timer-dot { background: var(--warn); box-shadow: 0 0 6px var(--warn); }
+    .timer-box.danger { border-color: rgba(255,56,96,0.4); color: var(--danger); }
+    .timer-box.danger .timer-dot { background: var(--danger); box-shadow: 0 0 6px var(--danger); }
+
+    .strike-box {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--bg);
+      border: 1px solid rgba(255,56,96,0.2);
+      border-radius: 8px;
+      padding: 8px 14px;
+      font-family: 'Space Mono', monospace;
+      font-size: 10px;
+      font-weight: 700;
+      color: var(--muted);
+      letter-spacing: 1px;
+      text-transform: uppercase;
+    }
+
+    .strike-pips { display: flex; gap: 4px; }
+
+    .strike-pip {
+      width: 10px; height: 10px;
+      border-radius: 3px;
+      border: 1px solid rgba(255,56,96,0.3);
+      background: transparent;
+      transition: all 0.3s;
+    }
+
+    .strike-pip.active {
+      background: var(--danger);
+      border-color: var(--danger);
+      box-shadow: 0 0 8px rgba(255,56,96,0.5);
+    }
+
+    .marks-box {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(0,245,200,0.05);
+      border: 1px solid rgba(0,245,200,0.2);
+      border-radius: 8px;
+      padding: 8px 14px;
+      font-family: 'Space Mono', monospace;
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--accent);
+    }
+
+    .calc-toggle-btn {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      background: var(--bg);
+      border: 1px solid rgba(0,245,200,0.2);
+      border-radius: 8px;
+      padding: 8px 14px;
+      font-family: 'Space Mono', monospace;
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--accent);
+      cursor: pointer;
+      transition: all 0.18s;
+      letter-spacing: 0.5px;
+    }
+
+    .calc-toggle-btn:hover {
+      background: rgba(0,245,200,0.07);
+      border-color: var(--accent);
+      box-shadow: 0 0 12px rgba(0,245,200,0.1);
+    }
+
+    .test-layout {
+      display: grid;
+      grid-template-columns: 1fr 240px;
+      gap: 20px;
+      align-items: start;
+    }
+
+    @media (max-width: 768px) {
+      .test-layout { grid-template-columns: 1fr; }
+    }
+
+    .question-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 32px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .question-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 1px;
+      background: linear-gradient(90deg, transparent 0%, var(--accent2) 30%, var(--accent) 70%, transparent 100%);
+      opacity: 0.3;
+    }
+
+    /* Corner bracket decoration on question card */
+    .question-card::after {
+      content: '';
+      position: absolute;
+      bottom: 16px; right: 16px;
+      width: 32px; height: 32px;
+      border-bottom: 1px solid rgba(139,92,246,0.25);
+      border-right: 1px solid rgba(139,92,246,0.25);
+    }
+
+    .q-meta {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 22px;
+    }
+
+    .q-badge {
+      font-family: 'Space Mono', monospace;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      background: rgba(0,245,200,0.08);
+      color: var(--accent);
+      border: 1px solid rgba(0,245,200,0.2);
+      border-radius: 5px;
+      padding: 4px 10px;
+    }
+
+    .q-badge.coding-badge {
+      background: rgba(139,92,246,0.1);
+      color: #a78bfa;
+      border-color: rgba(139,92,246,0.3);
+    }
+
+    .q-category {
+      font-family: 'Space Mono', monospace;
+      font-size: 11px;
+      color: var(--muted);
+    }
+
+    .q-number {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--muted);
+      font-family: 'Space Mono', monospace;
+    }
+
+    .q-marks {
+      margin-left: auto;
+      font-size: 11px;
+      font-weight: 700;
+      font-family: 'Space Mono', monospace;
+      background: rgba(245,158,11,0.08);
+      color: var(--warn);
+      border: 1px solid rgba(245,158,11,0.25);
+      border-radius: 5px;
+      padding: 4px 10px;
+    }
+
+    .question-text {
+      font-family: 'Rajdhani', sans-serif;
+      font-size: 20px;
+      font-weight: 600;
+      line-height: 1.5;
+      margin-bottom: 22px;
+      color: #f1f5f9;
+      pointer-events: none;
+      letter-spacing: 0.3px;
+    }
+
+    /* ===================== CODING QUESTION UI ===================== */
+    .coding-section { margin-bottom: 28px; }
+
+    .coding-meta-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 14px;
+    }
+
+    .lang-badge {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      background: rgba(139,92,246,0.1);
+      color: #a78bfa;
+      border: 1px solid rgba(139,92,246,0.25);
+      border-radius: 5px;
+      padding: 4px 10px;
+      font-family: 'Space Mono', monospace;
+    }
+
+    .diff-badge {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      border-radius: 5px;
+      padding: 4px 10px;
+      font-family: 'Space Mono', monospace;
+    }
+
+    .diff-easy { background: rgba(0,245,200,0.08); color: var(--accent); border: 1px solid rgba(0,245,200,0.2); }
+    .diff-medium { background: rgba(245,158,11,0.08); color: var(--warn); border: 1px solid rgba(245,158,11,0.25); }
+    .diff-hard { background: rgba(255,56,96,0.08); color: var(--danger); border: 1px solid rgba(255,56,96,0.25); }
+
+    .problem-statement {
+      background: var(--code-bg);
+      border: 1px solid rgba(139,92,246,0.15);
+      border-radius: 12px;
+      padding: 18px 20px;
+      margin-bottom: 16px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .problem-statement::before {
+      content: '';
+      position: absolute;
+      left: 0; top: 0; bottom: 0;
+      width: 2px;
+      background: linear-gradient(180deg, var(--accent2), transparent);
+    }
+
+    .problem-statement p {
+      font-size: 13.5px;
+      color: #94a3b8;
+      line-height: 1.8;
+      pointer-events: none;
+    }
+
+    .io-examples {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-top: 16px;
+    }
+
+    .io-box {
+      background: var(--surface2);
+      border: 1px solid rgba(255,255,255,0.05);
+      border-radius: 8px;
+      padding: 12px 14px;
+    }
+
+    .io-label {
+      font-family: 'Space Mono', monospace;
+      font-size: 9px;
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 6px;
+    }
+
+    .io-val {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12.5px;
+      color: var(--accent);
+      pointer-events: none;
+    }
+
+    .constraints-box {
+      background: rgba(245,158,11,0.04);
+      border: 1px solid rgba(245,158,11,0.15);
+      border-radius: 8px;
+      padding: 10px 14px;
+      margin-top: 12px;
+      font-size: 11.5px;
+      color: #fbbf24;
+      font-family: 'JetBrains Mono', monospace;
+      pointer-events: none;
+    }
+
+    /* Code Editor */
+    .editor-wrap {
+      background: var(--code-bg);
+      border: 1px solid rgba(139,92,246,0.2);
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: inset 0 0 40px rgba(0,0,0,0.3);
+    }
+
+    .editor-topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 16px;
+      background: rgba(255,255,255,0.02);
+      border-bottom: 1px solid rgba(255,255,255,0.04);
+    }
+
+    .editor-dots { display: flex; gap: 6px; }
+
+    .editor-dot {
+      width: 10px; height: 10px;
+      border-radius: 50%;
+    }
+
+    .dot-red { background: #ff5f57; }
+    .dot-yellow { background: #febc2e; }
+    .dot-green { background: #28c840; }
+
+    .editor-filename {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      color: var(--muted);
+      letter-spacing: 0.5px;
+    }
+
+    .editor-clear {
+      font-family: 'Space Mono', monospace;
+      font-size: 10px;
+      color: var(--muted);
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 2px 8px;
+      border-radius: 4px;
+      transition: 0.15s;
+      letter-spacing: 1px;
+    }
+
+    .editor-clear:hover { color: var(--danger); }
+
+    .code-editor {
+      width: 100%;
+      min-height: 280px;
+      padding: 16px;
+      background: transparent;
+      border: none;
+      outline: none;
+      color: #c4d0e4;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 13px;
+      line-height: 1.75;
+      resize: vertical;
+      tab-size: 4;
+      -moz-tab-size: 4;
+      user-select: text;
+      -webkit-user-select: text;
+    }
+
+    .code-editor::placeholder { color: #1e2d40; }
+
+    .editor-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 8px 16px;
+      background: rgba(255,255,255,0.015);
+      border-top: 1px solid rgba(255,255,255,0.04);
+    }
+
+    .char-count {
+      font-family: 'Space Mono', monospace;
+      font-size: 10px;
+      color: var(--muted);
+      letter-spacing: 0.5px;
+    }
+
+    .code-saved-indicator {
+      font-family: 'Space Mono', monospace;
+      font-size: 10px;
+      color: var(--accent);
+      opacity: 0;
+      transition: opacity 0.3s;
+      letter-spacing: 1px;
+    }
+
+    .code-saved-indicator.show { opacity: 1; }
+
+    /* ===================== NAV BUTTONS ===================== */
+    .nav-btns {
+      display: flex;
+      gap: 12px;
+      justify-content: space-between;
+      margin-top: 8px;
+    }
+
+    .btn-nav {
+      padding: 12px 24px;
+      border-radius: 10px;
+      font-family: 'Rajdhani', sans-serif;
+      font-size: 15px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.18s;
+      border: none;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+    }
+
+    .btn-prev {
+      background: transparent;
+      color: var(--muted);
+      border: 1px solid rgba(255,255,255,0.07);
+    }
+
+    .btn-prev:hover { color: var(--text); border-color: rgba(255,255,255,0.15); }
+
+    .btn-next {
+      background: transparent;
+      border: 1px solid var(--accent);
+      color: var(--accent);
+      margin-left: auto;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .btn-next::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: var(--accent);
+      transform: translateX(-100%);
+      transition: transform 0.25s ease;
+    }
+
+    .btn-next:hover::before { transform: translateX(0); }
+    .btn-next:hover { color: #03050d; }
+    .btn-next span { position: relative; z-index: 1; }
+
+    .btn-submit {
+      background: transparent;
+      border: 1px solid var(--accent2);
+      color: #a78bfa;
+      margin-left: auto;
+      position: relative;
+      overflow: hidden;
+      letter-spacing: 1px;
+    }
+
+    .btn-submit::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: var(--accent2);
+      transform: translateX(-100%);
+      transition: transform 0.25s ease;
+    }
+
+    .btn-submit:hover::before { transform: translateX(0); }
+    .btn-submit:hover { color: white; }
+    .btn-submit span { position: relative; z-index: 1; }
+
+    /* ===================== SIDEBAR ===================== */
+    .sidebar {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    /* Sidebar card base */
+    .sidebar > * {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+    }
+
+    .cam-card { overflow: hidden; }
+
+    .cam-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 14px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .cam-label {
+      font-family: 'Space Mono', monospace;
+      font-size: 9px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      color: var(--muted);
+    }
+
+    .rec-badge {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      font-family: 'Space Mono', monospace;
+      font-size: 10px;
+      color: var(--danger);
+      font-weight: 700;
+      letter-spacing: 1px;
+    }
+
+    .rec-dot {
+      width: 6px; height: 6px;
+      background: var(--danger);
+      border-radius: 50%;
+      animation: blink 1s infinite;
+      box-shadow: 0 0 6px var(--danger);
+    }
+
+    #cam {
+      width: 100%;
+      display: block;
+      aspect-ratio: 4/3;
+      object-fit: cover;
+      background: #000;
+      filter: contrast(1.05) saturate(0.9);
+    }
+
+    .cam-footer {
+      padding: 8px 14px;
+      font-family: 'Space Mono', monospace;
+      font-size: 9px;
+      color: var(--muted);
+      text-align: center;
+      letter-spacing: 0.5px;
+    }
+
+    .qmap-card { padding: 16px; }
+
+    .qmap-title {
+      font-family: 'Space Mono', monospace;
+      font-size: 9px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      color: var(--muted);
+      margin-bottom: 12px;
+    }
+
+    .qmap-grid {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 6px;
+    }
+
+    .qmap-btn {
+      aspect-ratio: 1;
+      border-radius: 7px;
+      border: 1px solid rgba(255,255,255,0.06);
+      background: var(--bg);
+      color: var(--muted);
+      font-family: 'Space Mono', monospace;
+      font-size: 11px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.15s;
+      display: flex; align-items: center; justify-content: center;
+    }
+
+    .qmap-btn:hover { border-color: var(--accent); color: var(--accent); box-shadow: 0 0 8px rgba(0,245,200,0.1); }
+    .qmap-btn.coding-answered { background: rgba(139,92,246,0.12); border-color: rgba(139,92,246,0.3); color: #a78bfa; }
+    .qmap-btn.active { background: rgba(0,245,200,0.12); border-color: var(--accent); color: var(--accent); box-shadow: 0 0 10px rgba(0,245,200,0.15); }
+    .qmap-btn.coding-q { border-color: rgba(139,92,246,0.2); }
+
+    .score-card { padding: 16px; }
+
+    .score-card-title {
+      font-family: 'Space Mono', monospace;
+      font-size: 9px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      color: var(--muted);
+      margin-bottom: 12px;
+    }
+
+    .score-rows { display: flex; flex-direction: column; gap: 8px; }
+
+    .score-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-family: 'Space Mono', monospace;
+      font-size: 11px;
+    }
+
+    .score-row-lbl { color: var(--muted); }
+    .score-row-val { color: var(--accent); font-weight: 700; }
+    .score-total-val { color: #f1f5f9; font-size: 16px; font-weight: 800; }
+
+    .violation-card { padding: 14px 16px; border-color: rgba(255,56,96,0.15) !important; }
+
+    .violation-card-title {
+      font-family: 'Space Mono', monospace;
+      font-size: 9px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      color: var(--danger);
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    #violationList {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      max-height: 100px;
+      overflow-y: auto;
+    }
+
+    .vlog-item {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10px;
+      color: var(--muted);
+      padding: 4px 8px;
+      background: rgba(255,56,96,0.04);
+      border-radius: 4px;
+      border-left: 2px solid rgba(255,56,96,0.3);
+    }
+
+    .vlog-empty {
+      font-family: 'Space Mono', monospace;
+      font-size: 10px;
+      color: var(--muted);
+      opacity: 0.4;
+    }
+
+    /* ===================== FLOATING CALCULATOR ===================== */
+    #calcPanel {
+      position: fixed;
+      bottom: 28px;
+      right: 28px;
+      width: 300px;
+      background: var(--surface);
+      border: 1px solid rgba(0,245,200,0.2);
+      border-radius: 20px;
+      box-shadow:
+        0 20px 60px rgba(0,0,0,0.7),
+        0 0 0 1px rgba(0,245,200,0.04),
+        inset 0 1px 0 rgba(255,255,255,0.04);
+      z-index: 500;
+      overflow: hidden;
+      user-select: none;
+      -webkit-user-select: none;
+      transition: box-shadow 0.2s;
+    }
+
+    #calcPanel::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--accent), transparent);
+      opacity: 0.3;
+    }
+
+    #calcPanel.dragging {
+      box-shadow: 0 30px 80px rgba(0,0,0,0.9), 0 0 40px rgba(0,245,200,0.08);
+    }
+
+    .calc-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 12px 16px;
+      background: rgba(0,245,200,0.04);
+      border-bottom: 1px solid rgba(0,245,200,0.1);
+      cursor: move;
+    }
+
+    .calc-title {
+      font-family: 'Space Mono', monospace;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: var(--accent);
+      display: flex;
+      align-items: center;
+      gap: 7px;
+    }
+
+    .calc-title-icon { font-size: 14px; }
+
+    .calc-close {
+      width: 22px; height: 22px;
+      border-radius: 50%;
+      background: rgba(255,56,96,0.1);
+      border: 1px solid rgba(255,56,96,0.25);
+      color: var(--danger);
+      font-size: 12px;
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer;
+      transition: 0.15s;
+      line-height: 1;
+    }
+
+    .calc-close:hover { background: rgba(255,56,96,0.25); }
+
+    .calc-display-wrap { padding: 14px 14px 10px; }
+
+    .calc-expr {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      color: var(--muted);
+      text-align: right;
+      min-height: 16px;
+      margin-bottom: 4px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .calc-display {
+      font-family: 'Space Mono', monospace;
+      font-size: 30px;
+      font-weight: 700;
+      color: var(--text);
+      text-align: right;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      min-height: 42px;
+      line-height: 1.3;
+    }
+
+    .calc-display.error { color: var(--danger); font-size: 18px; }
+
+    .calc-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 6px;
+      padding: 10px 14px 14px;
+    }
+
+    .c-btn {
+      padding: 0;
+      height: 52px;
+      border-radius: 10px;
+      border: none;
+      font-family: 'Space Mono', monospace;
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.1s;
+      display: flex; align-items: center; justify-content: center;
+      user-select: none;
+    }
+
+    .c-btn:active { transform: scale(0.92); }
+
+    .c-num {
+      background: var(--surface3);
+      color: var(--text);
+      border: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .c-num:hover { background: #1a2540; }
+
+    .c-op {
+      background: rgba(0,245,200,0.08);
+      color: var(--accent);
+      border: 1px solid rgba(0,245,200,0.2);
+    }
+
+    .c-op:hover { background: rgba(0,245,200,0.16); }
+
+    .c-fn {
+      background: rgba(139,92,246,0.1);
+      color: #a78bfa;
+      border: 1px solid rgba(139,92,246,0.2);
+      font-size: 12px;
+    }
+
+    .c-fn:hover { background: rgba(139,92,246,0.2); }
+
+    .c-eq {
+      background: rgba(0,245,200,0.12);
+      border: 1px solid rgba(0,245,200,0.3);
+      color: var(--accent);
+      font-size: 18px;
+    }
+
+    .c-eq:hover { background: rgba(0,245,200,0.22); box-shadow: 0 0 12px rgba(0,245,200,0.15); }
+
+    .c-clear {
+      background: rgba(255,56,96,0.08);
+      color: var(--danger);
+      border: 1px solid rgba(255,56,96,0.2);
+    }
+
+    .c-clear:hover { background: rgba(255,56,96,0.18); }
+
+    .c-zero { grid-column: span 2; }
+
+    .calc-history {
+      border-top: 1px solid rgba(255,255,255,0.04);
+      padding: 8px 14px;
+      max-height: 80px;
+      overflow-y: auto;
+    }
+
+    .calc-hist-title {
+      font-family: 'Space Mono', monospace;
+      font-size: 9px;
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 4px;
+    }
+
+    .calc-hist-item {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      color: var(--muted);
+      padding: 2px 0;
+    }
+
+    .calc-hist-item span { color: var(--accent); }
+
+    /* ===================== WARNING OVERLAY ===================== */
+    #warningOverlay {
+      position: fixed;
+      inset: 0;
+      z-index: 999;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(3,5,13,0.94);
+      backdrop-filter: blur(10px);
+    }
+
+    .warning-box {
+      background: var(--surface);
+      border: 1px solid rgba(255,56,96,0.3);
+      border-radius: 20px;
+      padding: 40px;
+      max-width: 460px;
+      width: 90%;
+      text-align: center;
+      box-shadow: 0 0 80px rgba(255,56,96,0.1), inset 0 1px 0 rgba(255,255,255,0.04);
+      animation: shake 0.5s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .warning-box::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--danger), transparent);
+      opacity: 0.5;
+    }
+
+    .warning-icon { font-size: 52px; margin-bottom: 16px; }
+    .warning-title {
+      font-family: 'Rajdhani', sans-serif;
+      font-size: 26px;
+      font-weight: 700;
+      color: var(--danger);
+      margin-bottom: 12px;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+    }
+
+    .warning-msg {
+      font-size: 14px;
+      color: var(--muted);
+      line-height: 1.7;
+      margin-bottom: 20px;
+    }
+
+    .warning-strike {
+      font-family: 'Space Mono', monospace;
+      font-size: 12px;
+      color: var(--warn);
+      background: rgba(245,158,11,0.06);
+      border: 1px solid rgba(245,158,11,0.2);
+      border-radius: 8px;
+      padding: 10px 16px;
+      margin-bottom: 24px;
+      letter-spacing: 0.5px;
+    }
+
+    .btn-warning-ok {
+      padding: 13px 36px;
+      border-radius: 10px;
+      background: transparent;
+      border: 1px solid var(--danger);
+      color: var(--danger);
+      font-family: 'Rajdhani', sans-serif;
+      font-size: 15px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: 0.18s;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+    }
+
+    .btn-warning-ok:hover {
+      background: var(--danger);
+      color: white;
+    }
+
+    #fsPrompt {
+      position: fixed;
+      inset: 0;
+      z-index: 9999;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(3,5,13,0.98);
+      backdrop-filter: blur(14px);
+    }
+
+    .fs-box {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 48px 40px;
+      max-width: 440px;
+      width: 90%;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .fs-box::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--accent), transparent);
+      opacity: 0.4;
+    }
+
+    .fs-icon { font-size: 52px; margin-bottom: 16px; }
+
+    .fs-title {
+      font-family: 'Rajdhani', sans-serif;
+      font-size: 26px;
+      font-weight: 700;
+      margin-bottom: 10px;
+      letter-spacing: 0.5px;
+    }
+
+    .fs-sub { font-size: 14px; color: var(--muted); line-height: 1.7; margin-bottom: 28px; }
+
+    #toastContainer {
+      position: fixed;
+      top: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 8000;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      pointer-events: none;
+    }
+
+    .toast {
+      background: var(--surface);
+      border: 1px solid rgba(255,56,96,0.4);
+      border-radius: 10px;
+      padding: 10px 20px;
+      font-family: 'Space Mono', monospace;
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--danger);
+      animation: slideDown 0.3s ease forwards;
+      white-space: nowrap;
+      letter-spacing: 0.5px;
+      box-shadow: 0 0 30px rgba(255,56,96,0.1);
+    }
+
+    .toast.fadeout { animation: fadeOut 0.5s ease forwards; }
+
+    #submitModal {
+      position: fixed;
+      inset: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(3,5,13,0.88);
+      backdrop-filter: blur(8px);
+    }
+
+    .modal-box {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 40px;
+      max-width: 400px;
+      width: 90%;
+      text-align: center;
+      box-shadow: 0 0 80px rgba(0,245,200,0.06), inset 0 1px 0 rgba(255,255,255,0.04);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .modal-box::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--accent2), var(--accent), transparent);
+      opacity: 0.4;
+    }
+
+    .modal-icon { font-size: 48px; margin-bottom: 16px; }
+
+    .modal-title {
+      font-family: 'Rajdhani', sans-serif;
+      font-size: 26px;
+      font-weight: 700;
+      margin-bottom: 8px;
+      letter-spacing: 0.5px;
+    }
+
+    .modal-sub { font-size: 14px; color: var(--muted); margin-bottom: 28px; line-height: 1.6; }
+
+    .modal-stats {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 10px;
+      margin-bottom: 28px;
+    }
+
+    .stat-box {
+      background: var(--bg);
+      border: 1px solid rgba(255,255,255,0.05);
+      border-radius: 10px;
+      padding: 14px;
+    }
+
+    .stat-val {
+      font-family: 'Space Mono', monospace;
+      font-size: 22px;
+      font-weight: 700;
+      color: var(--accent);
+    }
+
+    .stat-lbl {
+      font-family: 'Space Mono', monospace;
+      font-size: 10px;
+      color: var(--muted);
+      margin-top: 4px;
+      letter-spacing: 0.5px;
+    }
+
+    .modal-btns { display: flex; gap: 10px; }
+
+    .btn-cancel {
+      flex: 1;
+      padding: 13px;
+      border-radius: 10px;
+      background: transparent;
+      border: 1px solid rgba(255,255,255,0.07);
+      color: var(--muted);
+      font-family: 'Rajdhani', sans-serif;
+      font-size: 15px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: 0.18s;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+    }
+
+    .btn-cancel:hover { color: var(--text); border-color: rgba(255,255,255,0.15); }
+
+    .btn-confirm {
+      flex: 1;
+      padding: 13px;
+      border-radius: 10px;
+      background: transparent;
+      border: 1px solid var(--accent2);
+      color: #a78bfa;
+      font-family: 'Rajdhani', sans-serif;
+      font-size: 15px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: 0.18s;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+    }
+
+    .btn-confirm:hover { background: var(--accent2); color: white; }
+
+    #doneScreen {
+      position: fixed;
+      inset: 0;
+      z-index: 200;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--bg);
+      flex-direction: column;
+      text-align: center;
+      padding: 40px;
+    }
+
+    .done-glow {
+      width: 120px; height: 120px;
+      background: radial-gradient(circle, rgba(0,245,200,0.15), transparent 70%);
+      border-radius: 50%;
+      border: 1px solid rgba(0,245,200,0.2);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 52px;
+      margin: 0 auto 32px;
+    }
+
+    .done-title {
+      font-family: 'Rajdhani', sans-serif;
+      font-size: 40px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      margin-bottom: 12px;
+      background: linear-gradient(135deg, #fff 30%, var(--accent) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .done-sub { font-size: 16px; color: var(--muted); max-width: 400px; line-height: 1.6; margin-bottom: 32px; }
+
+    .done-badge {
+      display: inline-block;
+      background: rgba(0,245,200,0.06);
+      border: 1px solid rgba(0,245,200,0.2);
+      color: var(--accent);
+      border-radius: 99px;
+      padding: 10px 24px;
+      font-family: 'Space Mono', monospace;
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 2px;
+    }
+
+    ::-webkit-scrollbar { width: 4px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.07); border-radius: 99px; }
+
+    /* Pulse ring animation for live badge */
+    @keyframes pulseRing {
+      0% { box-shadow: 0 0 0 0 rgba(255,56,96,0.4); }
+      70% { box-shadow: 0 0 0 6px rgba(255,56,96,0); }
+      100% { box-shadow: 0 0 0 0 rgba(255,56,96,0); }
+    }
+
+    .rec-dot { animation: blink 1s infinite, pulseRing 2s infinite; }
+  </style>
+</head>
+<body>
+
+<div class="login-orb1"></div>
+<div class="login-orb2"></div>
+<div id="toastContainer"></div>
+
+<div id="fsPrompt" class="hidden">
+  <div class="fs-box">
+    <div class="fs-icon">⛶</div>
+    <div class="fs-title">Fullscreen Required</div>
+    <div class="fs-sub">This assessment must be taken in fullscreen mode. Please click the button below to continue. Exiting fullscreen will be flagged as a violation.</div>
+    <button class="btn-primary" onclick="requestFullscreen()"><span>Enter Fullscreen →</span></button>
+  </div>
+</div>
+
+<div id="warningOverlay" class="hidden">
+  <div class="warning-box">
+    <div class="warning-icon">⚠️</div>
+    <div class="warning-title" id="warnTitle">Violation Detected</div>
+    <div class="warning-msg" id="warnMsg">Suspicious activity has been detected and logged.</div>
+    <div class="warning-strike" id="warnStrike">Strike 1 of 3 — 2 more will auto-submit your test.</div>
+    <button class="btn-warning-ok" onclick="closeWarning()">I Understand — Resume</button>
+  </div>
+</div>
+
+<!-- ============ LOGIN ============ -->
+<div id="loginScreen">
+  <div class="login-box">
+    <div class="login-inner-glow"></div>
+    <div class="brand">
+      <div class="brand-icon">⚡</div>
+      <div class="brand-name">Codi<span>vora</span></div>
+    </div>
+
+    <!-- CANDIDATE WELCOME BANNER -->
+    <div class="candidate-banner">
+      <div class="candidate-avatar">MB</div>
+      <div class="candidate-info">
+        <div class="candidate-welcome">Welcome back</div>
+        <div class="candidate-name">Moumi Byapari</div>
+      </div>
+      <div class="candidate-id-badge">CODIVORA</div>
+    </div>
+
+    <div class="login-title">Assessment Portal</div>
+    <div class="login-sub">Enter your credentials to begin the SDE Internship evaluation.</div>
+
+    <label for="candidateId">Candidate ID</label>
+    <input type="text" id="candidateId" placeholder="e.g. CODIINDIA235567" autocomplete="off" spellcheck="false"/>
+
+    <label for="candidatePass">Password</label>
+    <input type="password" id="candidatePass" placeholder="••••••••••••"/>
+
+    <div id="loginErr">⚠ Invalid credentials. Please try again.</div>
+
+    <button class="btn-primary" onclick="doLogin()"><span>Start Assessment →</span></button>
+
+    <div class="login-note">
+      <span></span>5 coding problems &nbsp;·&nbsp; 90 minutes &nbsp;·&nbsp; 20 marks each &nbsp;·&nbsp; Anti-cheat active
+    </div>
+  </div>
+</div>
+
+<!-- ============ TEST ============ -->
+<div id="testScreen" class="hidden">
+  <div class="topbar">
+    <div class="topbar-brand">⚡ Codivora</div>
+
+    <!-- Candidate name in topbar -->
+    <div class="topbar-candidate">
+      <div class="topbar-candidate-dot">MB</div>
+      <div class="topbar-candidate-name">Moumi Byapari</div>
+    </div>
+
+    <div class="progress-wrap">
+      <div class="progress-label">
+        <span id="progressLabel">Question 1 of 5</span>
+        <span id="progressPct">0%</span>
+      </div>
+      <div class="progress-bar-bg">
+        <div class="progress-bar-fill" id="progressBar"></div>
+      </div>
+    </div>
+    <div class="marks-box">🏆 100 Marks Total</div>
+    <div class="strike-box">
+      <span style="font-size:9px;letter-spacing:2px;text-transform:uppercase;">Strikes</span>
+      <div class="strike-pips">
+        <div class="strike-pip" id="pip0"></div>
+        <div class="strike-pip" id="pip1"></div>
+        <div class="strike-pip" id="pip2"></div>
+      </div>
+    </div>
+    <button class="calc-toggle-btn" onclick="toggleCalculator()" id="calcToggleBtn">
+      🧮 Calculator
+    </button>
+    <div class="timer-box" id="timerBox">
+      <div class="timer-dot"></div>
+      <span id="timerDisplay">90:00</span>
+    </div>
+  </div>
+
+  <div class="test-layout">
+    <div class="question-card">
+      <div class="q-meta">
+        <div class="q-badge coding-badge" id="qBadge">💻 Coding</div>
+        <div class="q-category" id="qCat">—</div>
+        <div class="q-number" id="qNum">01/05</div>
+        <div class="q-marks">20 Marks</div>
+      </div>
+      <div class="question-text" id="questionText">Loading...</div>
+      <div id="questionBody"></div>
+      <div class="nav-btns">
+        <button class="btn-nav btn-prev" onclick="goPrev()">← Prev</button>
+        <button class="btn-nav btn-next" id="btnNext" onclick="goNext()"><span>Next →</span></button>
+        <button class="btn-nav btn-submit hidden" id="btnSubmit" onclick="openModal()"><span>Submit Test</span></button>
+      </div>
+    </div>
+
+    <div class="sidebar">
+      <div class="cam-card">
+        <div class="cam-header">
+          <div class="cam-label">Proctoring</div>
+          <div class="rec-badge"><div class="rec-dot"></div> LIVE</div>
+        </div>
+        <video id="cam" autoplay muted playsinline></video>
+        <div class="cam-footer">📷 Camera active — stay visible</div>
+      </div>
+
+      <div class="qmap-card">
+        <div class="qmap-title">Question Navigator</div>
+        <div class="qmap-grid" id="qmapGrid"></div>
+      </div>
+
+      <div class="score-card">
+        <div class="score-card-title">📊 Score Breakdown</div>
+        <div class="score-rows" id="scoreRows"></div>
+      </div>
+
+      <div class="violation-card">
+        <div class="violation-card-title">🛡 Violation Log</div>
+        <div id="violationList">
+          <div class="vlog-empty">No violations yet.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- FLOATING CALCULATOR -->
+<div id="calcPanel" class="hidden">
+  <div class="calc-header" id="calcHeader">
+    <div class="calc-title">
+      <span class="calc-title-icon">🧮</span> Calculator
+    </div>
+    <div class="calc-close" onclick="toggleCalculator()">✕</div>
+  </div>
+  <div class="calc-display-wrap">
+    <div class="calc-expr" id="calcExpr"></div>
+    <div class="calc-display" id="calcDisplay">0</div>
+  </div>
+  <div class="calc-grid">
+    <button class="c-btn c-clear" onclick="calcClear()">AC</button>
+    <button class="c-btn c-fn" onclick="calcFn('sign')">+/−</button>
+    <button class="c-btn c-fn" onclick="calcFn('pct')">%</button>
+    <button class="c-btn c-op" onclick="calcOp('/')">÷</button>
+    <button class="c-btn c-num" onclick="calcNum('7')">7</button>
+    <button class="c-btn c-num" onclick="calcNum('8')">8</button>
+    <button class="c-btn c-num" onclick="calcNum('9')">9</button>
+    <button class="c-btn c-op" onclick="calcOp('*')">×</button>
+    <button class="c-btn c-num" onclick="calcNum('4')">4</button>
+    <button class="c-btn c-num" onclick="calcNum('5')">5</button>
+    <button class="c-btn c-num" onclick="calcNum('6')">6</button>
+    <button class="c-btn c-op" onclick="calcOp('-')">−</button>
+    <button class="c-btn c-num" onclick="calcNum('1')">1</button>
+    <button class="c-btn c-num" onclick="calcNum('2')">2</button>
+    <button class="c-btn c-num" onclick="calcNum('3')">3</button>
+    <button class="c-btn c-op" onclick="calcOp('+')">+</button>
+    <button class="c-btn c-num c-zero" onclick="calcNum('0')">0</button>
+    <button class="c-btn c-num" onclick="calcDot()">.</button>
+    <button class="c-btn c-eq" onclick="calcEq()">=</button>
+  </div>
+  <div class="calc-history">
+    <div class="calc-hist-title">History</div>
+    <div id="calcHistList"></div>
+  </div>
+</div>
+
+<!-- SUBMIT MODAL -->
+<div id="submitModal" class="hidden">
+  <div class="modal-box">
+    <div class="modal-icon">📋</div>
+    <div class="modal-title">Submit Assessment?</div>
+    <div class="modal-sub">Once submitted, you cannot go back. Review your solutions before confirming.</div>
+    <div class="modal-stats">
+      <div class="stat-box">
+        <div class="stat-val" id="mCoding">0</div>
+        <div class="stat-lbl">Attempted</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-val" id="mSkipped">5</div>
+        <div class="stat-lbl">Skipped</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-val" id="mTotal">100</div>
+        <div class="stat-lbl">Max Marks</div>
+      </div>
+    </div>
+    <div class="modal-btns">
+      <button class="btn-cancel" onclick="closeModal()">Go Back</button>
+      <button class="btn-confirm" onclick="finalSubmit()">Confirm Submit</button>
+    </div>
+  </div>
+</div>
+
+<div id="doneScreen" class="hidden">
+  <div class="done-glow">✅</div>
+  <div class="done-title">Assessment Submitted</div>
+  <div class="done-sub">Your responses have been recorded, Moumi. Our team will evaluate your submission and reach out via email within 2–3 business days.</div>
+  <div class="done-badge">REF: CODI-<span id="refCode"></span></div>
+</div>
+
+<script>
+const USERS = [
+  { id: "CODIVORA", pass: "12345" }
+];
+
+const MARKS_PER_Q = 20;
+const TOTAL_MARKS = 100;
+
+const QUESTIONS = [
+  {
+    type: 'coding',
+    cat: 'Advanced Graphs',
+    difficulty: 'hard',
+    lang: 'Python / Java / C++',
+    q: 'Minimum Cost to Connect All Cities (Steiner Tree Variant)',
+    problem: `You are given n cities (1-indexed) and a list of bidirectional roads, each with a cost. Additionally, you have a list of k "special" cities that must all be interconnected. Find the minimum cost subgraph (not necessarily a spanning tree of all n cities) such that all k special cities are reachable from one another. Return -1 if it is impossible.
+
+This is a Steiner Tree problem. Use bitmask DP over subsets of special cities combined with shortest-path precomputation (Floyd-Warshall or Dijkstra per node) to solve this optimally.
+
+Formally: dp[S][v] = minimum cost to connect the subset S of special cities, with v as the "root" of that subtree.`,
+    examples: [
+      { input: 'n=5, edges=[[1,2,3],[2,3,1],[3,4,6],[4,5,2],[1,5,9]], specials=[1,3,5]', output: '12' },
+      { input: 'n=4, edges=[[1,2,1],[2,3,1],[3,4,1]], specials=[1,4]', output: '3' }
+    ],
+    constraints: `1 ≤ n ≤ 200 | 1 ≤ edges ≤ 2000 | 1 ≤ k ≤ 10 (special cities) | Edge costs: 1 ≤ w ≤ 10⁵ | Time: O(3^k · n + 2^k · n² + n³)`,
+    placeholder: `# Steiner Tree with Bitmask DP\n# dp[mask][v] = min cost to interconnect cities in 'mask', rooted at v\n\nimport heapq\nfrom math import inf\n\ndef steiner_tree(n, edges, specials):\n    k = len(specials)\n    # Build adjacency list\n    graph = [[] for _ in range(n + 1)]\n    for u, v, w in edges:\n        graph[u].append((v, w))\n        graph[v].append((u, w))\n    \n    # TODO: Initialize dp table\n    # dp[mask][v] for mask in range(1 << k), v in range(1, n+1)\n    \n    # TODO: Base case — single special city subsets\n    \n    # TODO: Dijkstra relaxation for each mask\n    \n    # TODO: Combine two disjoint subsets\n    \n    # TODO: Return min over all nodes for full mask (1<<k)-1\n    pass\n\n# Example usage\nprint(steiner_tree(5, [[1,2,3],[2,3,1],[3,4,6],[4,5,2],[1,5,9]], [1,3,5]))  # 12`
+  },
+  {
+    type: 'coding',
+    cat: 'Dynamic Programming',
+    difficulty: 'hard',
+    lang: 'Python / Java / C++',
+    q: 'Palindrome Partitioning IV — Minimum Cuts with At Most K Distinct Characters Per Part',
+    problem: `Given a string s of length n, partition it into exactly p parts such that:\n1. Each part is a palindrome, AND\n2. Each part contains at most k distinct characters.\n\nReturn the minimum number of cuts needed to achieve such a partition, or -1 if impossible.\n\nYou must combine palindrome-interval DP (O(n²) Manacher-style precomputation of isPalin[i][j]) with a knapsack-style partition DP that tracks distinct character counts per segment. Naive O(n³) solutions will TLE for n > 2000.`,
+    examples: [
+      { input: 's="aabbc", p=3, k=2', output: '2  (cuts: "aa"|"bb"|"c" — all palindromes, ≤2 distinct each)' },
+      { input: 's="abcba", p=2, k=3', output: '1  (cuts: "abcba" is palindrome with 3 distinct — valid as 1 part, but p=2 requires exactly 2 parts — answer: 1 cut into "a"|"bcb" both palindromes ≤3 distinct)' }
+    ],
+    constraints: `1 ≤ n ≤ 3000 | 1 ≤ p ≤ n | 1 ≤ k ≤ 26 | s consists of lowercase English letters | Expected: O(n² · p) time`,
+    placeholder: `# Palindrome Partitioning IV\n# Step 1: Precompute isPalin[i][j] using DP or Manacher expansion — O(n²)\n# Step 2: Precompute distinctCount[i][j] using prefix frequency arrays — O(n²)\n# Step 3: DP: dp[i][t] = min cuts to partition s[0..i-1] into exactly t valid parts\n\ndef min_cuts_palindrome_k_distinct(s, p, k):\n    n = len(s)\n    INF = float('inf')\n    \n    # TODO: Precompute isPalin[i][j]\n    \n    # TODO: Precompute distinct[i][j] = number of distinct chars in s[i..j]\n    \n    # TODO: dp[i][t] = min cuts for s[0..i] using exactly t parts\n    # Transition: dp[j][t] = min(dp[i][t-1] + 1) for all i < j\n    #             where isPalin[i+1][j] and distinct[i+1][j] <= k\n    \n    # TODO: Return dp[n-1][p] or -1 if INF\n    pass\n\nprint(min_cuts_palindrome_k_distinct("aabbc", 3, 2))  # 2`
+  },
+  {
+    type: 'coding',
+    cat: 'Data Structures',
+    difficulty: 'hard',
+    lang: 'Python / Java / C++',
+    q: 'Persistent Segment Tree — Range Sum with Point Updates on Historical Versions',
+    problem: `Implement a Persistent Segment Tree that supports:\n- update(version, idx, val): Creates a new version of the tree from 'version' with index idx set to val. Returns the new version ID.\n- query(version, l, r): Returns the sum of elements in range [l, r] in the given version.\n- rollback(version): Makes the given historical version the "current" working version.\n\nAll versions are immutable — each update creates a new root, sharing unchanged nodes with the previous version (path copying). The tree must handle up to 10⁵ updates and 10⁵ queries over an array of size up to 10⁵ in O(log n) per operation and O(n + Q log n) total space.`,
+    examples: [
+      { input: 'n=6, ops: update(0,2,5), update(1,4,3), query(1,1,4), query(2,1,4)', output: 'query(1,1,4)=5 | query(2,1,4)=8' },
+      { input: 'rollback to v1 then query(1,1,6)', output: '5  (v2 changes not visible)' }
+    ],
+    constraints: `1 ≤ n ≤ 10⁵ | 1 ≤ Q ≤ 10⁵ | 0 ≤ val ≤ 10⁹ | Each update: O(log n) new nodes | Total space: O(n + Q log n)`,
+    placeholder: `# Persistent Segment Tree Implementation\n\nclass Node:\n    def __init__(self, left=None, right=None, val=0):\n        self.left = left\n        self.right = right\n        self.val = val\n\nclass PersistentSegTree:\n    def __init__(self, n):\n        self.n = n\n        self.versions = []\n        self.versions.append(self._build(0, n - 1))\n    \n    def _build(self, l, r):\n        pass\n    \n    def update(self, version, idx, val):\n        pass\n    \n    def _update(self, node, l, r, idx, val):\n        pass\n    \n    def query(self, version, l, r):\n        pass\n    \n    def _query(self, node, l, r, ql, qr):\n        pass\n    \n    def rollback(self, version):\n        pass\n\npst = PersistentSegTree(6)\nv1 = pst.update(0, 2, 5)\nv2 = pst.update(v1, 4, 3)\nprint(pst.query(v1, 1, 4))  # 5\nprint(pst.query(v2, 1, 4))  # 8`
+  },
+  {
+    type: 'coding',
+    cat: 'String Algorithms',
+    difficulty: 'hard',
+    lang: 'Python / Java / C++',
+    q: 'Aho-Corasick Automaton — Multi-Pattern Matching with Wildcard Support',
+    problem: `Build an Aho-Corasick automaton over a dictionary of p pattern strings. Then, given a text string T of length n, find all starting positions in T where any pattern occurs, where patterns may contain the wildcard character '?' which matches any single character.\n\nYour implementation must:\n1. Build the trie and compute failure links — O(total pattern length · alphabet size).\n2. Extend goto transitions to handle '?' wildcards during trie construction.\n3. Process text T in O(n · 26) worst case to output all (pattern_id, start_position) matches.\n\nReturn a sorted list of (start_index, pattern_index) pairs (0-indexed).`,
+    examples: [
+      { input: 'patterns=["a?c","bc"], text="abcbcd"', output: '[(0,0),(1,1),(3,1)]  — "a?c" matches at 0 ("abc"), "bc" matches at 1 and 3' },
+      { input: 'patterns=["?b","ab"], text="ababab"', output: '[(0,0),(0,1),(2,0),(2,1),(4,0),(4,1)]' }
+    ],
+    constraints: `1 ≤ p ≤ 500 | 1 ≤ |pattern| ≤ 100 | 1 ≤ n ≤ 10⁵ | Patterns contain lowercase letters and '?' | Text contains only lowercase letters`,
+    placeholder: `# Aho-Corasick with Wildcard '?' support\nfrom collections import deque\n\nclass AhoCorasick:\n    def __init__(self):\n        self.goto = [{}]\n        self.fail = [0]\n        self.output = [[]]\n    \n    def insert(self, pattern, pid):\n        pass\n    \n    def build(self):\n        pass\n    \n    def search(self, text):\n        pass\n\ndef multi_pattern_wildcard(patterns, text):\n    ac = AhoCorasick()\n    for i, p in enumerate(patterns):\n        ac.insert(p, i)\n    ac.build()\n    return sorted(ac.search(text))\n\nprint(multi_pattern_wildcard(["a?c","bc"], "abcbcd"))\n# Expected: [(0,0),(1,1),(3,1)]`
+  },
+  {
+    type: 'coding',
+    cat: 'Competitive Programming',
+    difficulty: 'hard',
+    lang: 'Python / Java / C++',
+    q: 'Online Convex Hull Trick — Minimum Cost DP with Line Container',
+    problem: `You are given an array of n tasks. Task i has a processing_time[i] and a deadline[i]. If you schedule tasks in a contiguous batch from index i to j, the cost of that batch is:\n\n  cost(i, j) = (sum of processing_time[i..j])² + C\n\nwhere C is a fixed setup cost. Find the minimum total cost to partition all n tasks into contiguous batches, using the Convex Hull Trick (CHT) / Li Chao tree to achieve O(n log n) instead of O(n²).\n\nThis is a classic "slope trick" DP: dp[j] = min over i<j of { dp[i] + (prefix[j] - prefix[i])² + C }. Expanding fits the CHT form y = m·x + b where lines are parameterized by i and queries by j.`,
+    examples: [
+      { input: 'processing_time=[3,1,4,1,5,9,2,6], C=10', output: '131' },
+      { input: 'processing_time=[1,1,1,1], C=5', output: '21' }
+    ],
+    constraints: `1 ≤ n ≤ 10⁶ | 1 ≤ processing_time[i] ≤ 10⁴ | 0 ≤ C ≤ 10⁹ | Prefix sums ≤ 10¹⁰ — use 64-bit integers | Expected: O(n log n) with Li Chao tree or O(n) with monotone CHT`,
+    placeholder: `# Convex Hull Trick DP — O(n log n) with Li Chao Tree\nimport sys\nfrom math import inf\n\ndef min_batch_cost(proc_times, C):\n    n = len(proc_times)\n    prefix = [0] * (n + 1)\n    for i in range(n):\n        prefix[i+1] = prefix[i] + proc_times[i]\n    \n    dp = [inf] * (n + 1)\n    dp[0] = 0\n    \n    class Line:\n        def __init__(self, m, b):\n            self.m = m\n            self.b = b\n        def eval(self, x):\n            return self.m * x + self.b\n    \n    # TODO: Add lines and query minimum\n    \n    return dp[n]\n\nprint(min_batch_cost([3,1,4,1,5,9,2,6], 10))   # 131\nprint(min_batch_cost([1,1,1,1], 5))              # 21`
+  }
+];
+
+const TOTAL = QUESTIONS.length;
+let current = 0;
+let codeAnswers = new Array(TOTAL).fill('');
+let totalTime = 90 * 60;
+let timerInt = null;
+let camStream = null;
+let strikes = 0;
+const MAX_STRIKES = 3;
+let violationLog = [];
+let testActive = false;
+let warningOpen = false;
+let devtoolsCheckInt = null;
+
+function doLogin() {
+  const id = document.getElementById('candidateId').value.trim();
+  const pass = document.getElementById('candidatePass').value;
+  const valid = USERS.some(u => u.id === id && u.pass === pass);
+  const errEl = document.getElementById('loginErr');
+  if (!valid) { errEl.style.display = 'block'; return; }
+  errEl.style.display = 'none';
+  document.getElementById('loginScreen').classList.add('hidden');
+  document.getElementById('testScreen').classList.remove('hidden');
+  testActive = true;
+  startCam();
+  buildQMap();
+  buildScoreRows();
+  renderQ();
+  startTimer();
+  requestFullscreen();
+  initAntiCheat();
+}
+
+function startCam() {
+  navigator.mediaDevices.getUserMedia({ video: true, audio: false })
+    .then(stream => {
+      camStream = stream;
+      document.getElementById('cam').srcObject = stream;
+    })
+    .catch(() => {
+      document.querySelector('.cam-footer').textContent = '⚠️ Camera permission denied';
+      logViolation('Camera access denied');
+    });
+}
+
+function startTimer() {
+  timerInt = setInterval(() => {
+    totalTime--;
+    const m = Math.floor(totalTime / 60);
+    const s = totalTime % 60;
+    document.getElementById('timerDisplay').textContent =
+      String(m).padStart(2,'0') + ':' + String(s).padStart(2,'0');
+    const box = document.getElementById('timerBox');
+    box.className = 'timer-box';
+    if (totalTime <= 600) box.classList.add('warn');
+    if (totalTime <= 120) box.classList.add('danger');
+    if (totalTime <= 0) { clearInterval(timerInt); finalSubmit(); }
+  }, 1000);
+}
+
+function buildQMap() {
+  const grid = document.getElementById('qmapGrid');
+  grid.innerHTML = '';
+  QUESTIONS.forEach((q, i) => {
+    const btn = document.createElement('button');
+    btn.className = 'qmap-btn coding-q' + (i === 0 ? ' active' : '');
+    btn.textContent = i + 1;
+    btn.id = 'qm' + i;
+    btn.onclick = () => { current = i; renderQ(); };
+    grid.appendChild(btn);
+  });
+}
+
+function buildScoreRows() {
+  const container = document.getElementById('scoreRows');
+  container.innerHTML = '';
+  QUESTIONS.forEach((q, i) => {
+    const row = document.createElement('div');
+    row.className = 'score-row';
+    row.innerHTML = `<span class="score-row-lbl">Q${i+1}: ${q.q.length > 22 ? q.q.substring(0,22)+'…' : q.q}</span><span class="score-row-val" id="scoreQ${i}">—/20</span>`;
+    container.appendChild(row);
+  });
+  const divider = document.createElement('div');
+  divider.style.cssText = 'border-top:1px solid rgba(255,255,255,0.06);margin:8px 0';
+  container.appendChild(divider);
+  const total = document.createElement('div');
+  total.className = 'score-row';
+  total.innerHTML = `<span class="score-row-lbl" style="font-weight:700;color:var(--text)">Total</span><span class="score-row-val score-total-val" id="scoreTotalDisp">0/100</span>`;
+  container.appendChild(total);
+}
+
+function updateQMap() {
+  QUESTIONS.forEach((q, i) => {
+    const btn = document.getElementById('qm' + i);
+    btn.className = 'qmap-btn coding-q';
+    if (codeAnswers[i] && codeAnswers[i].trim().length > 10) btn.classList.add('coding-answered');
+    if (i === current) btn.classList.add('active');
+  });
+  updateScoreRows();
+}
+
+function updateScoreRows() {
+  let totalAttempted = 0;
+  QUESTIONS.forEach((q, i) => {
+    const el = document.getElementById('scoreQ' + i);
+    if (el) {
+      const attempted = codeAnswers[i] && codeAnswers[i].trim().length > 10;
+      el.textContent = attempted ? '?/20' : '—/20';
+      el.style.color = attempted ? 'var(--warn)' : 'var(--muted)';
+      if (attempted) totalAttempted++;
+    }
+  });
+  const tot = document.getElementById('scoreTotalDisp');
+  if (tot) tot.textContent = totalAttempted + ' attempted / 100 max';
+}
+
+function renderQ() {
+  const qd = QUESTIONS[current];
+  document.getElementById('qCat').textContent = qd.cat;
+  document.getElementById('qNum').textContent = String(current + 1).padStart(2,'0') + '/' + TOTAL;
+  document.getElementById('questionText').textContent = (current + 1) + '. ' + qd.q;
+
+  const pct = Math.round((current / (TOTAL - 1)) * 100);
+  document.getElementById('progressLabel').textContent = `Question ${current + 1} of ${TOTAL}`;
+  document.getElementById('progressPct').textContent = pct + '%';
+  document.getElementById('progressBar').style.width = pct + '%';
+
+  const body = document.getElementById('questionBody');
+  renderCodingQ(qd, body, current);
+
+  document.getElementById('btnNext').classList.toggle('hidden', current === TOTAL - 1);
+  document.getElementById('btnSubmit').classList.toggle('hidden', current !== TOTAL - 1);
+
+  updateQMap();
+}
+
+function renderCodingQ(qd, container, idx) {
+  const diffMap = { easy: 'diff-easy', medium: 'diff-medium', hard: 'diff-hard' };
+  const examplesHTML = qd.examples.map(ex => `
+    <div class="io-box">
+      <div class="io-label">Input</div>
+      <div class="io-val">${ex.input}</div>
+    </div>
+    <div class="io-box">
+      <div class="io-label">Output</div>
+      <div class="io-val">${ex.output}</div>
+    </div>
+  `).join('');
+
+  const savedCode = codeAnswers[idx] || '';
+
+  container.innerHTML = `
+    <div class="coding-section">
+      <div class="coding-meta-row">
+        <span class="lang-badge">${qd.lang}</span>
+        <span class="diff-badge ${diffMap[qd.difficulty]}">${qd.difficulty.toUpperCase()}</span>
+      </div>
+      <div class="problem-statement">
+        <p>${qd.problem}</p>
+        <div class="io-examples">${examplesHTML}</div>
+        <div class="constraints-box">⚡ Constraints: ${qd.constraints}</div>
+      </div>
+      <div class="editor-wrap">
+        <div class="editor-topbar">
+          <div class="editor-dots">
+            <div class="editor-dot dot-red"></div>
+            <div class="editor-dot dot-yellow"></div>
+            <div class="editor-dot dot-green"></div>
+          </div>
+          <div class="editor-filename">lang: Python / Java / C++</div>
+          <button class="editor-clear" onclick="clearCode(${idx})">CLEAR</button>
+        </div>
+        <textarea class="code-editor" id="codeEditor_${idx}" placeholder="${qd.placeholder}" spellcheck="false" autocorrect="off" autocapitalize="off">${savedCode}</textarea>
+        <div class="editor-footer">
+          <div class="char-count" id="charCount_${idx}">${savedCode.length} chars</div>
+          <div class="code-saved-indicator" id="savedInd_${idx}">✓ SAVED</div>
+        </div>
+      </div>
+    </div>
+  `;
+
+  const editor = document.getElementById('codeEditor_' + idx);
+  if (editor) {
+    editor.addEventListener('input', () => {
+      codeAnswers[idx] = editor.value;
+      document.getElementById('charCount_' + idx).textContent = editor.value.length + ' chars';
+      const ind = document.getElementById('savedInd_' + idx);
+      ind.classList.add('show');
+      setTimeout(() => ind.classList.remove('show'), 1500);
+      updateQMap();
+    });
+
+    editor.addEventListener('keydown', e => {
+      if (e.key === 'Tab') {
+        e.preventDefault();
+        e.stopPropagation();
+        const start = editor.selectionStart;
+        const end = editor.selectionEnd;
+        editor.value = editor.value.substring(0, start) + '    ' + editor.value.substring(end);
+        editor.selectionStart = editor.selectionEnd = start + 4;
+        codeAnswers[idx] = editor.value;
+      }
+    });
+  }
+}
+
+function clearCode(idx) {
+  codeAnswers[idx] = '';
+  const editor = document.getElementById('codeEditor_' + idx);
+  if (editor) { editor.value = ''; }
+  const cc = document.getElementById('charCount_' + idx);
+  if (cc) cc.textContent = '0 chars';
+  updateQMap();
+}
+
+function goPrev() {
+  if (current > 0) { current--; renderQ(); }
+}
+
+function goNext() {
+  if (current < TOTAL - 1) { current++; renderQ(); }
+}
+
+function openModal() {
+  const attempted = codeAnswers.filter(c => c && c.trim().length > 10).length;
+  const skipped = TOTAL - attempted;
+  document.getElementById('mCoding').textContent = attempted;
+  document.getElementById('mSkipped').textContent = skipped;
+  document.getElementById('mTotal').textContent = '100';
+  document.getElementById('submitModal').classList.remove('hidden');
+}
+
+function closeModal() {
+  document.getElementById('submitModal').classList.add('hidden');
+}
+
+function finalSubmit() {
+  testActive = false;
+  clearInterval(timerInt);
+  clearInterval(devtoolsCheckInt);
+  if (camStream) camStream.getTracks().forEach(t => t.stop());
+  if (document.fullscreenElement) document.exitFullscreen().catch(() => {});
+  document.getElementById('submitModal').classList.add('hidden');
+  document.getElementById('testScreen').classList.add('hidden');
+  document.getElementById('calcPanel').classList.add('hidden');
+  document.getElementById('doneScreen').classList.remove('hidden');
+  document.getElementById('refCode').textContent = Math.random().toString(36).substring(2,8).toUpperCase();
+}
+
+// ===================== CALCULATOR =====================
+let calcState = {
+  display: '0', expr: '', prevVal: null, pendingOp: null,
+  waitingForOperand: false, history: []
+};
+
+function toggleCalculator() {
+  document.getElementById('calcPanel').classList.toggle('hidden');
+}
+
+function updateCalcDisplay() {
+  document.getElementById('calcDisplay').textContent = calcState.display;
+  document.getElementById('calcExpr').textContent = calcState.expr;
+}
+
+function calcNum(n) {
+  if (calcState.waitingForOperand) { calcState.display = n; calcState.waitingForOperand = false; }
+  else { calcState.display = calcState.display === '0' ? n : calcState.display + n; }
+  if (calcState.display.length > 12) calcState.display = calcState.display.slice(0, 12);
+  updateCalcDisplay();
+}
+
+function calcDot() {
+  if (calcState.waitingForOperand) { calcState.display = '0.'; calcState.waitingForOperand = false; }
+  else if (!calcState.display.includes('.')) { calcState.display += '.'; }
+  updateCalcDisplay();
+}
+
+function calcOp(op) {
+  const val = parseFloat(calcState.display);
+  const opSymbols = { '+': '+', '-': '−', '*': '×', '/': '÷' };
+  if (calcState.prevVal !== null && !calcState.waitingForOperand) {
+    const result = compute(calcState.prevVal, val, calcState.pendingOp);
+    calcState.display = formatResult(result);
+    calcState.prevVal = result;
+  } else { calcState.prevVal = val; }
+  calcState.expr = calcState.display + ' ' + opSymbols[op];
+  calcState.pendingOp = op;
+  calcState.waitingForOperand = true;
+  updateCalcDisplay();
+}
+
+function calcEq() {
+  if (calcState.pendingOp === null) return;
+  const val = parseFloat(calcState.display);
+  const result = compute(calcState.prevVal, val, calcState.pendingOp);
+  const opSymbols = { '+': '+', '-': '−', '*': '×', '/': '÷' };
+  const histEntry = `${calcState.prevVal} ${opSymbols[calcState.pendingOp]} ${val} = ${formatResult(result)}`;
+  calcState.history.unshift(histEntry);
+  if (calcState.history.length > 5) calcState.history.pop();
+  calcState.expr = histEntry;
+  calcState.display = formatResult(result);
+  calcState.prevVal = null; calcState.pendingOp = null; calcState.waitingForOperand = true;
+  updateCalcDisplay();
+  renderCalcHistory();
+}
+
+function compute(a, b, op) {
+  switch(op) {
+    case '+': return a + b;
+    case '-': return a - b;
+    case '*': return a * b;
+    case '/': return b === 0 ? NaN : a / b;
+  }
+}
+
+function formatResult(r) {
+  if (isNaN(r)) return 'Error';
+  if (!isFinite(r)) return 'Infinity';
+  const s = r.toPrecision(10).replace(/\.?0+$/, '');
+  return s.length > 12 ? r.toExponential(4) : s;
+}
+
+function calcClear() {
+  calcState.display = '0'; calcState.expr = ''; calcState.prevVal = null;
+  calcState.pendingOp = null; calcState.waitingForOperand = false;
+  updateCalcDisplay();
+}
+
+function calcFn(fn) {
+  let val = parseFloat(calcState.display);
+  if (fn === 'sign') { val = -val; calcState.display = formatResult(val); }
+  if (fn === 'pct') { val = val / 100; calcState.display = formatResult(val); }
+  calcState.waitingForOperand = true;
+  updateCalcDisplay();
+}
+
+function renderCalcHistory() {
+  const list = document.getElementById('calcHistList');
+  list.innerHTML = calcState.history.map(h => {
+    const parts = h.split('=');
+    return `<div class="calc-hist-item">${parts[0]}= <span>${parts[1]}</span></div>`;
+  }).join('');
+}
+
+(function() {
+  let isDragging = false, startX, startY, initLeft, initTop;
+  document.addEventListener('DOMContentLoaded', () => {
+    const header = document.getElementById('calcHeader');
+    const panel = document.getElementById('calcPanel');
+    header.addEventListener('mousedown', e => {
+      isDragging = true; panel.classList.add('dragging');
+      const rect = panel.getBoundingClientRect();
+      startX = e.clientX; startY = e.clientY;
+      initLeft = rect.left; initTop = rect.top;
+      panel.style.bottom = 'auto'; panel.style.right = 'auto';
+      panel.style.left = initLeft + 'px'; panel.style.top = initTop + 'px';
+      e.preventDefault();
+    });
+    document.addEventListener('mousemove', e => {
+      if (!isDragging) return;
+      panel.style.left = (initLeft + e.clientX - startX) + 'px';
+      panel.style.top = (initTop + e.clientY - startY) + 'px';
+    });
+    document.addEventListener('mouseup', () => { isDragging = false; panel.classList.remove('dragging'); });
+  });
+})();
+
+// ===================== ANTI-CHEAT ENGINE =====================
+function initAntiCheat() {
+  document.addEventListener('contextmenu', e => {
+    if (testActive) { e.preventDefault(); showToast('⛔ Right-click is disabled during the assessment.'); logViolation('Right-click attempt'); }
+  });
+
+  ['copy', 'cut', 'paste'].forEach(evt => {
+    document.addEventListener(evt, e => {
+      if (!testActive) return;
+      const target = e.target;
+      if (target && target.classList && target.classList.contains('code-editor')) return;
+      e.preventDefault();
+      showToast(`⛔ ${evt.charAt(0).toUpperCase() + evt.slice(1)} is not allowed.`);
+      logViolation(`${evt} attempt`);
+    });
+  });
+
+  document.addEventListener('keydown', e => {
+    if (!testActive) return;
+    const key = e.key.toLowerCase();
+    const ctrl = e.ctrlKey || e.metaKey;
+    const isCodeEditor = e.target && e.target.classList && e.target.classList.contains('code-editor');
+
+    if (e.key === 'F12') { e.preventDefault(); handleViolation('DevTools key (F12) pressed'); return; }
+    if (ctrl && e.shiftKey && ['i','j','c','k','u'].includes(key)) { e.preventDefault(); handleViolation('DevTools shortcut detected'); return; }
+    if (ctrl && ['c','v','x','s','p'].includes(key) && !isCodeEditor) {
+      e.preventDefault(); showToast('⛔ Keyboard shortcuts are disabled.'); logViolation(`Ctrl+${key.toUpperCase()} blocked`); return;
+    }
+    if (e.key === 'PrintScreen') { e.preventDefault(); handleViolation('Screenshot attempt (PrintScreen)'); return; }
+    if (e.key === 'Escape' && !isCodeEditor) { e.preventDefault(); }
+  });
+
+  document.addEventListener('visibilitychange', () => {
+    if (!testActive) return;
+    if (document.hidden) handleViolation('Tab switched or window minimized');
+  });
+
+  window.addEventListener('blur', () => {
+    if (!testActive) return;
+    handleViolation('Window lost focus (possible alt-tab or external app)');
+  });
+
+  document.addEventListener('fullscreenchange', () => {
+    if (!testActive) return;
+    if (!document.fullscreenElement) {
+      handleViolation('Fullscreen mode exited');
+      document.getElementById('fsPrompt').classList.remove('hidden');
+    }
+  });
+
+  devtoolsCheckInt = setInterval(() => {
+    if (!testActive) return;
+    const threshold = 160;
+    if (window.outerWidth - window.innerWidth > threshold || window.outerHeight - window.innerHeight > threshold) {
+      handleViolation('DevTools panel likely opened (window size anomaly)');
+    }
+  }, 2000);
+
+  document.addEventListener('dragstart', e => { if (testActive) e.preventDefault(); });
+  document.addEventListener('selectstart', e => {
+    if (testActive && !(e.target && e.target.classList && e.target.classList.contains('code-editor'))) e.preventDefault();
+  });
+}
+
+function requestFullscreen() {
+  const el = document.documentElement;
+  const req = el.requestFullscreen || el.webkitRequestFullscreen || el.mozRequestFullScreen || el.msRequestFullscreen;
+  if (req) {
+    req.call(el).then(() => { document.getElementById('fsPrompt').classList.add('hidden'); }).catch(() => { document.getElementById('fsPrompt').classList.add('hidden'); });
+  } else { document.getElementById('fsPrompt').classList.add('hidden'); }
+}
+
+function handleViolation(reason) {
+  if (!testActive) return;
+  strikes++;
+  logViolation(reason);
+  updateStrikePips();
+  if (strikes >= MAX_STRIKES) { showAutoSubmitWarning(); return; }
+  showWarning('Violation Detected',
+    `<strong style="color:var(--text)">${reason}</strong><br><br>This incident has been logged and will be reviewed by our team. Repeated violations will result in automatic test termination.`,
+    `Strike ${strikes} of ${MAX_STRIKES} — ${MAX_STRIKES - strikes} more will auto-submit your test.`);
+}
+
+function logViolation(reason) {
+  const now = new Date();
+  const ts = `${String(now.getHours()).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')}:${String(now.getSeconds()).padStart(2,'0')}`;
+  violationLog.push({ ts, reason });
+  const list = document.getElementById('violationList');
+  const empty = list.querySelector('.vlog-empty');
+  if (empty) empty.remove();
+  const item = document.createElement('div');
+  item.className = 'vlog-item';
+  item.textContent = `[${ts}] ${reason}`;
+  list.insertBefore(item, list.firstChild);
+}
+
+function updateStrikePips() {
+  for (let i = 0; i < 3; i++) {
+    const pip = document.getElementById('pip' + i);
+    if (pip) pip.classList.toggle('active', i < strikes);
+  }
+}
+
+function showWarning(title, msg, strikeText) {
+  if (warningOpen) return;
+  warningOpen = true;
+  document.getElementById('warnTitle').textContent = title;
+  document.getElementById('warnMsg').innerHTML = msg;
+  document.getElementById('warnStrike').textContent = strikeText;
+  document.getElementById('warningOverlay').classList.remove('hidden');
+}
+
+function closeWarning() {
+  warningOpen = false;
+  document.getElementById('warningOverlay').classList.add('hidden');
+  if (!document.fullscreenElement && testActive) document.getElementById('fsPrompt').classList.remove('hidden');
+}
+
+function showAutoSubmitWarning() {
+  testActive = false;
+  document.getElementById('warnTitle').textContent = '🚨 Test Auto-Submitted';
+  document.getElementById('warnMsg').innerHTML = 'You have reached the maximum number of violations. Your test has been automatically submitted and flagged for review.';
+  document.getElementById('warnStrike').textContent = 'Maximum strikes reached (3/3) — Assessment terminated.';
+  document.getElementById('warningOverlay').classList.remove('hidden');
+  const btn = document.querySelector('.btn-warning-ok');
+  btn.textContent = 'View Submission';
+  btn.onclick = () => { document.getElementById('warningOverlay').classList.add('hidden'); finalSubmit(); };
+  clearInterval(timerInt);
+  clearInterval(devtoolsCheckInt);
+  if (camStream) camStream.getTracks().forEach(t => t.stop());
+}
+
+function showToast(msg) {
+  const container = document.getElementById('toastContainer');
+  const toast = document.createElement('div');
+  toast.className = 'toast';
+  toast.textContent = msg;
+  container.appendChild(toast);
+  setTimeout(() => { toast.classList.add('fadeout'); setTimeout(() => toast.remove(), 500); }, 2500);
+}
+</script>
+</body>
+</html>
